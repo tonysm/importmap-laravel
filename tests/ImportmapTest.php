@@ -8,13 +8,13 @@ beforeEach(function () {
 
     $this->map->pin("app");
     $this->map->pin("editor", to: "js/rich_text.js");
-    $this->map->pin("md5", to: "https://cdn.skypack.dev/md5");
+    $this->map->pin("md5", to: "https://cdn.skypack.dev/md5", preload: true);
 
-    $this->map->pinAllFrom("resources/js/controllers", under: "controllers", to: "js/controllers");
-    $this->map->pinAllFrom("resources/js/spina/controllers", under: "controllers/spina", to: "js/controllers/spina");
-    $this->map->pinAllFrom("resources/js/spina/controllers", under: "controllers/spina", to: "js/spina/controllers");
-    $this->map->pinAllFrom("resources/js/helpers", under: "helpers", to: "js/helpers");
-    $this->map->pinAllFrom("public/vendor/nova/");
+    $this->map->pinAllFrom("resources/js/controllers", under: "controllers", to: "js/controllers", preload: true);
+    $this->map->pinAllFrom("resources/js/spina/controllers", under: "controllers/spina", to: "js/controllers/spina", preload: true);
+    $this->map->pinAllFrom("resources/js/spina/controllers", under: "controllers/spina", to: "js/spina/controllers", preload: true);
+    $this->map->pinAllFrom("resources/js/helpers", under: "helpers", to: "js/helpers", preload: true);
+    $this->map->pinAllFrom("public/vendor/nova/", preload: true);
 });
 
 test('local bin with inferred to', function () {
@@ -49,4 +49,12 @@ test('directory pin under custom asset path', function () {
 
 test('directory pin without path or under', function () {
     expect(Arr::get($this->map->asArray('asset'), 'imports.my_lib'))->toEqual(asset('my_lib.js'));
+});
+
+test('preload modules are included in preload tags', function () {
+    $preloadingModulePaths = json_encode($this->map->preloadedModulePaths('asset'));
+
+    expect($preloadingModulePaths)->toContain('md5');
+    expect($preloadingModulePaths)->toContain('hello_controller');
+    expect($preloadingModulePaths)->not->toContain('app');
 });

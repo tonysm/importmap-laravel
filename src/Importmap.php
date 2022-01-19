@@ -19,14 +19,19 @@ class Importmap
         $this->directories = collect();
     }
 
-    public function pin(string $name, ?string $to = null)
+    public function pin(string $name, ?string $to = null, bool $preload = false)
     {
-        $this->packages->add(new MappedFile($name, path: $to ?: "js/{$name}.js"));
+        $this->packages->add(new MappedFile($name, path: $to ?: "js/{$name}.js", preload: $preload));
     }
 
-    public function pinAllFrom(string $dir, ?string $under = null, ?string $to = null)
+    public function pinAllFrom(string $dir, ?string $under = null, ?string $to = null, bool $preload = false)
     {
-        $this->directories->add(new MappedDirectory($dir, $under, $to));
+        $this->directories->add(new MappedDirectory($dir, $under, $to, $preload));
+    }
+
+    public function preloadedModulePaths(callable $assetResolver): array
+    {
+        return $this->resolveAssetPaths($this->expandPreloadingPackagesAndDirectories(), $assetResolver);
     }
 
     public function asArray(callable $assetResolver): array
@@ -34,6 +39,13 @@ class Importmap
         return [
             'imports' => $this->resolveAssetPaths($this->expandPackagesAndDirectories(), $assetResolver),
         ];
+    }
+
+    private function expandPreloadingPackagesAndDirectories(): Collection
+    {
+        return $this->expandPackagesAndDirectories()
+            ->filter(fn (MappedFile $mapping) => $mapping->preload)
+            ->values();
     }
 
     private function expandPackagesAndDirectories(): Collection
@@ -54,7 +66,7 @@ class Importmap
                     $moduleName = $this->moduleNameFrom($moduleFilename, $mapping);
                     $modulePath = $this->modulePathFrom($moduleFilename, $mapping);
 
-                    return new MappedFile($moduleName, $modulePath);
+                    return new MappedFile($moduleName, $modulePath, $mapping->preload);
                 });
         });
     }
