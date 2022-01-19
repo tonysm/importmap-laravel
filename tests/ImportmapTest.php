@@ -15,6 +15,7 @@ beforeEach(function () {
     $this->map->pinAllFrom("resources/js/spina/controllers", under: "controllers/spina", to: "js/spina/controllers", preload: true);
     $this->map->pinAllFrom("resources/js/helpers", under: "helpers", to: "js/helpers", preload: true);
     $this->map->pinAllFrom("public/vendor/nova/", preload: true);
+    $this->map->pinAllFrom("resources/js/libs", to: "js/libs");
 });
 
 test('local bin with inferred to', function () {
@@ -32,6 +33,10 @@ test('remote pin works', function () {
 test('directory pin mounted under matchin subdir maps all files', function () {
     expect(Arr::get($this->map->asArray('asset'), 'imports.controllers/hello_controller'))->toEqual(asset('js/controllers/hello_controller.js'));
     expect(Arr::get($this->map->asArray('asset'), 'imports.controllers/utilities/md5_controller'))->toEqual(asset('js/controllers/utilities/md5_controller.js'));
+});
+
+test('vendor directory inside pinned folder is ignored', function () {
+    expect(Arr::get($this->map->asArray('asset'), 'imports.vendor/alpine'))->toBeNull();
 });
 
 test('directory pin mounted under matching subdir maps index as root', function () {

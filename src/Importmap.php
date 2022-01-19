@@ -66,8 +66,15 @@ class Importmap
                     $moduleName = $this->moduleNameFrom($moduleFilename, $mapping);
                     $modulePath = $this->modulePathFrom($moduleFilename, $mapping);
 
+                    // We're ignoreing anything that starts with vendor/, as that's probably
+                    // being mapped directly as a result of pinning with a --download flag.
+                    if (str_starts_with($moduleFilename, 'vendor/')) {
+                        return null;
+                    }
+
                     return new MappedFile($moduleName, $modulePath, $mapping->preload);
-                });
+                })
+                ->filter();
         });
     }
 
