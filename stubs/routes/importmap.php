@@ -2,5 +2,4 @@
 
 use Tonysm\ImportmapLaravel\Facades\Importmap;
 
-Importmap::pin("app");
-Importmap::pinAllFrom('resources/js');
+Importmap::pinAllFrom("resources/js", to: "js/", preload: true);
