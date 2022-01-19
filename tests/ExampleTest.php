@@ -29,3 +29,7 @@ test('directory pin mounted under matchin subdir maps all files', function () {
     expect(Arr::get($this->map->asArray('asset'), 'imports.controllers/hello_controller'))->toEqual(asset('js/controllers/hello_controller.js'));
     expect(Arr::get($this->map->asArray('asset'), 'imports.controllers/utilities/md5_controller'))->toEqual(asset('js/controllers/utilities/md5_controller.js'));
 });
+
+test("directory pin mounted under matching subdir maps index as root", function () {
+    expect(Arr::get($this->map->asArray('asset'), 'imports.controllers'))->toEqual(asset('js/controllers/index.js'));
+});

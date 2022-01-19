@@ -86,7 +86,7 @@ class Importmap
     {
         return implode('/', array_filter([
             $mapping->under,
-            preg_replace('#(/index)?\.jsm?$#', '', $moduleFileName),
+            preg_replace('#(/?index)?\.jsm?$#', '', $moduleFileName),
         ]));
     }
 
