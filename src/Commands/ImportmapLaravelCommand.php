@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Tonysm\ImportmapLaravel\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class ImportmapLaravelCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'importmap-laravel';
 
     public $description = 'My command';
 
