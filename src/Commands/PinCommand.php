@@ -4,11 +4,11 @@ namespace Tonysm\ImportmapLaravel\Commands;
 
 use Illuminate\Console\Command;
 
-class ImportmapLaravelCommand extends Command
+class PinCommand extends Command
 {
-    public $signature = 'importmap-laravel';
+    public $signature = 'importmap:pin';
 
-    public $description = 'My command';
+    public $description = 'Pin JavaScript dependencies.';
 
     public function handle(): int
     {

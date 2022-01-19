@@ -5,9 +5,9 @@ namespace Tonysm\ImportmapLaravel\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Tonysm\ImportmapLaravel\ImportmapLaravel
+ * @see \Tonysm\ImportmapLaravel\Importmap
  */
-class ImportmapLaravel extends Facade
+class Importmap extends Facade
 {
     protected static function getFacadeAccessor()
     {

@@ -4,7 +4,8 @@ namespace Tonysm\ImportmapLaravel;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Tonysm\ImportmapLaravel\Commands\ImportmapLaravelCommand;
+use Tonysm\ImportmapLaravel\Commands;
+use Tonysm\ImportmapLaravel\View\Components;
 
 class ImportmapLaravelServiceProvider extends PackageServiceProvider
 {
@@ -16,10 +17,15 @@ class ImportmapLaravelServiceProvider extends PackageServiceProvider
          * More info: https://github.com/spatie/laravel-package-tools
          */
         $package
-            ->name('importmap-laravel')
+            ->name('importmap')
             ->hasConfigFile()
             ->hasViews()
-            ->hasMigration('create_importmap-laravel_table')
-            ->hasCommand(ImportmapLaravelCommand::class);
+            ->hasViewComponent('importmap', Components\Tags::class)
+            ->hasCommand(Commands\InstallCommand::class)
+            ->hasCommand(Commands\BuildCommand::class)
+            ->hasCommand(Commands\JsonCommand::class)
+            ->hasCommand(Commands\PinCommand::class)
+            ->hasCommand(Commands\UnpinCommand::class)
+        ;
     }
 }

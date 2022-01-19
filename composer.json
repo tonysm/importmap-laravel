@@ -34,8 +34,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Tonysm\\ImportmapLaravel\\": "src",
-            "Tonysm\\ImportmapLaravel\\Database\\Factories\\": "database/factories"
+            "Tonysm\\ImportmapLaravel\\": "src"
         }
     },
     "autoload-dev": {
@@ -61,7 +60,7 @@
                 "Tonysm\\ImportmapLaravel\\ImportmapLaravelServiceProvider"
             ],
             "aliases": {
-                "ImportmapLaravel": "Tonysm\\ImportmapLaravel\\Facades\\ImportmapLaravel"
+                "Importmap": "Tonysm\\ImportmapLaravel\\Facades\\Importmap"
             }
         }
     },
