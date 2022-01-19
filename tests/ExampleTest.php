@@ -11,6 +11,7 @@ beforeEach(function () {
     $this->map->pin("md5", to: "https://cdn.skypack.dev/md5");
 
     $this->map->pinAllFrom("resources/js/controllers", under: "controllers", path: "js/controllers");
+    $this->map->pinAllFrom("resources/js/helpers", under: "helpers", path: "js/helpers");
 });
 
 test('local bin with inferred to', function () {
@@ -30,6 +31,10 @@ test('directory pin mounted under matchin subdir maps all files', function () {
     expect(Arr::get($this->map->asArray('asset'), 'imports.controllers/utilities/md5_controller'))->toEqual(asset('js/controllers/utilities/md5_controller.js'));
 });
 
-test("directory pin mounted under matching subdir maps index as root", function () {
+test('directory pin mounted under matching subdir maps index as root', function () {
     expect(Arr::get($this->map->asArray('asset'), 'imports.controllers'))->toEqual(asset('js/controllers/index.js'));
+});
+
+test('directory pin mounted under matching subdir maps index as root at second depth', function () {
+    expect(Arr::get($this->map->asArray('asset'), 'imports.helpers/requests'))->toEqual(asset('js/helpers/requests/index.js'));
 });
