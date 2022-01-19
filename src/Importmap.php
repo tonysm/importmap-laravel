@@ -24,9 +24,9 @@ class Importmap
         $this->packages->add(new MappedFile($name, path: $to ?: "js/{$name}.js"));
     }
 
-    public function pinAllFrom(string $dir, ?string $under = null, ?string $path = null)
+    public function pinAllFrom(string $dir, ?string $under = null, ?string $to = null)
     {
-        $this->directories->add(new MappedDirectory($dir, $under, $path));
+        $this->directories->add(new MappedDirectory($dir, $under, $to));
     }
 
     public function asArray(callable $assetResolver): array
