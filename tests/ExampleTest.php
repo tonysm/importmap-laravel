@@ -8,12 +8,17 @@ beforeEach(function () {
 
     $this->map->pin("app");
     $this->map->pin("editor", to: "js/rich_text.js");
+    $this->map->pin("md5", to: "https://cdn.skypack.dev/md5");
 });
 
-it('local bin with inferred to', function () {
+test('local bin with inferred to', function () {
     expect(Arr::get($this->map->asArray('asset'), 'imports.app'))->toEqual(asset('js/app.js'));
 });
 
-it('local pin with explicit to', function () {
+test('local pin with explicit to', function () {
     expect(Arr::get($this->map->asArray('asset'), 'imports.editor'))->toEqual(asset('js/rich_text.js'));
+});
+
+test('remote pin works', function () {
+    expect(Arr::get($this->map->asArray('asset'), 'imports.md5'))->toEqual('https://cdn.skypack.dev/md5');
 });
