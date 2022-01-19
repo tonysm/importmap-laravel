@@ -40,6 +40,8 @@ class ImportmapLaravelServiceProvider extends PackageServiceProvider
 
     public function packageBooted()
     {
-        require base_path('routes/importmap.php');
+        if (file_exists(base_path('routes/importmap.php'))) {
+            require base_path('routes/importmap.php');
+        }
     }
 }
