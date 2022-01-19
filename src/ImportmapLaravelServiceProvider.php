@@ -28,4 +28,18 @@ class ImportmapLaravelServiceProvider extends PackageServiceProvider
             ->hasCommand(Commands\UnpinCommand::class)
         ;
     }
+
+    public function packageRegistered()
+    {
+        $this->app->scoped(Importmap::class, function () {
+            return new Importmap(base_path());
+        });
+
+        $this->app->bind('importmap-laravel', Importmap::class);
+    }
+
+    public function packageBooted()
+    {
+        require base_path('routes/importmap.php');
+    }
 }

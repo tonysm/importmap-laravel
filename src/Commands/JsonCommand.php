@@ -3,6 +3,7 @@
 namespace Tonysm\ImportmapLaravel\Commands;
 
 use Illuminate\Console\Command;
+use Tonysm\ImportmapLaravel\Importmap;
 
 class JsonCommand extends Command
 {
@@ -10,9 +11,11 @@ class JsonCommand extends Command
 
     public $description = 'Displays the generated importmaps JSON based on your current pins.';
 
-    public function handle(): int
+    public function handle(Importmap $importmap): int
     {
-        $this->comment('All done');
+        $imports = $importmap->asArray('asset');
+
+        $this->output->writeln(json_encode($imports, JSON_PRETTY_PRINT));
 
         return self::SUCCESS;
     }
