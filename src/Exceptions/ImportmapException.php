@@ -10,6 +10,7 @@ class ImportmapException extends Exception
     {
         return new static($error);
     }
+
     public static function withUnexpectedResponseCode($code)
     {
         return new static(sprintf('Unexpected response code (%s)', $code));

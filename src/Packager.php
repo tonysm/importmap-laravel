@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 
 class Packager
 {
-    const DEFAULT_CDN = 'jspm';
+    public const DEFAULT_CDN = 'jspm';
     public static $ENDPOINT = 'https://api.jspm.io/generate';
 
     public function __construct(public string $importmapPath = 'routes/importmap.php', public string $vendorPath = 'resources/js/vendor')
@@ -26,7 +26,7 @@ class Packager
             'provider' => $from,
         ]);
 
-        return match($response->status()) {
+        return match ($response->status()) {
             200 => $response->collect('map.imports'),
             404, 401 => null,
             default => $this->handleFailureResponse($response),
