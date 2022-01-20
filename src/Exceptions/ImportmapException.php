@@ -8,11 +8,11 @@ class ImportmapException extends Exception
 {
     public static function withResponseError(string $error)
     {
-        return new static($error);
+        return new self($error);
     }
 
     public static function withUnexpectedResponseCode($code)
     {
-        return new static(sprintf('Unexpected response code (%s)', $code));
+        return new self(sprintf('Unexpected response code (%s)', $code));
     }
 }
