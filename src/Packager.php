@@ -60,7 +60,7 @@ class Packager
     public function packaged(string $package): bool
     {
         return (bool) preg_match(
-            sprintf('#Importmap::pin\("%s"#', $package),
+            sprintf('#Importmap::pin\("%s"#', str_replace('#', '\#', $package)),
             File::get(base_path($this->importmapPath)),
         );
     }
