@@ -24,9 +24,9 @@ class InstallCommand extends Command
         File::ensureDirectoryExists(resource_path('js'));
 
         $this->info('Copying the scaffold files...');
-        File::copy(__DIR__ . '/../../stubs/js/app.js', resource_path('js/'));
-        File::copy(__DIR__ . '/../../stubs/js/bootstrap.js', resource_path('js/'));
-        File::copy(__DIR__ . '/../../stubs/routes/importmap.php', base_path('routes/'));
+        File::copy(__DIR__ . '/../../stubs/js/app.js', resource_path('js/app.js'));
+        File::copy(__DIR__ . '/../../stubs/js/bootstrap.js', resource_path('js/bootstrap.js'));
+        File::copy(__DIR__ . '/../../stubs/routes/importmap.php', base_path('routes/importmap.php'));
 
         $this->info('Done!');
 
