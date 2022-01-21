@@ -12,7 +12,7 @@ class Importmap
     private Collection $packages;
     private Collection $directories;
 
-    public function __construct(private ?string $rootPath = null)
+    public function __construct(public ?string $rootPath = null)
     {
         $this->rootPath = rtrim($this->rootPath ?: base_path(), '/');
         $this->packages = collect();
@@ -50,6 +50,11 @@ class Importmap
 
     private function expandPackagesAndDirectories(): Collection
     {
+        if (File::exists($manifest = $this->rootPath . '/public/importmap-manifest.json')) {
+            return collect(json_decode(File::get($manifest), true))
+                ->map(fn (array $json) => new MappedFile($json['module'], $json['path'], $json['preload']));
+        }
+
         return $this->packages->collect()->merge($this->expandDirectories());
     }
 
@@ -112,7 +117,7 @@ class Importmap
     private function modulePathFrom(string $moduleFilename, MappedDirectory $mapping): string
     {
         return implode('/', array_filter([
-            $mapping->path ?: $mapping->under,
+            rtrim($mapping->path ?: $mapping->under, '/'),
             $moduleFilename,
         ]));
     }
