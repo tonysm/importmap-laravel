@@ -3,6 +3,7 @@
 namespace Tonysm\ImportmapLaravel\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\File;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Tonysm\ImportmapLaravel\ImportmapLaravelServiceProvider;
 
@@ -15,6 +16,10 @@ class TestCase extends Orchestra
         Factory::guessFactoryNamesUsing(
             fn (string $modelName) => 'Tonysm\\ImportmapLaravel\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
+
+        if (File::exists($stubManifest = __DIR__ . '/stubs/public/importmap-manifest.json')) {
+            File::delete($stubManifest);
+        }
     }
 
     protected function getPackageProviders($app)

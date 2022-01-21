@@ -15,6 +15,7 @@ class OptimizeCommand extends Command
 
     public function handle(Importmap $importmap): int
     {
+        $this->call('importmap:clear');
         $this->info('Copying over the files to a dist folder and generating a digest of them...');
 
         if ($imports = $importmap->asArray(fn ($file) => $file)) {
@@ -24,7 +25,7 @@ class OptimizeCommand extends Command
                     File::ensureDirectoryExists($dist = $importmap->rootPath . '/public/dist');
 
                     $sourceFile = $importmap->rootPath . '/resources/' . trim($file, '/');
-                    $sourceReplacement = $dist . '/' . $this->digest($file, $sourceFile);
+                    $sourceReplacement = $dist . '/' . trim($this->digest($file, $sourceFile), '/');
 
                     File::ensureDirectoryExists(dirname($sourceReplacement));
 
@@ -40,6 +41,8 @@ class OptimizeCommand extends Command
 
                     return $replacement;
                 });
+
+            $this->info('Generating cached manifest...');
 
             $preloadModulePaths = $importmap->preloadedModulePaths(fn ($file) => $file);
 

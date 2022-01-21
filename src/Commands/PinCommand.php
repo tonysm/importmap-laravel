@@ -37,6 +37,8 @@ class PinCommand extends Command
      */
     public function handle(Packager $packager)
     {
+        $this->call('importmap:clear');
+
         $packages = Arr::wrap($this->argument('packages'));
 
         if ($imports = $packager->import($packages, $this->option('from-env'), $this->option('from'))) {

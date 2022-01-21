@@ -12,10 +12,6 @@ beforeEach(function () {
     if (File::isDirectory($this->distPath = $this->rootPath . '/public/dist/')) {
         File::cleanDirectory($this->distPath);
     }
-
-    if (File::exists($manifest = $this->rootPath . '/public/importmap-manifest.json')) {
-        File::delete($manifest);
-    }
 });
 
 test('optimize command generates copies files to public/dist folder', function () {
