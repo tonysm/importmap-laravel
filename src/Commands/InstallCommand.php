@@ -20,10 +20,16 @@ class InstallCommand extends Command
         }
 
         $this->info('Purging the existing resources/js files...');
-        File::cleanDirectory(resource_path('js'));
+
         File::ensureDirectoryExists(resource_path('js'));
+        File::cleanDirectory(resource_path('js'));
+
+        collect([base_path('package.json'), base_path('webpack.mix.js')])
+            ->filter(fn ($file) => File::exists($file))
+            ->each(fn ($file) => File::delete($file));
 
         $this->info('Copying the scaffold files...');
+
         File::copy(__DIR__ . '/../../stubs/js/app.js', resource_path('js/app.js'));
         File::copy(__DIR__ . '/../../stubs/js/bootstrap.js', resource_path('js/bootstrap.js'));
         File::copy(__DIR__ . '/../../stubs/routes/importmap.php', base_path('routes/importmap.php'));
