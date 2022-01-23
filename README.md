@@ -104,7 +104,7 @@ Local pins should be added to the `routes/importmap.php` file manually, like so:
 Importmap::pin("app", to: "/js/app.js");
 ```
 
-This means that the `app` module will point to `/js/app.js` in the browser. This is a URL or a URI, not the path to file itself.
+This means that the `app` module will point to `/js/app.js` in the browser. This is a URL or a URI, not the path to file itself. Pins to local file assume a relative path of `resources/js/` to find them.
 
 ### Pinning Local Directories
 
