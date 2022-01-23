@@ -1,9 +1,16 @@
-#  Importmap Laravel
+<p align="center" style="margin-top: 2rem; margin-bottom: 2rem;"><img src="/art/importmap-laravel-logo.svg" alt="Logo Importmap Laravel" /></p>
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/tonysm/importmap-laravel.svg?style=flat-square)](https://packagist.org/packages/tonysm/importmap-laravel)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/tonysm/importmap-laravel/run-tests?label=tests)](https://github.com/tonysm/importmap-laravel/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/tonysm/importmap-laravel/Check%20&%20fix%20styling?label=code%20style)](https://github.com/tonysm/importmap-laravel/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/tonysm/importmap-laravel.svg?style=flat-square)](https://packagist.org/packages/tonysm/importmap-laravel)
+<p align="center">
+    <a href="https://packagist.org/packages/tonysm/importmap-laravel">
+        <img src="https://img.shields.io/packagist/dt/tonysm/importmap-laravel.svg?style=flat-square" alt="Total Downloads">
+    </a>
+    <a href="https://packagist.org/packages/tonysm/importmap-laravel">
+        <img src="https://img.shields.io/packagist/v/tonysm/importmap-laravel" alt="Latest Stable Version">
+    </a>
+    <a href="https://packagist.org/packages/tonysm/importmap-laravel">
+        <img src="https://img.shields.io/packagist/l/tonysm/importmap-laravel" alt="License">
+    </a>
+</p>
 
 ## Introduction
 
