@@ -3,12 +3,13 @@
 return [
     /*
      |----------------------------------------------------------------
-     | Root folder in which the `resources/js` folder is contained.
+     | Whether to use the shim or not.
      |----------------------------------------------------------------
      |
-     | This folder is used in the Importmap to determine the absolute
-     | path of files when you're pinning folders (which you should)
-     | use relative path of the directory of where the files are.
+     | In some environments, such as when running browser testing, for instance,
+     | you may be running on a controller environment so the shim may slow down
+     | your tests, so you may prefer to not use the shim in such situations.
+     |
      */
-    'root_path' => base_path(),
+    'use_shim' => true,
 ];

@@ -32,7 +32,7 @@ class ImportmapLaravelServiceProvider extends PackageServiceProvider
     public function packageRegistered()
     {
         $this->app->scoped(Importmap::class, function () {
-            return new Importmap(config('importmap::root_path'));
+            return new Importmap();
         });
 
         $this->app->bind('importmap-laravel', Importmap::class);
