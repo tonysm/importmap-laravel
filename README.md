@@ -184,6 +184,18 @@ Which will add the correct `links` tags to your head tag in the HTML document, l
 <link rel="modulepreload" href="https://unpkg.com/alpinejs@3.8.1/dist/module.esm.js">
 ```
 
+## Known Problems
+
+### Browser Console Errors
+
+While import maps are native in Chrome and Edge, they need a shim in other browsers that'll produce a JavaScript console error like `TypeError: Module specifier, 'app' does not start with "/", "./", or "../".`. This error is normal and does not have any user-facing consequences.
+
+In Firefox, when opening the browser console, the asm.js module lexer build will run in unoptimized mode due to the debugger attaching. This gives a warning message `"asm.js type error: Disabled because no suitable wasm compiler is available"` which is as expected. When the console is closed again, the asm.js optimizations are fully applied, and this can even be verified with the console open by disabling the debugger in about:config and reloading the page.
+
+### On React's JSX and Vue's SFC
+
+It's possible to use both React and Vue with importmaps, but unfortunatelly you would have to use those without the power of JSX or SFC. That's because those file types need a compilation/transpilation step where they are converted to something the browser can understand. There are alternative ways to use both these libraries, but I should say that these are not "common" ways on their communities. You may use [React with HTM](https://github.com/developit/htm). And you can use Vue just fine without SFC, the only difference is that your templates would be in Blade files, not a SFC file.
+
 ## Testing
 
 ```bash
