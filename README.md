@@ -196,6 +196,10 @@ In Firefox, when opening the browser console, the asm.js module lexer build will
 
 It's possible to use both React and Vue with importmaps, but unfortunatelly you would have to use those without the power of JSX or SFC. That's because those file types need a compilation/transpilation step where they are converted to something the browser can understand. There are alternative ways to use both these libraries, but I should say that these are not "common" ways on their communities. You may use [React with HTM](https://github.com/developit/htm). And you can use Vue just fine without SFC, the only difference is that your templates would be in Blade files, not a SFC file.
 
+### Process ENV Configs
+
+You may be used to having a couple `process.env.MIX_*` lines in your JS files here and there. The way this works is Webpack would replace at build time your calls to `process.env` with the values it had during the build. Since we don't have a "build time" anymore, this won't work. Instead, you should add `<meta>` tags to your layout file with anything that you want to make available to your JavaScript files and use `document.head.querySelector('meta[name=my-config]').content` instead of relying in the `process.env`.
+
 ## Testing
 
 ```bash
