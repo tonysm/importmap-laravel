@@ -1,1 +1,100 @@
-<svg width="508.779" height="82.326" viewBox="0 0 134.61 21.782" xmlns="http://www.w3.org/2000/svg"><text style="line-height:1.25;stroke:#fff;stroke-width:2.95513;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" x="39.24" y="13.941" stroke-width=".31" font-family="sans-serif" font-size="9.48" font-weight="400"><tspan x="39.24" y="13.941" style="-inkscape-font-specification:Ubuntu;stroke:#fff;stroke-width:2.95513;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" font-family="Ubuntu"><tspan style="font-weight:700;stroke-width:2.95513">Importmap</tspan> Laravel</tspan></text><g transform="matrix(.82065 0 0 .82065 9.214 -.987)"><path style="fill:#fff;stroke:#fff;stroke-width:1.4884;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill" d="M12.901 11.835a6.985 7.526 0 0 1 .088 3.988c-.205.876-.807 2.163-1.326 2.838a7.115 7.666 0 0 1-2.278 1.94c-.795.426-1.9.765-2.353.721-.24-.023-.147-.11 1.693-1.556 2.688-2.112 3.718-2.986 3.92-3.325a1.91 2.058 0 0 0 .225-.712c.05-.4.036-.445-.235-.836-.346-.5-.513-.569-1.5-.625-.42-.025-.943-.064-1.16-.087l-.397-.043.51-.46 1.456-1.323a85.025 85.025 0 0 1 1.076-.97c.115-.095.144-.05.281.45z"/><circle style="opacity:.335932;fill:#008dff;fill-opacity:1;stroke:none;stroke-width:.264585;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" cx="12.12" cy="14.52" r="10.891"/><g style="fill:#fff;stroke:currentColor;stroke-width:.999941;stroke-miterlimit:4;stroke-dasharray:none"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 20-5.447-2.724A1 1 0 0 1 3 16.382V5.618a1 1 0 0 1 1.447-.894L9 7m0 13 6-3m-6 3V7m6 10 4.553 2.276A1 1 0 0 0 21 18.382V7.618a1 1 0 0 0-.553-.894L15 4m0 13V4m0 0L9 7" style="fill:#fff;stroke-width:.999941;stroke-miterlimit:4;stroke-dasharray:none" transform="matrix(.68845 0 0 -.52727 3.858 23.756)"/></g><g style="fill:#fff;stroke:currentColor;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4.025" d="m25.216 31.579-8.54 8.54a4.021 4.021 0 0 1-5.689 0l-8.542-8.54a16.101 16.101 0 1 1 22.771 0z" style="fill:#fff;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none" transform="translate(8.813 5.715) scale(.26458)"/></g><text xml:space="preserve" style="font-style:normal;font-weight:400;font-size:4.23335px;line-height:1.25;font-family:sans-serif;fill:#000;fill-opacity:1;stroke:none;stroke-width:.264585" x="1.8" y="12.656" transform="translate(8.133 -.408)"><tspan style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:4.23335px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu Bold';stroke-width:.264585" x="1.8" y="12.656">JS</tspan></text><path style="opacity:1;fill:#fff;fill-opacity:1;stroke:#fff;stroke-width:.375602;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" d="m14.977 80.046-6.338-2.45v-16.73l2.394 2.361c1.317 1.299 2.69 2.512 3.05 2.695.361.184 1.216.375 1.9.424 1.748.125 2.84-.278 4.275-1.577l1.151-1.042v9.406c0 5.173-.02 9.396-.047 9.384-.025-.012-2.899-1.124-6.385-2.471z" transform="translate(8.128 -.653) scale(.26458)"/></g></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="508.779"
+   height="82.326"
+   viewBox="0 0 134.61 21.782"
+   version="1.1"
+   id="svg28"
+   sodipodi:docname="importmap-laravel-logo.svg"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs32" />
+  <sodipodi:namedview
+     id="namedview30"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="1.4564281"
+     inkscape:cx="252.32966"
+     inkscape:cy="22.658174"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="960"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg28" />
+  <text
+     style="line-height:1.25;stroke:#ffffff;stroke-width:2.85472;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+     x="34.102119"
+     y="13.855286"
+     stroke-width=".31"
+     font-family="sans-serif"
+     font-size="9.15827px"
+     font-weight="400"
+     id="text6"><tspan
+       x="34.102119"
+       y="13.855286"
+       style="-inkscape-font-specification:Ubuntu;stroke:#ffffff;stroke-width:2.85472;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+       font-family="Ubuntu"
+       id="tspan4"><tspan
+   style="font-weight:700;stroke-width:2.85472"
+   id="tspan2">Importmap</tspan> Laravel</tspan></text>
+  <path
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1.1376;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
+     d="m 22.11359,8.7405901 a 5.3386905,5.752181 0 0 1 0.06726,3.0480599 c -0.156683,0.669533 -0.616797,1.653198 -1.013473,2.169105 a 5.4380505,5.8591841 0 0 1 -1.741093,1.482758 c -0.607625,0.325595 -1.452185,0.584695 -1.798416,0.551066 -0.183434,-0.01758 -0.112354,-0.08407 1.293973,-1.189263 2.054459,-1.614219 2.841697,-2.282224 2.996087,-2.541324 a 1.459828,1.5729456 0 0 0 0.171969,-0.544187 c 0.03822,-0.305724 0.02752,-0.340117 -0.179612,-0.638962 -0.26445,-0.382154 -0.39209,-0.434891 -1.146462,-0.477692 -0.321009,-0.01911 -0.720742,-0.04892 -0.886597,-0.0665 l -0.303431,-0.03286 0.389797,-0.351581 1.112832,-1.0111798 a 64.985277,64.985277 0 0 1 0.822395,-0.7413786 c 0.0879,-0.072609 0.110061,-0.038215 0.214771,0.3439385 z"
+     id="path8" />
+  <circle
+     style="fill:#ffeeaa;fill-opacity:1;stroke:none;stroke-width:0.202224;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     cx="21.516665"
+     cy="10.792757"
+     r="8.3240767"
+     id="circle10" />
+  <g
+     style="fill:#ffffff;stroke:currentColor;stroke-width:0.999941;stroke-miterlimit:4;stroke-dasharray:none"
+     id="g14"
+     transform="matrix(0.76430787,0,0,0.76430787,12.253253,-0.30499351)">
+    <path
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       stroke-width="2"
+       d="M 9,20 3.553,17.276 A 1,1 0 0 1 3,16.382 V 5.618 A 1,1 0 0 1 4.447,4.724 L 9,7 m 0,13 6,-3 M 9,20 V 7 m 6,10 4.553,2.276 A 1,1 0 0 0 21,18.382 V 7.618 A 1,1 0 0 0 20.447,6.724 L 15,4 m 0,13 V 4 m 0,0 -6,3"
+       style="fill:#ffffff;stroke-width:0.999941;stroke-miterlimit:4;stroke-dasharray:none"
+       transform="matrix(0.68845,0,0,-0.52727,3.858,23.756)"
+       id="path12" />
+  </g>
+  <g
+     style="fill:#f7e018;fill-opacity:1;stroke:currentColor;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
+     id="g18"
+     transform="matrix(0.76430787,0,0,0.76430787,12.253253,-0.30499351)">
+    <path
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       stroke-width="4.025"
+       d="m 25.216,31.579 -8.54,8.54 a 4.021,4.021 0 0 1 -5.689,0 l -8.542,-8.54 a 16.101,16.101 0 1 1 22.771,0 z"
+       style="fill:#f7e018;fill-opacity:1;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
+       transform="matrix(0.26458,0,0,0.26458,8.813,5.715)"
+       id="path16" />
+  </g>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-weight:400;font-size:3.23558px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.202224"
+     x="19.845123"
+     y="9.0562496"
+     id="text22"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:3.23558px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu Bold';stroke-width:0.202224"
+       x="19.845123"
+       y="9.0562496"
+       id="tspan20">JS</tspan></text>
+  <path
+     style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.0759558;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 21.4945,15.383189 -1.281744,-0.495271 v -3.382827 l 0.484571,0.476928 c 0.265979,0.262922 0.543423,0.508265 0.616797,0.544952 0.07261,0.03821 0.245342,0.07643 0.383682,0.0856 0.353875,0.02522 0.57476,-0.05579 0.864433,-0.318716 l 0.233114,-0.210185 v 1.901598 c 0,1.046338 -0.0046,1.90007 -0.0092,1.897777 z"
+     id="path24" />
+</svg>
