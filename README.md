@@ -97,9 +97,6 @@ Then, in your JavaScript files you can safely do:
 
 ```js
 import Alpine from 'alpinejs';
-
-Alpine.start();
-window.Alpine = Alpine;
 ```
 
 ### Pinning Local Files
