@@ -41,6 +41,11 @@ class Importmap
         ];
     }
 
+    public function getRootPath(): string
+    {
+        return $this->rootPath;
+    }
+
     private function expandPreloadingPackagesAndDirectories(): Collection
     {
         return $this->expandPackagesAndDirectories()
