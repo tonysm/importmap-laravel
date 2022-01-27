@@ -31,11 +31,19 @@ class Importmap
 
     public function preloadedModulePaths(callable $assetResolver): array
     {
+        if ($this->hasManifest()) {
+            return $this->resolvePreloadedModulesFromManifest();
+        }
+
         return $this->resolveAssetPaths($this->expandPreloadingPackagesAndDirectories(), $assetResolver);
     }
 
     public function asArray(callable $assetResolver): array
     {
+        if ($this->hasManifest()) {
+            return $this->resolveImportsFromManifest();
+        }
+
         return [
             'imports' => $this->resolveAssetPaths($this->expandPackagesAndDirectories(), $assetResolver),
         ];
@@ -44,6 +52,33 @@ class Importmap
     public function getRootPath(): string
     {
         return $this->rootPath;
+    }
+
+    private function hasManifest(): bool
+    {
+        return File::exists($this->manifestPath());
+    }
+
+    private function manifestPath(): string
+    {
+        return $this->rootPath . '/public/importmap-manifest.json';
+    }
+
+    private function resolvePreloadedModulesFromManifest(): array
+    {
+        return collect(json_decode(File::get($this->manifestPath()), true))
+            ->filter(fn (array $json) => $json['preload'])
+            ->mapWithKeys(fn (array $json) => [$json['module'] => $json['path']])
+            ->all();
+    }
+
+    private function resolveImportsFromManifest(): array
+    {
+        return [
+            'imports' => collect(json_decode(File::get($this->manifestPath()), true))
+                ->mapWithKeys(fn (array $json) => [$json['module'] => $json['path']])
+                ->all(),
+        ];
     }
 
     private function expandPreloadingPackagesAndDirectories(): Collection
@@ -55,11 +90,6 @@ class Importmap
 
     private function expandPackagesAndDirectories(): Collection
     {
-        if (File::exists($manifest = $this->rootPath . '/public/importmap-manifest.json')) {
-            return collect(json_decode(File::get($manifest), true))
-                ->map(fn (array $json) => new MappedFile($json['module'], $json['path'], $json['preload']));
-        }
-
         return $this->packages->collect()->merge($this->expandDirectories());
     }
 

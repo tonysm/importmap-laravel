@@ -48,7 +48,7 @@ class OptimizeCommand extends Command
                 ->map(function (string $oldFilename, string $module) use ($preloadModulePaths, $optimizedImports) {
                     return [
                         'module' => $module,
-                        'path' => $optimizedImports[$module] ?? $oldFilename,
+                        'path' => isset($optimizedImports[$module]) ? asset($optimizedImports[$module]) : $oldFilename,
                         'preload' => in_array($oldFilename, $preloadModulePaths),
                     ];
                 })
