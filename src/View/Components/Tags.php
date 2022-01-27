@@ -3,6 +3,7 @@
 namespace Tonysm\ImportmapLaravel\View\Components;
 
 use Illuminate\View\Component;
+use Tonysm\ImportmapLaravel\AssetResolver;
 use Tonysm\ImportmapLaravel\Facades\Importmap;
 
 class Tags extends Component
@@ -13,9 +14,11 @@ class Tags extends Component
 
     public function render()
     {
+        $resolver = new AssetResolver();
+
         return view("importmap::tags", [
-            'importmaps' => Importmap::asArray('asset'),
-            'preloadedModules' => Importmap::preloadedModulePaths('asset'),
+            'importmaps' => Importmap::asArray($resolver),
+            'preloadedModules' => Importmap::preloadedModulePaths($resolver),
         ]);
     }
 }
