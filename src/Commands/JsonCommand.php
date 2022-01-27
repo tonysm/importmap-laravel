@@ -3,6 +3,7 @@
 namespace Tonysm\ImportmapLaravel\Commands;
 
 use Illuminate\Console\Command;
+use Tonysm\ImportmapLaravel\AssetResolver;
 use Tonysm\ImportmapLaravel\Importmap;
 
 class JsonCommand extends Command
@@ -13,7 +14,7 @@ class JsonCommand extends Command
 
     public function handle(Importmap $importmap): int
     {
-        $imports = $importmap->asArray('asset');
+        $imports = $importmap->asArray(new AssetResolver);
 
         $this->output->writeln(json_encode($imports, JSON_PRETTY_PRINT));
 
