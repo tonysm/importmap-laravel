@@ -45,10 +45,16 @@ php artisan importmap:install
 Next, we need to add the following component to our view or layout file:
 
 ```blade
-<x-importmap-tags entrypoint="app" />
+<x-importmap-tags />
 ```
 
 Add that between your `<head>` tags. The `entrypoint` should be the "main" file, commonly the `resources/js/app.js` file, which will be mapped to the `app` module (use the module name, not the file).
+
+By default the `x-importmap-tags` component assumes your entrypoint module is `app`, which matches the existing `resources/js/app.js` file from Laravel's defaulf scaffolding. You may want to customize the entrypoint, which you can do with the `entrypoint` prop:
+
+```blade
+<x-importmap-tags entrypoint="admin" />
+```
 
 We also need to symlink the `resources/js` folder to `public/js` to make our JavaScript files publicly available. It's recommended to do that only for local development. This can be achieved by adding the link rule to your `config/filesystems.php`:
 
