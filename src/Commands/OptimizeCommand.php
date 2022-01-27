@@ -67,7 +67,7 @@ class OptimizeCommand extends Command
     {
         return preg_replace(
             '#(\.jsm?)$#',
-            sprintf('-%s$1', (new FileDigest)($fileSource)),
+            sprintf('-%s$1', (new FileDigest())($fileSource)),
             $filename
         );
     }
