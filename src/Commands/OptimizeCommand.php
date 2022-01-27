@@ -5,6 +5,7 @@ namespace Tonysm\ImportmapLaravel\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Tonysm\ImportmapLaravel\FileDigest;
 use Tonysm\ImportmapLaravel\Importmap;
 
 class OptimizeCommand extends Command
@@ -64,11 +65,9 @@ class OptimizeCommand extends Command
 
     private function digest(string $filename, string $fileSource): string
     {
-        $digest = sha1(File::get($fileSource));
-
         return preg_replace(
             '#(\.jsm?)$#',
-            sprintf('-%s$1', $digest),
+            sprintf('-%s$1', (new FileDigest)($fileSource)),
             $filename
         );
     }
