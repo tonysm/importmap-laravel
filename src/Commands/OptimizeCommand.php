@@ -22,13 +22,10 @@ class OptimizeCommand extends Command
             $optimizedImports = collect($imports['imports'])
                 ->reject(fn (string $url) => Str::startsWith($url, ['http://', 'https://']))
                 ->map(function (string $file) use ($importmap) {
-                    File::ensureDirectoryExists($dist = $importmap->rootPath . '/public/dist');
-
                     $sourceFile = $importmap->rootPath . '/resources/' . trim($file, '/');
-                    $sourceReplacement = $dist . '/' . trim($this->digest($file, $sourceFile), '/');
+                    $sourceReplacement = $importmap->rootPath . '/public/dist/' . trim($this->digest($file, $sourceFile), '/');
 
                     File::ensureDirectoryExists(dirname($sourceReplacement));
-
                     File::copy($sourceFile, $sourceReplacement);
 
                     $replacement = Str::after($sourceReplacement, $importmap->rootPath . '/public/');
