@@ -2,6 +2,12 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 0.3.0 - 2022-02-09
+
+### Changelog
+
+- **CHANGED**: Laravel 9 support (nothing really changed in the app, just the version constraints)
+
 ## 0.2.0 - 2022-01-27
 
 ### Changed
