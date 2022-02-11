@@ -15,8 +15,6 @@ beforeEach(function () {
     if (File::isDirectory($this->distPath = $this->rootPath . '/public/dist/')) {
         File::cleanDirectory($this->distPath);
     }
-
-    $this->swap(Importmap::class, $this->map);
 });
 
 it('generates tags without nonce', function () {
