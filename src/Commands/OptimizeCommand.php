@@ -55,7 +55,7 @@ class OptimizeCommand extends Command
                 ->values()
                 ->all();
 
-            File::put($importmap->rootPath . '/public/importmap-manifest.json', json_encode($optmizedJson, JSON_PRETTY_PRINT));
+            File::put($importmap->rootPath . '/public/.importmap-manifest.json', json_encode($optmizedJson, JSON_PRETTY_PRINT));
         }
 
         $this->info('Done!');
