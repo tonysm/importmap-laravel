@@ -61,7 +61,7 @@ class Importmap
 
     private function manifestPath(): string
     {
-        return $this->rootPath . '/public/importmap-manifest.json';
+        return $this->rootPath . '/public/.importmap-manifest.json';
     }
 
     private function resolvePreloadedModulesFromManifest(): array
