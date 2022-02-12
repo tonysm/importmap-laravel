@@ -8,7 +8,7 @@ use Tonysm\ImportmapLaravel\Facades\Importmap;
 
 class Tags extends Component
 {
-    public function __construct(public string $entrypoint = 'app')
+    public function __construct(public string $entrypoint = 'app', public ?string $nonce = null)
     {
     }
 
