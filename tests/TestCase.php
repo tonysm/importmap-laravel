@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\File;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Tonysm\ImportmapLaravel\ImportmapLaravelServiceProvider;
+use Tonysm\ImportmapLaravel\Manifest;
 
 class TestCase extends Orchestra
 {
@@ -13,11 +14,13 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
+        config()->set('importmap.manifest_location_path', __DIR__ . '/stubs/public/.importmap-manifest.json');
+
         Factory::guessFactoryNamesUsing(
             fn (string $modelName) => 'Tonysm\\ImportmapLaravel\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
 
-        if (File::exists($stubManifest = __DIR__ . '/stubs/public/.importmap-manifest.json')) {
+        if (File::exists($stubManifest = Manifest::path())) {
             File::delete($stubManifest);
         }
     }

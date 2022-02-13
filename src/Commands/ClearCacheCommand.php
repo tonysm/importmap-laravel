@@ -5,6 +5,7 @@ namespace Tonysm\ImportmapLaravel\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Tonysm\ImportmapLaravel\Importmap;
+use Tonysm\ImportmapLaravel\Manifest;
 
 class ClearCacheCommand extends Command
 {
@@ -16,11 +17,11 @@ class ClearCacheCommand extends Command
     {
         $this->info('Clearing cached manifest...');
 
-        if (File::exists($manifest = $importmap->rootPath . '/public/importmap-manifest.json')) {
+        if (File::exists($manifest = Manifest::path())) {
             File::delete($manifest);
         }
 
-        $this->info('Done!');
+        $this->info('Manifest file cleared!');
 
         return self::SUCCESS;
     }

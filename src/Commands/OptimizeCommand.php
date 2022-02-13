@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Tonysm\ImportmapLaravel\FileDigest;
 use Tonysm\ImportmapLaravel\Importmap;
+use Tonysm\ImportmapLaravel\Manifest;
 
 class OptimizeCommand extends Command
 {
@@ -55,7 +56,7 @@ class OptimizeCommand extends Command
                 ->values()
                 ->all();
 
-            File::put($importmap->rootPath . '/public/.importmap-manifest.json', json_encode($optmizedJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+            File::put(Manifest::path(), json_encode($optmizedJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         }
 
         $this->info('Done!');
