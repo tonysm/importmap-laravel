@@ -2,6 +2,12 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 0.4.1 - 2022-02-13
+
+### Changelog
+
+- **FIXED**: Pinned directories were not working on Windows because we're using `/` instead of `\`. Anyways, that should be fixed now. Define the directories with `/` as you would on any Unix/Linux OS and the package will make sure that gets converted to the correct directory separator when dealing with file paths and to the `/` separator when dealing with URIs https://github.com/tonysm/importmap-laravel/pull/5
+
 ## 0.4.0 - 2022-02-13
 
 ### Changelog
