@@ -2,6 +2,12 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 0.4.0 - 2022-02-13
+
+### Changelog
+
+- **CHANGED**: Changes the manifest filename to be `.importmap-manifest.json` (with a dot prefix) so it can be included in the Vapor artifact (which doesn't remove dotfiles by default).
+
 ## 0.3.0 - 2022-02-09
 
 ### Changelog
