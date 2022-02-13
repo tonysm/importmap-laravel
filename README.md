@@ -78,7 +78,7 @@ For production, it's recommended to run the `importmap:optimize` command instead
 php artisan importmap:optimize
 ```
 
-This should scan all your pinned files/folders (no URLs) and publish them to `public/dist/js`, adding a digest based on the file's content to the file name - so something like `public/dist/js/app-123123.js`, and then generate an `importmap-manifest.json` file in the `public/` folder. This file will get precence over your pins. If you run that by accident in development, make sure you delete that file or simply run `php artisan importmap:clear`, which should get rid of it. You may also want to add `/public/dist` to your `.gitignore` file.
+This should scan all your pinned files/folders (no URLs) and publish them to `public/dist/js`, adding a digest based on the file's content to the file name - so something like `public/dist/js/app-123123.js`, and then generate a `.importmap-manifest.json` file in the `public/` folder. This file will get precence over your pins. If you run that by accident in development, make sure you delete that file or simply run `php artisan importmap:clear`, which should get rid of it. You may also want to add `/public/dist` to your `.gitignore` file, as well as `*importmap-manifest.json`.
 
 ## Usage
 
