@@ -4,7 +4,7 @@ use Illuminate\Support\Arr;
 use Tonysm\ImportmapLaravel\Importmap;
 
 beforeEach(function () {
-    $this->map = new Importmap(rootPath: __DIR__ . '/stubs/');
+    $this->map = new Importmap(rootPath: __DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR);
 
     $this->map->pin("app");
     $this->map->pin("editor", to: "js/rich_text.js");

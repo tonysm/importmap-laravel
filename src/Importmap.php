@@ -14,7 +14,7 @@ class Importmap
 
     public function __construct(public ?string $rootPath = null)
     {
-        $this->rootPath = rtrim($this->rootPath ?: base_path(), '/');
+        $this->rootPath = rtrim($this->rootPath ?: base_path(), DIRECTORY_SEPARATOR);
         $this->packages = collect();
         $this->directories = collect();
     }
@@ -52,6 +52,11 @@ class Importmap
     public function getRootPath(): string
     {
         return $this->rootPath;
+    }
+
+    public function getFileAbsolutePath(string $relativePath): string
+    {
+        return $this->rootPath . str_replace('/', DIRECTORY_SEPARATOR, $relativePath);
     }
 
     private function hasManifest(): bool
@@ -106,9 +111,9 @@ class Importmap
                     $moduleName = $this->moduleNameFrom($moduleFilename, $mapping);
                     $modulePath = $this->modulePathFrom($moduleFilename, $mapping);
 
-                    // We're ignoring anything that starts with `vendor/`, as that's probably
+                    // We're ignoring anything that starts with `vendor`, as that's probably
                     // being mapped directly as a result of pinning with a --download flag.
-                    if (str_starts_with($moduleFilename, 'vendor/')) {
+                    if (str_starts_with($moduleFilename, 'vendor')) {
                         return null;
                     }
 
@@ -121,10 +126,10 @@ class Importmap
     private function absoluteRootOf(string $path): string
     {
         if (Str::startsWith($path, '/')) {
-            return $path;
+            return str_replace('/', DIRECTORY_SEPARATOR, $path);
         }
 
-        return $this->rootPath . '/' . $path;
+        return $this->rootPath . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $path);
     }
 
     private function findJavascriptFilesInTree(string $absolutePath): Collection
@@ -138,23 +143,23 @@ class Importmap
 
     private function relativePathFrom(string $fileAbsolutePath, string $folderAbsolutePath)
     {
-        return trim(Str::after($fileAbsolutePath, $folderAbsolutePath), '/');
+        return trim(Str::after($fileAbsolutePath, $folderAbsolutePath), DIRECTORY_SEPARATOR);
     }
 
     private function moduleNameFrom(string $moduleFileName, MappedDirectory $mapping): string
     {
-        return implode('/', array_filter([
+        return str_replace(DIRECTORY_SEPARATOR, '/', implode('/', array_filter([
             $mapping->under,
-            preg_replace('#(/?index)?\.jsm?$#', '', $moduleFileName),
-        ]));
+            preg_replace('#([\\\/]?index)?\.jsm?$#', '', $moduleFileName),
+        ])));
     }
 
     private function modulePathFrom(string $moduleFilename, MappedDirectory $mapping): string
     {
-        return implode('/', array_filter([
-            rtrim($mapping->path ?: $mapping->under, '/'),
+        return str_replace(DIRECTORY_SEPARATOR, '/', implode('/', array_filter([
+            rtrim($mapping->path ?: $mapping->under, DIRECTORY_SEPARATOR . '/'),
             $moduleFilename,
-        ]));
+        ])));
     }
 
     private function resolveAssetPaths(Collection $paths, callable $assetResolver): array
