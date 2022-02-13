@@ -1,5 +1,5 @@
 <script type="importmap" data-turbo-track="reload"@if ($nonce) nonce="{{ $nonce }}" @endif>
-    @js($importmaps)
+    @json($importmaps, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
 </script>
 
 @foreach ($preloadedModules as $preloadedModule)
