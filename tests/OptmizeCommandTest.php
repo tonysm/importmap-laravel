@@ -18,11 +18,11 @@ test('optimize command generates copies files to public/dist folder', function (
     $this->artisan('importmap:optimize')
         ->expectsOutput('    copied js/app.js to dist/js/app-da39a3ee5e6b4b0d3255bfef95601890afd80709.js');
 
-    expect(File::exists($this->rootPath . '/public/importmap-manifest.json'))->toBeTrue();
+    expect(File::exists($this->rootPath . '/public/.importmap-manifest.json'))->toBeTrue();
 });
 
 test('uses the generated importmap-manifest.json when that is available', function () {
-    File::put($this->map->rootPath . '/public/importmap-manifest.json', json_encode($imports = [
+    File::put($this->map->rootPath . '/public/.importmap-manifest.json', json_encode($imports = [
         ['module' => 'app', 'path' => 'http://example.com/app.js', 'preload' => false],
         ['module' => 'md5', 'path' => 'http://example.com/md5.js', 'preload' => true],
     ], JSON_PRETTY_PRINT));

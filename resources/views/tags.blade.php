@@ -12,5 +12,5 @@
 </script>
 
 <script type="module" data-turbo-track="reload"@if ($nonce) nonce="{{ $nonce }}" @endif>
-    import {{ $entrypoint }} as '{{ $entrypoint }}';
+    import {{ $entrypoint }} from '{{ $entrypoint }}';
 </script>

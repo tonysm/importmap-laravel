@@ -17,7 +17,7 @@ class TestCase extends Orchestra
             fn (string $modelName) => 'Tonysm\\ImportmapLaravel\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
 
-        if (File::exists($stubManifest = __DIR__ . '/stubs/public/importmap-manifest.json')) {
+        if (File::exists($stubManifest = __DIR__ . '/stubs/public/.importmap-manifest.json')) {
             File::delete($stubManifest);
         }
     }
