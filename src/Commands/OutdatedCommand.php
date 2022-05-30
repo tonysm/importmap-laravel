@@ -20,7 +20,7 @@ class OutdatedCommand extends Command
         if ($outdatedPackages->isEmpty()) {
             $this->info("No outdated packages found.");
 
-            return Command::SUCCESS;
+            return self::SUCCESS;
         }
 
         $this->table(
@@ -38,6 +38,6 @@ class OutdatedCommand extends Command
             Str::plural('package', $outdatedPackages->count()),
         ));
 
-        return Command::FAILURE;
+        return self::FAILURE;
     }
 }
