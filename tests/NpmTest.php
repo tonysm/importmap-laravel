@@ -3,109 +3,97 @@
 namespace Tonysm\ImportmapLaravel;
 
 use Illuminate\Support\Facades\Http;
-use Tonysm\ImportmapLaravel\Tests\TestCase;
 
-class NpmTest extends TestCase
-{
-    private Npm $npm;
+beforeEach(function () {
+    $this->importmap = new Importmap();
+    $this->npm = new Npm($this->importmap);
+});
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+it("finds no outdated packages", function () {
+    $this->importmap->pin("md5", "https://cdn.skypack.dev/md5@2.2.0");
 
-        $this->importmap = new Importmap();
-        $this->npm = new Npm($this->importmap);
-    }
+    Http::fake(fn () => Http::response([
+        "dist-tags" => [
+            "latest" => "2.2.0",
+        ],
+    ]));
 
-    /** @test */
-    public function no_oudated_packages()
-    {
-        $this->importmap->pin("md5", "https://cdn.skypack.dev/md5@2.2.0");
+    expect($this->npm->outdatedPackages()->count())->toEqual(0);
+});
 
-        Http::fake(fn () => Http::response([
-            "dist-tags" => [
-                "latest" => "2.2.0",
-            ],
-        ]));
+it("handles error when fails to fetch latest version of package", function () {
+    $this->importmap->pin("md5", "https://cdn.skypack.dev/md5@2.2.0");
 
-        $this->assertCount(0, $this->npm->outdatedPackages());
-    }
+    Http::fake(fn () => Http::response([], 404));
 
-    /** @test */
-    public function handles_error_when_fails_to_fetch_latest_version_of_package()
-    {
-        $this->importmap->pin("md5", "https://cdn.skypack.dev/md5@2.2.0");
+    expect($packages = $this->npm->outdatedPackages())->toHaveCount(1);
+    expect($packages->first()->name)->toEqual("md5");
+    expect($packages->first()->currentVersion)->toEqual("2.2.0");
+    expect($packages->first()->latestVersion)->toBeNull();
+    expect($packages->first()->error)->toEqual("Response error");
+});
 
-        Http::fake(fn () => Http::response([], 404));
+it("handles error when returns ok but response json contains error", function () {
+    $this->importmap->pin("md5", "https://cdn.skypack.dev/md5@2.2.0");
 
-        $this->assertCount(1, $packages = $this->npm->outdatedPackages());
-        $this->assertEquals("md5", $packages->first()->name);
-        $this->assertEquals("2.2.0", $packages->first()->currentVersion);
-        $this->assertNull($packages->first()->latestVersion);
-        $this->assertEquals("Response error", $packages->first()->error);
-    }
+    Http::fake(fn () => Http::response([
+        "error" => "Something went wrong",
+    ], 200));
 
-    /** @test */
-    public function handles_error_when_returns_ok_but_response_json_contains_error()
-    {
-        $this->importmap->pin("md5", "https://cdn.skypack.dev/md5@2.2.0");
+    expect($packages = $this->npm->outdatedPackages())->toHaveCount(1);
+    expect($packages->first()->name)->toEqual("md5");
+    expect($packages->first()->currentVersion)->toEqual("2.2.0");
+    expect($packages->first()->latestVersion)->toBeNull();
+    expect($packages->first()->error)->toEqual("Something went wrong");
+});
 
-        Http::fake(fn () => Http::response([
-            "error" => "Something went wrong",
-        ], 200));
+it("finds outdated packages", function () {
+    $this->importmap->pin("md5", "https://cdn.skypack.dev/md5@2.2.0");
 
-        $this->assertCount(1, $packages = $this->npm->outdatedPackages());
-        $this->assertEquals("md5", $packages->first()->name);
-        $this->assertEquals("2.2.0", $packages->first()->currentVersion);
-        $this->assertNull($packages->first()->latestVersion);
-        $this->assertEquals("Something went wrong", $packages->first()->error);
-    }
+    Http::fake(fn () => Http::response([
+        "dist-tags" => [
+            "latest" => "2.2.1",
+        ],
+    ]));
 
-    /** @test */
-    public function finds_outdated_package()
-    {
-        $this->importmap->pin("md5", "https://cdn.skypack.dev/md5@2.2.0");
+    expect($packages = $this->npm->outdatedPackages())->toHaveCount(1);
+    expect($packages->first()->name)->toEqual("md5");
+    expect($packages->first()->currentVersion)->toEqual("2.2.0");
+    expect($packages->first()->latestVersion)->toEqual("2.2.1");
+    expect($packages->first()->error)->toBeNull();
+});
 
-        Http::fake(fn () => Http::response([
-            "dist-tags" => [
-                "latest" => "2.2.1",
-            ],
-        ]));
+it("finds outdated packages comparing versions", function () {
+    $this->importmap->pin("md5", "https://cdn.skypack.dev/md5@2.2.0");
 
-        $this->assertCount(1, $packages = $this->npm->outdatedPackages());
-        $this->assertEquals("md5", $packages->first()->name);
-        $this->assertEquals("2.2.0", $packages->first()->currentVersion);
-        $this->assertEquals("2.2.1", $packages->first()->latestVersion);
-        $this->assertNull($packages->first()->error);
-    }
+    Http::fake(fn () => Http::response([
+        "versions" => [
+            "2.0.0" => [],
+            "2.2.2" => [],
+            "1.2.0" => [],
+            "1.7.0" => [],
+        ],
+    ]));
 
-    /** @test */
-    public function finds_outdated_package_comparing_versions()
-    {
-        $this->importmap->pin("md5", "https://cdn.skypack.dev/md5@2.2.0");
+    expect($packages = $this->npm->outdatedPackages())->toHaveCount(1);
+    expect($packages->first()->name)->toEqual("md5");
+    expect($packages->first()->currentVersion)->toEqual("2.2.0");
+    expect($packages->first()->latestVersion)->toEqual("2.2.2");
+    expect($packages->first()->error)->toBeNull();
+});
 
-        Http::fake(fn () => Http::response([
-            "versions" => [
-                "2.0.0" => [],
-                "2.2.2" => [],
-                "1.2.0" => [],
-                "1.7.0" => [],
-            ],
-        ]));
+it("finds no audit vulnerabilities", function () {
+    $this->importmap->pin("is-svg", "https://cdn.skypack.dev/is-svg@3.0.0");
 
-        $this->assertCount(1, $packages = $this->npm->outdatedPackages());
-        $this->assertEquals("md5", $packages->first()->name);
-        $this->assertEquals("2.2.0", $packages->first()->currentVersion);
-        $this->assertEquals("2.2.2", $packages->first()->latestVersion);
-        $this->assertNull($packages->first()->error);
-    }
+    Http::fake(fn () => Http::response([]));
 
-    /** @test */
-    public function finds_no_audit_vulnerabilities()
-    {
-        $this->importmap->pin("is-svg", "https://cdn.skypack.dev/is-svg@3.0.0");
+    expect($this->npm->vulnerablePackages())->toHaveCount(0);
+});
 
-        Http::fake(fn () => Http::response([
+it("finds audit vulnerabilities", function () {
+    $this->importmap->pin("is-svg", "https://cdn.skypack.dev/is-svg@3.0.0");
+
+    Http::fake(fn () => Http::response([
             "is-svg" => [
                 [
                     "title" => "Regular Expression Denial of Service (ReDoS)",
@@ -120,16 +108,15 @@ class NpmTest extends TestCase
             ],
         ]));
 
-        $this->assertCount(2, $vulnerabilities = $this->npm->vulnerablePackages());
+    expect($vulnerabilities = $this->npm->vulnerablePackages())->toHaveCount(2);
 
-        $this->assertEquals("is-svg", $vulnerabilities->first()->name);
-        $this->assertEquals("Regular Expression Denial of Service (ReDoS)", $vulnerabilities->first()->vulnerability);
-        $this->assertEquals("high", $vulnerabilities->first()->severity);
-        $this->assertEquals(">=2.1.0 <4.2.2", $vulnerabilities->first()->vulnerableVersions);
+    expect($vulnerabilities->first()->name)->toEqual("is-svg");
+    expect($vulnerabilities->first()->vulnerability)->toEqual("Regular Expression Denial of Service (ReDoS)");
+    expect($vulnerabilities->first()->severity)->toEqual("high");
+    expect($vulnerabilities->first()->vulnerableVersions)->toEqual(">=2.1.0 <4.2.2");
 
-        $this->assertEquals("is-svg", $vulnerabilities->last()->name);
-        $this->assertEquals("ReDOS in IS-SVG", $vulnerabilities->last()->vulnerability);
-        $this->assertEquals("high", $vulnerabilities->last()->severity);
-        $this->assertEquals(">=2.1.0 <4.3.0", $vulnerabilities->last()->vulnerableVersions);
-    }
-}
+    expect($vulnerabilities->last()->name)->toEqual("is-svg");
+    expect($vulnerabilities->last()->vulnerability)->toEqual("ReDOS in IS-SVG");
+    expect($vulnerabilities->last()->severity)->toEqual("high");
+    expect($vulnerabilities->last()->vulnerableVersions)->toEqual(">=2.1.0 <4.3.0");
+});
