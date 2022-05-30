@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
     $this->npm = new Npm(configPath: __DIR__ . "/fixtures/npm/outdated-importmap.php");
+
+    Http::preventStrayRequests();
 });
 
 it("finds no outdated packages", function () {
@@ -17,9 +19,10 @@ it("finds no outdated packages", function () {
 });
 
 it("handles error when fails to fetch latest version of package", function () {
-    Http::fakeSequence()
-        ->push([], 404)
-        ->push(["dist-tags" => ["latest" => "4.0.0"]]);
+    Http::fake([
+        'https://registry.npmjs.org/is-svg' => Http::response([], 404),
+        'https://registry.npmjs.org/lodash' => Http::response(["dist-tags" => ["latest" => "4.0.0"]]),
+    ]);
 
     expect($packages = $this->npm->outdatedPackages())->toHaveCount(1);
     expect($packages->first()->name)->toEqual("is-svg");
@@ -29,9 +32,10 @@ it("handles error when fails to fetch latest version of package", function () {
 });
 
 it("handles error when returns ok but response json contains error", function () {
-    Http::fakeSequence()
-        ->push(["error" => "Something went wrong"])
-        ->push(["dist-tags" => ["latest" => "4.0.0"]]);
+    Http::fake([
+        'https://registry.npmjs.org/is-svg' => Http::response(["error" => "Something went wrong"]),
+        'https://registry.npmjs.org/lodash' => Http::response(["dist-tags" => ["latest" => "4.0.0"]]),
+    ]);
 
     expect($packages = $this->npm->outdatedPackages())->toHaveCount(1);
     expect($packages->first()->name)->toEqual("is-svg");
@@ -41,26 +45,31 @@ it("handles error when returns ok but response json contains error", function ()
 });
 
 it("finds outdated packages", function () {
-    Http::fakeSequence()
-        ->push(["dist-tags" => ["latest" => "4.0.0"]])
-        ->push([
+    Http::fake([
+        'https://registry.npmjs.org/is-svg' => Http::response(["dist-tags" => ["latest" => "4.0.0"]]),
+        'https://registry.npmjs.org/lodash' => Http::response([
             "versions" => [
                 "2.0.0" => [],
                 "5.0.0" => [],
                 "1.2.0" => [],
                 "1.7.0" => [],
             ],
-        ]);
+        ]),
+    ]);
 
     expect($packages = $this->npm->outdatedPackages())->toHaveCount(2);
 
-    expect($packages->first()->name)->toEqual("is-svg");
-    expect($packages->first()->currentVersion)->toEqual("3.0.0");
-    expect($packages->first()->latestVersion)->toEqual("4.0.0");
-    expect($packages->first()->error)->toBeNull();
+    $svgPackage = $packages->firstWhere('name', 'is-svg');
 
-    expect($packages->last()->name)->toEqual("lodash");
-    expect($packages->last()->currentVersion)->toEqual("4.0.0");
-    expect($packages->last()->latestVersion)->toEqual("5.0.0");
-    expect($packages->last()->error)->toBeNull();
+    expect($svgPackage->name)->toEqual("is-svg");
+    expect($svgPackage->currentVersion)->toEqual("3.0.0");
+    expect($svgPackage->latestVersion)->toEqual("4.0.0");
+    expect($svgPackage->error)->toBeNull();
+
+    $lodashPackage = $packages->firstWhere('name', 'lodash');
+
+    expect($lodashPackage->name)->toEqual("lodash");
+    expect($lodashPackage->currentVersion)->toEqual("4.0.0");
+    expect($lodashPackage->latestVersion)->toEqual("5.0.0");
+    expect($lodashPackage->error)->toBeNull();
 });

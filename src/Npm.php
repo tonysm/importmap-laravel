@@ -73,10 +73,10 @@ class Npm
     {
         $content = File::get($this->configPath);
 
-        $matches = $this->findPackagesFromCdnMatches($content)
-            ->merge($this->findPackagesFromLocalMatches($content));
-
-        return $matches;
+        return $this->findPackagesFromCdnMatches($content)
+            ->merge($this->findPackagesFromLocalMatches($content))
+            ->unique('name')
+            ->values();
     }
 
     private function findPackagesFromCdnMatches(string $content)
