@@ -6,7 +6,7 @@ use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
-    $this->npm = new Npm(configPath: __DIR__ . '/fixtures/npm/audit-importmap.php');
+    $this->npm = new Npm(configPath: __DIR__ . DIRECTORY_SEPARATOR . join(DIRECTORY_SEPARATOR, ["fixtures", "npm", "audit-importmap.php"]));
 
     Http::preventStrayRequests();
 });

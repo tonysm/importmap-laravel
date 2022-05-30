@@ -5,7 +5,7 @@ namespace Tonysm\ImportmapLaravel;
 use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
-    $this->npm = new Npm(configPath: __DIR__ . "/fixtures/npm/outdated-importmap.php");
+    $this->npm = new Npm(configPath: __DIR__ . DIRECTORY_SEPARATOR . join(DIRECTORY_SEPARATOR, ["fixtures", "npm", "outdated-importmap.php"]));
 
     Http::preventStrayRequests();
 });
