@@ -30,10 +30,13 @@ class OutdatedCommand extends Command
             ->all(),
         );
 
-        $packageLabel = Str::plural('package', $outdatedPackages->count());
-
         $this->newLine();
-        $this->error(sprintf('%d outdated %s found.', $outdatedPackages->count(), $packageLabel));
+
+        $this->error(sprintf(
+            '%d outdated %s found.',
+            $outdatedPackages->count(),
+            Str::plural('package', $outdatedPackages->count()),
+        ));
 
         return Command::FAILURE;
     }
