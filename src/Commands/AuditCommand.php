@@ -24,7 +24,7 @@ class AuditCommand extends Command
         }
 
         $this->table(
-            ['Package', 'Severity', 'Vundlerable Versions', 'Vulnerability'],
+            ['Package', 'Severity', 'Vulnerable Versions', 'Vulnerability'],
             $vulnerablePackages
                 ->map(fn (VulnerablePackage $package) => [$package->name, $package->severity, $package->vulnerableVersions, $package->vulnerability])
                 ->all()
