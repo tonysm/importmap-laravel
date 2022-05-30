@@ -18,29 +18,29 @@ class Npm
     public function outdatedPackages(): Collection
     {
         return $this->packagesWithVersion()
-        ->reduce(function (Collection $outdatedPackages, PackageVersion $package) {
-            $latestVersion = null;
-            $error = null;
+            ->reduce(function (Collection $outdatedPackages, PackageVersion $package) {
+                $latestVersion = null;
+                $error = null;
 
-            if (! ($response = $this->getPackage($package))) {
-                $error = "Response error";
-            } elseif ($response["error"] ?? false) {
-                $error = $response["error"];
-            } else {
-                $latestVersion = $this->findLatestVersion($response);
+                if (! ($response = $this->getPackage($package))) {
+                    $error = "Response error";
+                } elseif ($response["error"] ?? false) {
+                    $error = $response["error"];
+                } else {
+                    $latestVersion = $this->findLatestVersion($response);
 
-                if (! $this->outdated($package->version, $latestVersion)) {
-                    return $outdatedPackages;
+                    if (! $this->outdated($package->version, $latestVersion)) {
+                        return $outdatedPackages;
+                    }
                 }
-            }
 
-            return $outdatedPackages->add(new OutdatedPackage(
-                name: $package->name,
-                currentVersion: $package->version,
-                latestVersion: $latestVersion,
-                error: $error,
-            ));
-        }, collect());
+                return $outdatedPackages->add(new OutdatedPackage(
+                    name: $package->name,
+                    currentVersion: $package->version,
+                    latestVersion: $latestVersion,
+                    error: $error,
+                ));
+            }, collect());
     }
 
     public function vulnerablePackages(): Collection
