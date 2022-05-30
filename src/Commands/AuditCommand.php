@@ -1,0 +1,51 @@
+<?php
+
+namespace Tonysm\ImportmapLaravel\Commands;
+
+use Illuminate\Console\Command;
+use Illuminate\Support\Str;
+use Tonysm\ImportmapLaravel\Npm;
+use Tonysm\ImportmapLaravel\VulnerablePackage;
+
+class AuditCommand extends Command
+{
+    public $signature = 'importmap:audit';
+
+    public $description = 'Run a security audit.';
+
+    public function handle(Npm $npm): int
+    {
+        $vulnerablePackages = $npm->vulnerablePackages();
+
+        if ($vulnerablePackages->isEmpty()) {
+            $this->info("No vulnerable packages found.");
+
+            return self::SUCCESS;
+        }
+
+        $this->table(
+            ['Package', 'Severity', 'Vulnerable Versions', 'Vulnerability'],
+            $vulnerablePackages
+                ->map(fn (VulnerablePackage $package) => [$package->name, $package->severity, $package->vulnerableVersions, $package->vulnerability])
+                ->all()
+        );
+
+        $this->newLine();
+
+        $summary = $vulnerablePackages
+            ->groupBy('severity')
+            ->map(fn ($vulns) => $vulns->count())
+            ->sortDesc()
+            ->map(fn ($count, $severity) => "$count {$severity}")
+            ->join(", ");
+
+        $this->error(sprintf(
+            "%d %s found: %s",
+            $vulnerablePackages->count(),
+            Str::plural('vulnerability', $vulnerablePackages->count()),
+            $summary,
+        ));
+
+        return self::FAILURE;
+    }
+}

@@ -194,6 +194,30 @@ Which will add the correct `links` tags to your head tag in the HTML document, l
 <link rel="modulepreload" href="https://unpkg.com/alpinejs@3.8.1/dist/module.esm.js">
 ```
 
+## Dependency Maintenance Commands
+
+Maintaining a healthy dependency list can be tricky. Here's a couple of commands to help you with this task.
+
+### Outdated Dependencies
+
+To keep your dependencies up-to-date, make sure you run the `importmap:outdated` command from time to time:
+
+```bash
+php artisan importmap:outdated
+```
+
+This command will scan your `config/importmap.php` file, find your current versions, then use the NPM registry API to look for the latest version of the packages you're using. It also handles locally served vendor libs that you added using the `--download` flag from the `importmap:pin` command.
+
+### Auditing Dependencies
+
+If you want to a security audit on your dependecies to see if you're using a version that's been breached, run the `importmap:audit` command from time to time. Better yet, add that command to your CI build:
+
+```bash
+php artisan importmap:audit
+```
+
+This will also scan your `config/importmap.php` file, find your current versions, then use the NPM registry API to look for vulnerabilities on your packages. It also handles locally serverd vendor libs that you added using the `--download` flag from the `importmap:pin` command.
+
 ## Known Problems
 
 ### Browser Console Errors
