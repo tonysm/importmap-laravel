@@ -3,20 +3,21 @@
 namespace Tonysm\ImportmapLaravel;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 
 class Npm
 {
     private string $baseUrl = "https://registry.npmjs.org";
 
-    public function __construct(private Importmap $importmap)
+    public function __construct(private string $configPath)
     {
     }
 
     public function outdatedPackages(): Collection
     {
-        return $this->packagesWithVersion()->reduce(function (Collection $outdatedPackages, string $url) {
-            $package = $this->extractVendorName($url);
+        return $this->packagesWithVersion()
+        ->reduce(function (Collection $outdatedPackages, PackageVersion $package) {
             $latestVersion = null;
             $error = null;
 
@@ -48,7 +49,6 @@ class Npm
     public function vulnerablePackages(): Collection
     {
         $data = $this->packagesWithVersion()
-            ->map(fn ($url) => $this->extractVendorName($url))
             ->mapWithKeys(fn (PackageVersion $package) => [
                 $package->name => [$package->version],
             ])
@@ -74,19 +74,40 @@ class Npm
 
     private function packagesWithVersion(): Collection
     {
-        return collect($this->importmap->asArray(fn ($url) => $url)["imports"]);
+        $content = File::get($this->configPath);
+
+        $matches = $this->findPackagesFromCdnMatches($content)
+            ->merge($this->findPackagesFromLocalMatches($content));
+
+        return $matches;
     }
 
-    private function extractVendorName(string $url)
+    private function findPackagesFromCdnMatches(string $content)
     {
-        $matches = null;
-        preg_match('/^.*(?<=npm:|npm\/|skypack\.dev\/|unpkg\.com\/)(.*)(?=@\d+\.\d+\.\d+)@(\d+\.\d+\.\d+(?:[^\/\s"]*)).*$/', $url, $matches);
+        preg_match_all('/^Importmap\:\:pin\(.*(?<=npm:|npm\/|skypack\.dev\/|unpkg\.com\/)(.*)(?=@\d+\.\d+\.\d+)@(\d+\.\d+\.\d+(?:[^\/\s"]*)).*\)\;$/m', $content, $matches);
 
         if (count($matches) !== 3) {
-            return null;
+            return collect();
         }
 
-        return new PackageVersion(name: $matches[1], version: $matches[2]);
+        return collect($matches[1])
+            ->zip($matches[2])
+            ->map(fn ($items) => new PackageVersion(name: $items[0], version: $items[1]))
+            ->values();
+    }
+
+    private function findPackagesFromLocalMatches(string $content)
+    {
+        preg_match_all('/^Importmap::pin\("([^"]*)".*\)\; \/\/.*@(\d+\.\d+\.\d+(?:[^\s]*)).*$/m', $content, $matches);
+
+        if (count($matches) !== 3) {
+            return collect();
+        }
+
+        return collect($matches[1])
+            ->zip($matches[2])
+            ->map(fn ($items) => new PackageVersion(name: $items[0], version: $items[1]))
+            ->values();
     }
 
     private function getPackage(PackageVersion $package)
