@@ -2,6 +2,7 @@
 
 namespace Tonysm\ImportmapLaravel;
 
+use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
@@ -15,9 +16,11 @@ it("finds no audit vulnerabilities", function () {
 
     expect($this->npm->vulnerablePackages())->toHaveCount(0);
 
-    Http::assertSent(fn ($request) => (
-        $request['is-svg'] === ["3.0.0"] &&
-        $request['lodash'] === ["4.17.12"]
+    Http::assertSent(fn (Request $request) => (
+        $request->data() == [
+            "is-svg" => ["3.0.0"],
+            "lodash" => ["4.17.12"],
+        ]
     ));
 });
 
@@ -49,8 +52,10 @@ it("finds audit vulnerabilities", function () {
     expect($vulnerabilities->last()->severity)->toEqual("high");
     expect($vulnerabilities->last()->vulnerableVersions)->toEqual(">=2.1.0 <4.3.0");
 
-    Http::assertSent(fn ($request) => (
-        $request['is-svg'] === ["3.0.0"] &&
-        $request['lodash'] === ["4.17.12"]
+    Http::assertSent(fn (Request $request) => (
+        $request->data() == [
+            "is-svg" => ["3.0.0"],
+            "lodash" => ["4.17.12"],
+        ]
     ));
 });
