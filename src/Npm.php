@@ -81,7 +81,7 @@ class Npm
 
     private function findPackagesFromCdnMatches(string $content)
     {
-        preg_match_all('/^Importmap\:\:pin\(.*(?<=npm:|npm\/|skypack\.dev\/|unpkg\.com\/)(.*)(?=@\d+\.\d+\.\d+)@(\d+\.\d+\.\d+(?:[^\/\s"]*)).*\)\;$/m', $content, $matches);
+        preg_match_all('/^Importmap\:\:pin\(.*(?<=npm:|npm\/|skypack\.dev\/|unpkg\.com\/)(.*)(?=@\d+\.\d+\.\d+)@(\d+\.\d+\.\d+(?:[^\/\s"]*)).*\)\;\r?$/m', $content, $matches);
 
         if (count($matches) !== 3) {
             return collect();
@@ -95,7 +95,7 @@ class Npm
 
     private function findPackagesFromLocalMatches(string $content)
     {
-        preg_match_all('/^Importmap::pin\("([^"]*)".*\)\; \/\/.*@(\d+\.\d+\.\d+(?:[^\s]*)).*$/m', $content, $matches);
+        preg_match_all('/^Importmap::pin\("([^"]*)".*\)\; \/\/.*@(\d+\.\d+\.\d+(?:[^\s]*)).*\r?$/m', $content, $matches);
 
         if (count($matches) !== 3) {
             return collect();
