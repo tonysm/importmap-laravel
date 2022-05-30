@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
     $this->npm = new Npm(configPath: __DIR__ . '/fixtures/npm/audit-importmap.php');
+
+    Http::preventStrayRequests();
 });
 
 it("finds no audit vulnerabilities", function () {
