@@ -22,10 +22,6 @@ class Npm
             $latestVersion = null;
             $error = null;
 
-            if (! $package) {
-                return $outdatedPackages;
-            }
-
             if (! ($response = $this->getPackage($package))) {
                 $error = "Response error";
             } elseif ($response["error"] ?? false) {
