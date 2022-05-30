@@ -17,26 +17,31 @@ class Npm
     {
         return $this->packagesWithVersion()->reduce(function (Collection $outdatedPackages, string $url) {
             $package = $this->extractVendorName($url);
+            $latestVersion = null;
+            $error = null;
 
             if (! $package) {
                 return $outdatedPackages;
             }
 
             if (! ($response = $this->getPackage($package))) {
-                $package->error = "Response error";
+                $error = "Response error";
             } elseif ($response["error"] ?? false) {
-                $package->error = $response["error"];
+                $error = $response["error"];
             } else {
                 $latestVersion = $this->findLatestVersion($response);
 
-                if (! $this->outdated($package->currentVersion, $latestVersion)) {
+                if (! $this->outdated($package->version, $latestVersion)) {
                     return $outdatedPackages;
                 }
-
-                $package->latestVersion = $latestVersion;
             }
 
-            return $outdatedPackages->add($package);
+            return $outdatedPackages->add(new OutdatedPackage(
+                name: $package->name,
+                currentVersion: $package->version,
+                latestVersion: $latestVersion,
+                error: $error,
+            ));
         }, collect());
     }
 
@@ -44,8 +49,8 @@ class Npm
     {
         $data = $this->packagesWithVersion()
             ->map(fn ($url) => $this->extractVendorName($url))
-            ->mapWithKeys(fn (OutdatedPackage $package) => [
-                $package->name => [$package->currentVersion],
+            ->mapWithKeys(fn (PackageVersion $package) => [
+                $package->name => [$package->version],
             ])
             ->all();
 
@@ -81,10 +86,10 @@ class Npm
             return null;
         }
 
-        return new OutdatedPackage(name: $matches[1], currentVersion: $matches[2]);
+        return new PackageVersion(name: $matches[1], version: $matches[2]);
     }
 
-    private function getPackage(OutdatedPackage $package)
+    private function getPackage(PackageVersion $package)
     {
         $response = Http::get($this->baseUrl . "/" . $package->name);
 
