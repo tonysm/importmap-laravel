@@ -99,4 +99,37 @@ class NpmTest extends TestCase
         $this->assertEquals("2.2.2", $packages->first()->latestVersion);
         $this->assertNull($packages->first()->error);
     }
+
+    /** @test */
+    public function finds_no_audit_vulnerabilities()
+    {
+        $this->importmap->pin("is-svg", "https://cdn.skypack.dev/is-svg@3.0.0");
+
+        Http::fake(fn () => Http::response([
+            "is-svg" => [
+                [
+                    "title" => "Regular Expression Denial of Service (ReDoS)",
+                    "severity" => "high",
+                    "vulnerable_versions" => ">=2.1.0 <4.2.2",
+                ],
+                [
+                    "title" => "ReDOS in IS-SVG",
+                    "severity" => "high",
+                    "vulnerable_versions" => ">=2.1.0 <4.3.0",
+                ],
+            ],
+        ]));
+
+        $this->assertCount(2, $vulnerabilities = $this->npm->vulnerablePackages());
+
+        $this->assertEquals("is-svg", $vulnerabilities->first()->name);
+        $this->assertEquals("Regular Expression Denial of Service (ReDoS)", $vulnerabilities->first()->vulnerability);
+        $this->assertEquals("high", $vulnerabilities->first()->severity);
+        $this->assertEquals(">=2.1.0 <4.2.2", $vulnerabilities->first()->vulnerableVersions);
+
+        $this->assertEquals("is-svg", $vulnerabilities->last()->name);
+        $this->assertEquals("ReDOS in IS-SVG", $vulnerabilities->last()->vulnerability);
+        $this->assertEquals("high", $vulnerabilities->last()->severity);
+        $this->assertEquals(">=2.1.0 <4.3.0", $vulnerabilities->last()->vulnerableVersions);
+    }
 }

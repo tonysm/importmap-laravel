@@ -40,6 +40,33 @@ class Npm
         }, collect());
     }
 
+    public function vulnerablePackages(): Collection
+    {
+        $data = $this->packagesWithVersion()
+            ->map(fn ($url) => $this->extractVendorName($url))
+            ->mapWithKeys(fn (OutdatedPackage $package) => [
+                $package->name => [$package->currentVersion],
+            ])
+            ->all();
+
+        return $this->getAudit($data)
+            ->collect()
+            ->flatMap(function (array $vulnerabilities, string $package) {
+                return collect($vulnerabilities)
+                    ->map(fn (array $vulnerability) => new VulnerablePackage(
+                        name: $package,
+                        severity: $vulnerability['severity'],
+                        vulnerableVersions: $vulnerability['vulnerable_versions'],
+                        vulnerability: $vulnerability['title'],
+                    ));
+            })
+            ->sortBy([
+                ['name', 'asc'],
+                ['severity', 'asc'],
+            ])
+            ->values();
+    }
+
     private function packagesWithVersion(): Collection
     {
         return collect($this->importmap->asArray(fn ($url) => $url)["imports"]);
@@ -90,5 +117,17 @@ class Npm
     private function outdated(string $currentVersion, string $latestVersion)
     {
         return version_compare($currentVersion, $latestVersion) === -1;
+    }
+
+    private function getAudit(array $packages)
+    {
+        $response = Http::asJson()
+            ->post($this->baseUrl . "/-/npm/v1/security/advisories/bulk", $packages);
+
+        if (! $response->ok()) {
+            return collect();
+        }
+
+        return $response->collect();
     }
 }
