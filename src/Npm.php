@@ -10,8 +10,9 @@ class Npm
 {
     private string $baseUrl = "https://registry.npmjs.org";
 
-    public function __construct(private string $configPath)
+    public function __construct(private ?string $configPath = null)
     {
+        $this->configPath ??= base_path("routes/importmap.php");
     }
 
     public function outdatedPackages(): Collection
