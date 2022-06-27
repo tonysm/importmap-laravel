@@ -2,6 +2,12 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 1.1.0 - 2022-06-27
+
+### Changelog
+
+- Bumps `es-module-shims` to version 1.5.8
+
 ## 0.4.1 - 2022-02-13
 
 ### Changelog
