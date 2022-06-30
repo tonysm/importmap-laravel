@@ -60,7 +60,7 @@ class Packager
     public function packaged(string $package): bool
     {
         return (bool) preg_match(
-            sprintf('#Importmap::pin\("%s"#', str_replace('#', '\#', $package)),
+            sprintf('#Importmap::pin\("%s"#', preg_quote($package)),
             File::get(base_path($this->importmapPath)),
         );
     }
@@ -86,7 +86,7 @@ class Packager
     {
         $contents = collect(File::lines(base_path($this->importmapPath)))
             ->reject(fn (string $line) => (
-                preg_match(sprintf('#Importmap::pin\("%s"#', $package), $line)
+                preg_match(sprintf('#Importmap::pin\("%s"#', preg_quote($package)), $line)
             ))
             ->join(PHP_EOL);
 

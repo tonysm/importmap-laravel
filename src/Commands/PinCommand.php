@@ -94,7 +94,7 @@ class PinCommand extends Command
     {
         return sprintf(
             '#^Importmap::pin\("%s".*$#',
-            $package,
+            preg_quote($package),
         );
     }
 }
