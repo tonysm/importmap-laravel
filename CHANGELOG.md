@@ -2,6 +2,12 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 1.1.1 - 2022-06-30
+
+### Changelog
+
+- **FIXED**: The `importmap:pin` command was breaking depending on the package name because we needed to wrap the package name using the `preg_quote` to escape it. Otherwise, some characters might become part of the regex itself. https://github.com/tonysm/importmap-laravel/pull/16
+
 ## 1.1.0 - 2022-06-27
 
 ### Changelog
