@@ -28,6 +28,7 @@ class InstallCommand extends Command
         $this->updateAppLayouts();
         $this->deleteNpmRelatedFiles();
         $this->configureJsSymlink();
+        $this->configureIgnoredFolder();
 
         if (count($this->afterMessages) > 0) {
             $this->displayHeader('After Notes & Next Steps', '<bg=yellow;fg=black> NOTES </>');
@@ -242,5 +243,22 @@ class InstallCommand extends Command
         }
 
         $this->newLine();
+    }
+
+    private function configureIgnoredFolder()
+    {
+        $this->displayTask('dumping & ignoring `public/js` folder', function () {
+            if (File::isDirectory($publicJsFolder = public_path('js'))) {
+                File::cleanDirectory($publicJsFolder);
+                File::deleteDirectory($publicJsFolder);
+            }
+
+            File::append(
+                base_path('.gitignore'),
+                '/public/js/'
+            );
+
+            return self::SUCCESS;
+        });
     }
 }
