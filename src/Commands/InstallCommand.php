@@ -257,7 +257,7 @@ class InstallCommand extends Command
 
             File::append(
                 base_path('.gitignore'),
-                "\n/public/js/\n"
+                "\n/public/js\n"
             );
 
             return self::SUCCESS;
