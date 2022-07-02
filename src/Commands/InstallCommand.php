@@ -30,25 +30,12 @@ class InstallCommand extends Command
         $this->configureJsSymlink();
         $this->configureIgnoredFolder();
 
-        if (count($this->afterMessages) > 0) {
-            $this->displayHeader('After Notes & Next Steps', '<bg=yellow;fg=black> NOTES </>');
-
-            foreach ($this->afterMessages as $message) {
-                $this->line('    '.$message);
-            }
-        }
+        $this->displayAfterNotes();
 
         $this->newLine();
         $this->line(" <fg=white>Done!</>");
 
         return self::SUCCESS;
-    }
-
-    private function displayHeader($text, $prefix)
-    {
-        $this->newLine();
-        $this->line(sprintf(' %s <fg=white>%s</>  ', $prefix, $text));
-        $this->newLine();
     }
 
     private function deleteNpmRelatedFiles(): void
@@ -227,6 +214,13 @@ class InstallCommand extends Command
         });
     }
 
+    private function displayHeader($text, $prefix)
+    {
+        $this->newLine();
+        $this->line(sprintf(' %s <fg=white>%s</>  ', $prefix, $text));
+        $this->newLine();
+    }
+
     private function displayTask($description, $task)
     {
         $width = (new Terminal())->getWidth();
@@ -255,10 +249,21 @@ class InstallCommand extends Command
 
             File::append(
                 base_path('.gitignore'),
-                '/public/js/'
+                "\n/public/js/\n"
             );
 
             return self::SUCCESS;
         });
+    }
+
+    private function displayAfterNotes()
+    {
+        if (count($this->afterMessages) > 0) {
+            $this->displayHeader('After Notes & Next Steps', '<bg=yellow;fg=black> NOTES </>');
+
+            foreach ($this->afterMessages as $message) {
+                $this->line('    '.$message);
+            }
+        }
     }
 }
