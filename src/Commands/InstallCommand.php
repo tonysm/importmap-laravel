@@ -153,8 +153,8 @@ class InstallCommand extends Command
                 ->each(fn ($file) => File::put(
                     $file,
                     preg_replace(
-                        '/(\s*)(\@vite\(\[.*)\'resources\/js\/app.js\'(.*\]\))/',
-                        "\\1\\2\\3\n\\1<x-importmap-tags />",
+                        '/\@vite.*/',
+                        "<x-importmap-tags />",
                         File::get($file),
                     ),
                 ))
