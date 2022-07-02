@@ -165,7 +165,7 @@ class InstallCommand extends Command
                         '',
                         File::get($file),
                     ),
-                ))
+                ));
 
             return self::SUCCESS;
         });
