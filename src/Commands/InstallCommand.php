@@ -157,7 +157,15 @@ class InstallCommand extends Command
                         "\\1\\2\\3\n\\1<x-importmap-tags />",
                         File::get($file),
                     ),
-                ));
+                ))
+                ->each(fn ($file) => File::put(
+                    $file,
+                    preg_replace(
+                        '/.*\@vite\(\[\]\).*\n/',
+                        '',
+                        File::get($file),
+                    ),
+                ))
 
             return self::SUCCESS;
         });
