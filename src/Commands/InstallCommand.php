@@ -152,9 +152,9 @@ class InstallCommand extends Command
             $this->existingLayoutFiles()
                 ->each(fn ($file) => File::put(
                     $file,
-                    str_replace(
-                        "@vite(['resources/css/app.css', 'resources/js/app.js'])",
-                        '<x-importmap-tags />',
+                    preg_replace(
+                        '/(\s*)(\@vite\(\[.*)\'resources\/js\/app.js\'(.*\]\))/',
+                        "\\1\\2\\3\n\\1<x-importmap-tags />",
                         File::get($file),
                     ),
                 ));
