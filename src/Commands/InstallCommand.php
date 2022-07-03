@@ -216,6 +216,10 @@ class InstallCommand extends Command
                 ),
             );
 
+            if (File::isDirectory(public_path('js'))) {
+                $this->afterMessages[] = "<fg=white>* Please, delete the `<fg=yellow>public/js</>` folder before the next step.</>\n";
+            }
+
             $this->afterMessages[] = "<fg=white>* To create the symlink, run:</>\n\n\n    <fg=yellow>    php artisan storage:link</>\n";
 
             return self::SUCCESS;
@@ -250,11 +254,6 @@ class InstallCommand extends Command
     private function configureIgnoredFolder()
     {
         $this->displayTask('dumping & ignoring `public/js` folder', function () {
-            if (File::isDirectory($publicJsFolder = public_path('js'))) {
-                File::cleanDirectory($publicJsFolder);
-                File::deleteDirectory($publicJsFolder);
-            }
-
             File::append(
                 base_path('.gitignore'),
                 "\n/public/js\n"
