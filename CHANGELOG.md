@@ -2,6 +2,12 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 1.2.0 - 2022-07-03
+
+### Changelog
+
+- **CHANGED**: The `importmap:install` command was changed to work with the new Vite setup in Laravel. It should also still work on installs in the Laravel 8 frontends setups using Mix.
+
 ## 1.1.1 - 2022-06-30
 
 ### Changelog
