@@ -2,6 +2,12 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 1.2.1 - 2022-07-29
+
+### Changelog
+
+- **CHANGED**: we don't delete the `public/js` folder anymore, but instead ask the developer to do so (https://github.com/tonysm/importmap-laravel/commit/f0b3ad562bb748fe20f34768d8b9fb49936099c7)
+
 ## 1.2.0 - 2022-07-03
 
 ### Changelog
