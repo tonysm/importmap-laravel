@@ -16,7 +16,7 @@ class JsonCommand extends Command
     {
         $imports = $importmap->asArray(new AssetResolver());
 
-        $this->output->writeln(json_encode($imports, JSON_PRETTY_PRINT));
+        $this->output->writeln(json_encode($imports, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
         return self::SUCCESS;
     }
