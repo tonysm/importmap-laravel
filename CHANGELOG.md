@@ -2,6 +2,13 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 1.2.2 - 2022-08-04
+
+### Changelog
+
+- **CHANGED**: stop escapeing the slashes in the `importmap:json` output (https://github.com/tonysm/importmap-laravel/commit/496cb8bc77c51fd1dae28f12e37a881b4cc41997)
+- **NEW**: handle imported files from `public/vendor` folder (https://github.com/tonysm/importmap-laravel/commit/b6c22d1f047715b1f47393dc55a59730397aa55a)
+
 ## 1.2.1 - 2022-07-29
 
 ### Changelog
