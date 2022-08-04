@@ -2,6 +2,12 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 1.2.3 - 2022-08-04
+
+### Changelog
+
+- **FIXED**: Fixes the optimize command when pinning dependencies from `public/vendor` (https://github.com/tonysm/importmap-laravel/commit/a3a685583bfaaf82e737f0ec2fb368f63f3d3c1f)
+
 ## 1.2.2 - 2022-08-04
 
 ### Changelog
