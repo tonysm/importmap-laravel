@@ -25,7 +25,7 @@
         "guzzlehttp/guzzle": "^7.4",
         "nunomaduro/collision": "^5.10|^6.0",
         "nunomaduro/larastan": "^1.0",
-        "orchestra/testbench": "^7.0",
+        "orchestra/testbench": "^7.17",
         "pestphp/pest": "^1.22",
         "pestphp/pest-plugin-laravel": "^1.2",
         "phpstan/extension-installer": "^1.1",
