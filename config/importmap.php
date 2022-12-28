@@ -14,6 +14,18 @@ return [
     'use_shim' => true,
 
     /*
+     |-------------------------------------------------------------------
+     | The desired version of the `es-module-shims` dependency.
+     |-------------------------------------------------------------------
+     |
+     | Set the desired shim dependency version. Having it as a config allows
+     | applications using the package to evolve faster and indenpendenly,
+     | since you may bump the shim version without having to upgrade.
+     |
+     */
+    'shim_version' => env('IMPORTMAP_SHIM_VERSION', '1.6.2'),
+
+    /*
      |------------------------------------------------------------------
      | The path to the location where the manifest file will be created.
      |------------------------------------------------------------------
