@@ -24,7 +24,7 @@
     "require-dev": {
         "guzzlehttp/guzzle": "^7.4",
         "nunomaduro/collision": "^5.10|^6.0",
-        "nunomaduro/larastan": "^1.0",
+        "nunomaduro/larastan": "^2.3",
         "orchestra/testbench": "^7.17|^8.0",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-deprecation-rules": "^1.0",
