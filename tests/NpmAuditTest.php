@@ -1,31 +1,43 @@
 <?php
 
-namespace Tonysm\ImportmapLaravel;
+namespace Tonysm\ImportmapLaravel\Tests;
 
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
+use Tonysm\ImportmapLaravel\Npm;
 
-beforeEach(function () {
-    $this->npm = new Npm(configPath: __DIR__ . DIRECTORY_SEPARATOR . join(DIRECTORY_SEPARATOR, ["fixtures", "npm", "audit-importmap.php"]));
+class NpmAuditTest extends TestCase
+{
+    private Npm $npm;
 
-    Http::preventStrayRequests();
-});
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-it("finds no audit vulnerabilities", function () {
-    Http::fake(fn () => Http::response([]));
+        $this->npm = new Npm(configPath: __DIR__ . DIRECTORY_SEPARATOR . join(DIRECTORY_SEPARATOR, ["fixtures", "npm", "audit-importmap.php"]));
 
-    expect($this->npm->vulnerablePackages())->toHaveCount(0);
+        Http::preventStrayRequests();
+    }
 
-    Http::assertSent(fn (Request $request) => (
-        $request->data() == [
-            "is-svg" => ["3.0.0"],
-            "lodash" => ["4.17.12"],
-        ]
-    ));
-});
+    /** @test */
+    public function finds_no_audit_vulnerabilities()
+    {
+        Http::fake(fn () => Http::response([]));
 
-it("finds audit vulnerabilities", function () {
-    Http::fake(fn () => Http::response([
+        $this->assertCount(0, $this->npm->vulnerablePackages());
+
+        Http::assertSent(fn (Request $request) => (
+            $request->data() == [
+                "is-svg" => ["3.0.0"],
+                "lodash" => ["4.17.12"],
+            ]
+        ));
+    }
+
+    /** @test */
+    public function finds_audit_vulnerabilities()
+    {
+        Http::fake(fn () => Http::response([
             "is-svg" => [
                 [
                     "title" => "Regular Expression Denial of Service (ReDoS)",
@@ -40,22 +52,23 @@ it("finds audit vulnerabilities", function () {
             ],
         ]));
 
-    expect($vulnerabilities = $this->npm->vulnerablePackages())->toHaveCount(2);
+        $this->assertCount(2, $vulnerabilities = $this->npm->vulnerablePackages());
 
-    expect($vulnerabilities->first()->name)->toEqual("is-svg");
-    expect($vulnerabilities->first()->vulnerability)->toEqual("Regular Expression Denial of Service (ReDoS)");
-    expect($vulnerabilities->first()->severity)->toEqual("high");
-    expect($vulnerabilities->first()->vulnerableVersions)->toEqual(">=2.1.0 <4.2.2");
+        $this->assertEquals('is-svg', $vulnerabilities->first()->name);
+        $this->assertEquals('Regular Expression Denial of Service (ReDoS)', $vulnerabilities->first()->vulnerability);
+        $this->assertEquals('high', $vulnerabilities->first()->severity);
+        $this->assertEquals('>=2.1.0 <4.2.2', $vulnerabilities->first()->vulnerableVersions);
 
-    expect($vulnerabilities->last()->name)->toEqual("is-svg");
-    expect($vulnerabilities->last()->vulnerability)->toEqual("ReDOS in IS-SVG");
-    expect($vulnerabilities->last()->severity)->toEqual("high");
-    expect($vulnerabilities->last()->vulnerableVersions)->toEqual(">=2.1.0 <4.3.0");
+        $this->assertEquals('is-svg', $vulnerabilities->last()->name);
+        $this->assertEquals('ReDOS in IS-SVG', $vulnerabilities->last()->vulnerability);
+        $this->assertEquals('high', $vulnerabilities->last()->severity);
+        $this->assertEquals('>=2.1.0 <4.3.0', $vulnerabilities->last()->vulnerableVersions);
 
-    Http::assertSent(fn (Request $request) => (
-        $request->data() == [
-            "is-svg" => ["3.0.0"],
-            "lodash" => ["4.17.12"],
-        ]
-    ));
-});
+        Http::assertSent(fn (Request $request) => (
+            $request->data() == [
+                "is-svg" => ["3.0.0"],
+                "lodash" => ["4.17.12"],
+            ]
+        ));
+    }
+}
