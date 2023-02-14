@@ -2,6 +2,13 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 1.4.0 - 2023-02-14
+
+### Changelog
+
+- **CHANGED**: Bumps the default `es-module-shims` version to `1.3.1`
+- **CHANGED**: Support Laravel 10
+
 ## 1.3.1 - 2023-02-14
 
 ### Changelog
