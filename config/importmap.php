@@ -23,7 +23,7 @@ return [
      | since you may bump the shim version without having to upgrade.
      |
      */
-    'shim_version' => env('IMPORTMAP_SHIM_VERSION', '1.6.3'),
+    'shim_version' => env('IMPORTMAP_SHIM_VERSION', '1.7.2'),
 
     /*
      |------------------------------------------------------------------
