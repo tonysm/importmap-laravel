@@ -2,6 +2,14 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 1.4.1 - 2023-05-10
+
+### What's Changed
+
+- Bump the shim version to 1.7.2
+
+**Full Changelog**: https://github.com/tonysm/importmap-laravel/compare/1.4.0...1.4.1
+
 ## 1.4.0 - 2023-02-14
 
 ### Changelog
