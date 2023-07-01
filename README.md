@@ -26,7 +26,7 @@ This package was inspired by the [Importmap Rails](https://github.com/rails/impo
 
 With this approach you'll ship many small JavaScript files instead of one big JavaScript file. Thanks to HTTP/2 that no longer carries a material performance penalty during the initial transport, and in fact offers substantial benefits over the long run due to better caching dynamics. Whereas before any change to any JavaScript file included in your big bundle would invalidate the cache for the the whole bundle, now only the cache for that single file is invalidated.
 
-There's [native support for import maps in Chrome/Edge 89+](https://caniuse.com/?search=importmap), and [a shim available](https://github.com/guybedford/es-module-shims) for any browser with basic ESM support. So your app will be able to work with all the evergreen browsers.
+There's [native support for import maps in Chrome/Edge 89+/Firefox 108+](https://caniuse.com/?search=importmap), and [a shim available](https://github.com/guybedford/es-module-shims) for any browser with basic ESM support. So your app will be able to work with all the evergreen browsers.
 
 ## Installation
 
@@ -218,11 +218,15 @@ php artisan importmap:audit
 
 This will also scan your `config/importmap.php` file, find your current versions, then use the NPM registry API to look for vulnerabilities on your packages. It also handles locally serverd vendor libs that you added using the `--download` flag from the `importmap:pin` command.
 
+### Turning Off The Shim
+
+Under certain circumstances, like running browser tests using chromedriver under CI (which may be resource constrained and trigger errors in certain cases), you may want to explicitly turn off including the shim. You can do this by setting the `importmap.use_shim` config to `false`. You may also set it to something like `'use_shim' => ! env('CI')`.
+
 ## Known Problems
 
 ### Browser Console Errors
 
-While import maps are native in Chrome and Edge, they need a shim in other browsers that'll produce a JavaScript console error like `TypeError: Module specifier, 'app' does not start with "/", "./", or "../".`. This error is normal and does not have any user-facing consequences.
+While import maps are native in Chrome, Edge, and Firefox, they need a shim in other browsers that'll produce a JavaScript console error like `TypeError: Module specifier, 'app' does not start with "/", "./", or "../".`. This error is normal and does not have any user-facing consequences.
 
 In Firefox, when opening the browser console, the asm.js module lexer build will run in unoptimized mode due to the debugger attaching. This gives a warning message `"asm.js type error: Disabled because no suitable wasm compiler is available"` which is as expected. When the console is closed again, the asm.js optimizations are fully applied, and this can even be verified with the console open by disabling the debugger in about:config and reloading the page.
 
