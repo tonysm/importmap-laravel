@@ -69,7 +69,7 @@ class Npm
             ->values();
     }
 
-    private function packagesWithVersion(): Collection
+    public function packagesWithVersion(): Collection
     {
         $content = File::get($this->configPath);
 
