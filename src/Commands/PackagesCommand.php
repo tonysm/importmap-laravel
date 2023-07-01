@@ -4,6 +4,7 @@ namespace Tonysm\ImportmapLaravel\Commands;
 
 use Illuminate\Console\Command;
 use Tonysm\ImportmapLaravel\Npm;
+use Tonysm\ImportmapLaravel\PackageVersion;
 
 class PackagesCommand extends Command
 {
@@ -13,8 +14,8 @@ class PackagesCommand extends Command
 
     public function handle(Npm $npm): int
     {
-        $npm->packagesWithVersion()->each(fn ($package) => (
-            $this->output->writeln(join(' ', $package))
+        $npm->packagesWithVersion()->each(fn (PackageVersion $package) => (
+            $this->output->writeln(sprintf('%s %s', $package->name, $package->version))
         ));
 
         return self::SUCCESS;
