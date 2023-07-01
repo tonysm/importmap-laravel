@@ -28,6 +28,7 @@ class ImportmapLaravelServiceProvider extends PackageServiceProvider
             ->hasCommand(Commands\UnpinCommand::class)
             ->hasCommand(Commands\OutdatedCommand::class)
             ->hasCommand(Commands\AuditCommand::class)
+            ->hasCommand(Commands\PackagesCommand::class)
         ;
     }
 
