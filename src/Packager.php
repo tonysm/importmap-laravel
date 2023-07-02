@@ -12,9 +12,13 @@ class Packager
     public const DEFAULT_CDN = 'jspm';
     public static $ENDPOINT = 'https://api.jspm.io/generate';
 
-    public function __construct(public string $importmapPath = 'routes/importmap.php', public string $vendorPath = 'resources/js/vendor')
-    {
-        //
+    public function __construct(
+        public string $importmapPath = 'routes/importmap.php',
+        public string $vendorPath = 'resources/js/vendor',
+    ) {
+        $this->importmapPath = ! str_starts_with($importmapPath, '/')
+            ? base_path($this->importmapPath)
+            : $this->importmapPath;
     }
 
     public function import(array $packages, string $env, string $from)
@@ -60,8 +64,8 @@ class Packager
     public function packaged(string $package): bool
     {
         return (bool) preg_match(
-            sprintf('#Importmap::pin\("%s"#', preg_quote($package)),
-            File::get(base_path($this->importmapPath)),
+            sprintf('#Importmap::pin\(["\']%s["\']#', preg_quote($package)),
+            File::get($this->importmapPath),
         );
     }
 
@@ -84,13 +88,13 @@ class Packager
 
     private function removePackageFromImportmap(string $package)
     {
-        $contents = collect(File::lines(base_path($this->importmapPath)))
+        $contents = collect(File::lines($this->importmapPath))
             ->reject(fn (string $line) => (
-                preg_match(sprintf('#Importmap::pin\("%s"#', preg_quote($package)), $line)
+                preg_match(sprintf('#Importmap::pin\(["\']%s["\']#', preg_quote($package)), $line)
             ))
             ->join(PHP_EOL);
 
-        File::put(base_path($this->importmapPath), $contents);
+        File::put($this->importmapPath, $contents);
     }
 
     private function withoutSourceMapComments(string $contents): string
