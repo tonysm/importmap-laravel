@@ -80,12 +80,12 @@ class PinCommand extends Command
             if ($packager->packaged($package)) {
                 // Replace existing pin...
                 File::put(
-                    base_path($packager->importmapPath),
-                    preg_replace($this->pattern($package), $pin, File::get(base_path($packager->importmapPath))),
+                    $packager->importmapPath,
+                    preg_replace($this->pattern($package), $pin, File::get($packager->importmapPath)),
                 );
             } else {
                 // Append to file...
-                File::append(base_path($packager->importmapPath), "{$pin}\n");
+                File::append($packager->importmapPath, "{$pin}\n");
             }
         });
     }
