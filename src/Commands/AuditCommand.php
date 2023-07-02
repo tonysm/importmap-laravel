@@ -18,7 +18,7 @@ class AuditCommand extends Command
         $vulnerablePackages = $npm->vulnerablePackages();
 
         if ($vulnerablePackages->isEmpty()) {
-            $this->info("No vulnerable packages found.");
+            $this->info('No vulnerable packages found.');
 
             return self::SUCCESS;
         }
@@ -37,10 +37,10 @@ class AuditCommand extends Command
             ->map(fn ($vulns) => $vulns->count())
             ->sortDesc()
             ->map(fn ($count, $severity) => "$count {$severity}")
-            ->join(", ");
+            ->join(', ');
 
         $this->error(sprintf(
-            "%d %s found: %s",
+            '%d %s found: %s',
             $vulnerablePackages->count(),
             Str::plural('vulnerability', $vulnerablePackages->count()),
             $summary,

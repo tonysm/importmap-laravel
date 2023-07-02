@@ -23,6 +23,7 @@
     },
     "require-dev": {
         "guzzlehttp/guzzle": "^7.4",
+        "laravel/pint": "^1.10",
         "nunomaduro/collision": "^5.10|^6.0",
         "orchestra/testbench": "^7.17|^8.0",
         "phpstan/extension-installer": "^1.1",

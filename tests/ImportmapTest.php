@@ -13,18 +13,18 @@ class ImportmapTest extends TestCase
     {
         parent::setUp();
 
-        $this->map = new Importmap(rootPath: __DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR);
+        $this->map = new Importmap(rootPath: __DIR__.DIRECTORY_SEPARATOR.'stubs'.DIRECTORY_SEPARATOR);
 
-        $this->map->pin("app");
-        $this->map->pin("editor", to: "js/rich_text.js");
-        $this->map->pin("md5", to: "https://cdn.skypack.dev/md5", preload: true);
+        $this->map->pin('app');
+        $this->map->pin('editor', to: 'js/rich_text.js');
+        $this->map->pin('md5', to: 'https://cdn.skypack.dev/md5', preload: true);
 
-        $this->map->pinAllFrom("resources/js/controllers", under: "controllers", to: "js/controllers", preload: true);
-        $this->map->pinAllFrom("resources/js/spina/controllers", under: "controllers/spina", to: "js/controllers/spina", preload: true);
-        $this->map->pinAllFrom("resources/js/spina/controllers", under: "controllers/spina", to: "js/spina/controllers", preload: true);
-        $this->map->pinAllFrom("resources/js/helpers", under: "helpers", to: "js/helpers", preload: true);
-        $this->map->pinAllFrom("public/vendor/nova/", preload: true);
-        $this->map->pinAllFrom("resources/js/libs", to: "js/libs");
+        $this->map->pinAllFrom('resources/js/controllers', under: 'controllers', to: 'js/controllers', preload: true);
+        $this->map->pinAllFrom('resources/js/spina/controllers', under: 'controllers/spina', to: 'js/controllers/spina', preload: true);
+        $this->map->pinAllFrom('resources/js/spina/controllers', under: 'controllers/spina', to: 'js/spina/controllers', preload: true);
+        $this->map->pinAllFrom('resources/js/helpers', under: 'helpers', to: 'js/helpers', preload: true);
+        $this->map->pinAllFrom('public/vendor/nova/', preload: true);
+        $this->map->pinAllFrom('resources/js/libs', to: 'js/libs');
     }
 
     /** @test */

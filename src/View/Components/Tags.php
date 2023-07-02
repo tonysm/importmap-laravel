@@ -20,7 +20,7 @@ class Tags extends Component
     {
         $resolver = new AssetResolver();
 
-        return view("importmap::tags", [
+        return view('importmap::tags', [
             'importmaps' => $this->importmap?->asArray($resolver) ?? ImportmapFacade::asArray($resolver),
             'preloadedModules' => $this->importmap?->preloadedModulePaths($resolver) ?? ImportmapFacade::preloadedModulePaths($resolver),
         ]);

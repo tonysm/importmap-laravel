@@ -13,7 +13,7 @@ class NpmOutdatedTest extends TestCase
     {
         parent::setUp();
 
-        $this->npm = new Npm(configPath: __DIR__ . DIRECTORY_SEPARATOR . join(DIRECTORY_SEPARATOR, ["fixtures", "npm", "outdated-importmap.php"]));
+        $this->npm = new Npm(configPath: __DIR__.DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, ['fixtures', 'npm', 'outdated-importmap.php']));
 
         Http::preventStrayRequests();
     }
@@ -22,8 +22,8 @@ class NpmOutdatedTest extends TestCase
     public function finds_no_outdated_packages()
     {
         Http::fakeSequence()
-        ->push(["dist-tags" => ["latest" => "3.0.0"]])
-        ->push(["dist-tags" => ["latest" => "4.0.0"]]);
+            ->push(['dist-tags' => ['latest' => '3.0.0']])
+            ->push(['dist-tags' => ['latest' => '4.0.0']]);
 
         $this->assertCount(0, $this->npm->outdatedPackages());
     }
@@ -33,7 +33,7 @@ class NpmOutdatedTest extends TestCase
     {
         Http::fake([
             'https://registry.npmjs.org/is-svg' => Http::response([], 404),
-            'https://registry.npmjs.org/lodash' => Http::response(["dist-tags" => ["latest" => "4.0.0"]]),
+            'https://registry.npmjs.org/lodash' => Http::response(['dist-tags' => ['latest' => '4.0.0']]),
         ]);
 
         $this->assertCount(1, $packages = $this->npm->outdatedPackages());
@@ -48,8 +48,8 @@ class NpmOutdatedTest extends TestCase
     public function handles_error_when_returns_ok_but_response_json_contains_error()
     {
         Http::fake([
-            'https://registry.npmjs.org/is-svg' => Http::response(["error" => "Something went wrong"]),
-            'https://registry.npmjs.org/lodash' => Http::response(["dist-tags" => ["latest" => "4.0.0"]]),
+            'https://registry.npmjs.org/is-svg' => Http::response(['error' => 'Something went wrong']),
+            'https://registry.npmjs.org/lodash' => Http::response(['dist-tags' => ['latest' => '4.0.0']]),
         ]);
 
         $this->assertCount(1, $packages = $this->npm->outdatedPackages());
@@ -64,13 +64,13 @@ class NpmOutdatedTest extends TestCase
     public function finds_outdated_packages()
     {
         Http::fake([
-            'https://registry.npmjs.org/is-svg' => Http::response(["dist-tags" => ["latest" => "4.0.0"]]),
+            'https://registry.npmjs.org/is-svg' => Http::response(['dist-tags' => ['latest' => '4.0.0']]),
             'https://registry.npmjs.org/lodash' => Http::response([
-                "versions" => [
-                    "2.0.0" => [],
-                    "5.0.0" => [],
-                    "1.2.0" => [],
-                    "1.7.0" => [],
+                'versions' => [
+                    '2.0.0' => [],
+                    '5.0.0' => [],
+                    '1.2.0' => [],
+                    '1.7.0' => [],
                 ],
             ]),
         ]);

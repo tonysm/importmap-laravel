@@ -10,6 +10,7 @@ use SplFileInfo;
 class Importmap
 {
     private Collection $packages;
+
     private Collection $directories;
 
     public function __construct(public ?string $rootPath = null)
@@ -56,7 +57,7 @@ class Importmap
 
     public function getFileAbsolutePath(string $relativePath): string
     {
-        return $this->rootPath . str_replace('/', DIRECTORY_SEPARATOR, $relativePath);
+        return $this->rootPath.str_replace('/', DIRECTORY_SEPARATOR, $relativePath);
     }
 
     private function hasManifest(): bool
@@ -129,7 +130,7 @@ class Importmap
             return str_replace('/', DIRECTORY_SEPARATOR, $path);
         }
 
-        return $this->rootPath . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $path);
+        return $this->rootPath.DIRECTORY_SEPARATOR.str_replace('/', DIRECTORY_SEPARATOR, $path);
     }
 
     private function findJavascriptFilesInTree(string $absolutePath): Collection
@@ -157,7 +158,7 @@ class Importmap
     private function modulePathFrom(string $moduleFilename, MappedDirectory $mapping): string
     {
         return str_replace(DIRECTORY_SEPARATOR, '/', implode('/', array_filter([
-            rtrim($mapping->path ?: $mapping->under, DIRECTORY_SEPARATOR . '/'),
+            rtrim($mapping->path ?: $mapping->under, DIRECTORY_SEPARATOR.'/'),
             $moduleFilename,
         ])));
     }

@@ -14,7 +14,7 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
-        config()->set('importmap.manifest_location_path', __DIR__ . '/stubs/public/.importmap-manifest.json');
+        config()->set('importmap.manifest_location_path', __DIR__.'/stubs/public/.importmap-manifest.json');
 
         Factory::guessFactoryNamesUsing(
             fn (string $modelName) => 'Tonysm\\ImportmapLaravel\\Database\\Factories\\'.class_basename($modelName).'Factory'

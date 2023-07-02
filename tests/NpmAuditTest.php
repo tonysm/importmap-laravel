@@ -14,7 +14,7 @@ class NpmAuditTest extends TestCase
     {
         parent::setUp();
 
-        $this->npm = new Npm(configPath: __DIR__ . DIRECTORY_SEPARATOR . join(DIRECTORY_SEPARATOR, ["fixtures", "npm", "audit-importmap.php"]));
+        $this->npm = new Npm(configPath: __DIR__.DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, ['fixtures', 'npm', 'audit-importmap.php']));
 
         Http::preventStrayRequests();
     }
@@ -28,8 +28,8 @@ class NpmAuditTest extends TestCase
 
         Http::assertSent(fn (Request $request) => (
             $request->data() == [
-                "is-svg" => ["3.0.0"],
-                "lodash" => ["4.17.12"],
+                'is-svg' => ['3.0.0'],
+                'lodash' => ['4.17.12'],
             ]
         ));
     }
@@ -38,16 +38,16 @@ class NpmAuditTest extends TestCase
     public function finds_audit_vulnerabilities()
     {
         Http::fake(fn () => Http::response([
-            "is-svg" => [
+            'is-svg' => [
                 [
-                    "title" => "Regular Expression Denial of Service (ReDoS)",
-                    "severity" => "high",
-                    "vulnerable_versions" => ">=2.1.0 <4.2.2",
+                    'title' => 'Regular Expression Denial of Service (ReDoS)',
+                    'severity' => 'high',
+                    'vulnerable_versions' => '>=2.1.0 <4.2.2',
                 ],
                 [
-                    "title" => "ReDOS in IS-SVG",
-                    "severity" => "high",
-                    "vulnerable_versions" => ">=2.1.0 <4.3.0",
+                    'title' => 'ReDOS in IS-SVG',
+                    'severity' => 'high',
+                    'vulnerable_versions' => '>=2.1.0 <4.3.0',
                 ],
             ],
         ]));
@@ -66,8 +66,8 @@ class NpmAuditTest extends TestCase
 
         Http::assertSent(fn (Request $request) => (
             $request->data() == [
-                "is-svg" => ["3.0.0"],
-                "lodash" => ["4.17.12"],
+                'is-svg' => ['3.0.0'],
+                'lodash' => ['4.17.12'],
             ]
         ));
     }

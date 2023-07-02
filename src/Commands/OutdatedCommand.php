@@ -18,7 +18,7 @@ class OutdatedCommand extends Command
         $outdatedPackages = $npm->outdatedPackages();
 
         if ($outdatedPackages->isEmpty()) {
-            $this->info("No outdated packages found.");
+            $this->info('No outdated packages found.');
 
             return self::SUCCESS;
         }
@@ -26,8 +26,8 @@ class OutdatedCommand extends Command
         $this->table(
             ['Package', 'Current', 'Latest'],
             $outdatedPackages
-            ->map(fn (OutdatedPackage $package) => [$package->name, $package->currentVersion, $package->latestVersion ?: $package->error])
-            ->all(),
+                ->map(fn (OutdatedPackage $package) => [$package->name, $package->currentVersion, $package->latestVersion ?: $package->error])
+                ->all(),
         );
 
         $this->newLine();

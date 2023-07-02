@@ -33,7 +33,7 @@ class InstallCommand extends Command
         $this->displayAfterNotes();
 
         $this->newLine();
-        $this->line(" <fg=white>Done!</>");
+        $this->line(' <fg=white>Done!</>');
 
         return self::SUCCESS;
     }
@@ -61,7 +61,7 @@ class InstallCommand extends Command
     private function publishImportmapFile(): void
     {
         $this->displayTask('publishing the `routes/importmap.php` file', function () {
-            File::copy(__DIR__ . '/../../stubs/routes/importmap.php', base_path('routes/importmap.php'));
+            File::copy(__DIR__.'/../../stubs/routes/importmap.php', base_path('routes/importmap.php'));
 
             return self::SUCCESS;
         });
@@ -76,7 +76,7 @@ class InstallCommand extends Command
                     $file->getRealPath(),
                     preg_replace(
                         "/import (.*['\"])\.\/(.*)/",
-                        "import $1$2",
+                        'import $1$2',
                         File::get($file->getRealPath()),
                     ),
                 ));
@@ -89,7 +89,7 @@ class InstallCommand extends Command
     {
         $this->displayTask('pinning dependencies from NPM', function () {
             if (! File::exists($packageJsonFile = base_path('package.json'))) {
-                $this->afterMessages[] = "<fg=white>* Pinning was skipped because of missing package.json</>";
+                $this->afterMessages[] = '<fg=white>* Pinning was skipped because of missing package.json</>';
 
                 return self::INVALID;
             }
@@ -154,7 +154,7 @@ class InstallCommand extends Command
                     $file,
                     preg_replace(
                         '/\@vite.*/',
-                        "<x-importmap-tags />",
+                        '<x-importmap-tags />',
                         File::get($file),
                     ),
                 ))

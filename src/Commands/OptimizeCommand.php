@@ -24,16 +24,16 @@ class OptimizeCommand extends Command
             $optimizedImports = collect($imports['imports'])
                 ->reject(fn (string $url) => Str::startsWith($url, ['http://', 'https://']))
                 ->map(function (string $file) use ($importmap) {
-                    $sourceFile = $importmap->rootPath . (str_starts_with($file, 'vendor/') ? '/public/' : '/resources/') . trim($file, '/');
-                    $sourceReplacement = $importmap->rootPath . '/public/dist/' . trim($this->digest($file, $sourceFile), '/');
+                    $sourceFile = $importmap->rootPath.(str_starts_with($file, 'vendor/') ? '/public/' : '/resources/').trim($file, '/');
+                    $sourceReplacement = $importmap->rootPath.'/public/dist/'.trim($this->digest($file, $sourceFile), '/');
 
                     File::ensureDirectoryExists(dirname($sourceReplacement));
                     File::copy($sourceFile, $sourceReplacement);
 
-                    $replacement = Str::after($sourceReplacement, $importmap->rootPath . '/public/');
+                    $replacement = Str::after($sourceReplacement, $importmap->rootPath.'/public/');
 
                     $this->output->writeln(sprintf(
-                        "    copied %s to %s",
+                        '    copied %s to %s',
                         $file,
                         $replacement,
                     ));

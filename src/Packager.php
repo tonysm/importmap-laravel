@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 class Packager
 {
     public const DEFAULT_CDN = 'jspm';
+
     public static $ENDPOINT = 'https://api.jspm.io/generate';
 
     public function __construct(
@@ -109,7 +110,7 @@ class Packager
 
     private function packageFilename(string $package): string
     {
-        return str_replace('/', '--', $package) . '.js';
+        return str_replace('/', '--', $package).'.js';
     }
 
     private function extractPackageVersionFrom(string $url): string

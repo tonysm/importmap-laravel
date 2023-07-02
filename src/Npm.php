@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\Http;
 
 class Npm
 {
-    private string $baseUrl = "https://registry.npmjs.org";
+    private string $baseUrl = 'https://registry.npmjs.org';
 
     public function __construct(private ?string $configPath = null)
     {
-        $this->configPath ??= base_path("routes/importmap.php");
+        $this->configPath ??= base_path('routes/importmap.php');
     }
 
     public function outdatedPackages(): Collection
@@ -23,9 +23,9 @@ class Npm
                 $error = null;
 
                 if (! ($response = $this->getPackage($package))) {
-                    $error = "Response error";
-                } elseif ($response["error"] ?? false) {
-                    $error = $response["error"];
+                    $error = 'Response error';
+                } elseif ($response['error'] ?? false) {
+                    $error = $response['error'];
                 } else {
                     $latestVersion = $this->findLatestVersion($response);
 
@@ -109,7 +109,7 @@ class Npm
 
     private function getPackage(PackageVersion $package)
     {
-        $response = Http::get($this->baseUrl . "/" . $package->name);
+        $response = Http::get($this->baseUrl.'/'.$package->name);
 
         if (! $response->ok()) {
             return null;
@@ -120,17 +120,17 @@ class Npm
 
     private function findLatestVersion(array $json)
     {
-        $latestVersion = data_get($json, "dist-tags.latest");
+        $latestVersion = data_get($json, 'dist-tags.latest');
 
         if ($latestVersion) {
             return $latestVersion;
         }
 
-        if (! isset($json["versions"])) {
+        if (! isset($json['versions'])) {
             return;
         }
 
-        return collect($json["versions"])
+        return collect($json['versions'])
             ->keys()
             ->sort(fn ($versionA, $versionB) => version_compare($versionB, $versionA))
             ->values()
@@ -145,7 +145,7 @@ class Npm
     private function getAudit(array $packages)
     {
         $response = Http::asJson()
-            ->post($this->baseUrl . "/-/npm/v1/security/advisories/bulk", $packages);
+            ->post($this->baseUrl.'/-/npm/v1/security/advisories/bulk', $packages);
 
         if (! $response->ok()) {
             return collect();
