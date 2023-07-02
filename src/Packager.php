@@ -17,7 +17,7 @@ class Packager
         public string $importmapPath = 'routes/importmap.php',
         public string $vendorPath = 'resources/js/vendor',
     ) {
-        $this->importmapPath = ! str_starts_with($importmapPath, '/')
+        $this->importmapPath = file_exists(base_path($importmapPath))
             ? base_path($this->importmapPath)
             : $this->importmapPath;
     }
