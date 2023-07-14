@@ -2,6 +2,15 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 1.5.0 - 2023-07-14
+
+### Changelog
+
+- **NEW**: New `importmap:packages` command that lists out the external packages being imported
+- **FIXED**: Fixes single quotes support in the `routes/importmap.php` file
+
+**Full Changelog**: https://github.com/tonysm/importmap-laravel/compare/1.4.1...1.5.0
+
 ## 1.4.1 - 2023-05-10
 
 ### What's Changed
