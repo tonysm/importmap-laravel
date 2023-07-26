@@ -27,7 +27,6 @@ class InstallCommand extends Command
         $this->importDependenciesFromNpm();
         $this->updateAppLayouts();
         $this->deleteNpmRelatedFiles();
-        $this->configureJsSymlink();
         $this->configureIgnoredFolder();
 
         $this->displayAfterNotes();
@@ -193,37 +192,6 @@ class InstallCommand extends Command
         return collect(['app', 'guest'])
             ->map(fn ($file) => resource_path("views/layouts/{$file}.blade.php"))
             ->filter(fn ($file) => File::exists($file));
-    }
-
-    private function configureJsSymlink()
-    {
-        $this->displayTask('configuring JS symlink', function () {
-            File::put(
-                $configFile = base_path('config/filesystems.php'),
-                preg_replace(
-                    '/(\s*)\'links\' => \[((?:.|\n)*)(?:],)+?/',
-                    "\\1'links' => array_filter([\n\\1    public_path('js') => env('APP_ENV') === 'local' ? resource_path('js') : null,\\2]),",
-                    File::get($configFile),
-                ),
-            );
-
-            File::put(
-                $configFile,
-                preg_replace(
-                    '/(array_filter\(\[)\n\n/',
-                    '\\1',
-                    File::get($configFile),
-                ),
-            );
-
-            if (File::isDirectory(public_path('js'))) {
-                $this->afterMessages[] = "<fg=white>* Please, delete the `<fg=yellow>public/js</>` folder before the next step.</>\n";
-            }
-
-            $this->afterMessages[] = "<fg=white>* To create the symlink, run:</>\n\n\n    <fg=yellow>    php artisan storage:link</>\n";
-
-            return self::SUCCESS;
-        });
     }
 
     private function displayHeader($text, $prefix)

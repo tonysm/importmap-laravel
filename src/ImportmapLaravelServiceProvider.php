@@ -45,5 +45,11 @@ class ImportmapLaravelServiceProvider extends PackageServiceProvider
         if (file_exists(base_path('routes/importmap.php'))) {
             require base_path('routes/importmap.php');
         }
+
+        if (app()->environment('local') && app()->runningInConsole()) {
+            config()->set('filesystems.links', config('filesystems.links') + [
+                public_path('js') => resource_path('js'),
+            ]);
+        }
     }
 }
