@@ -2,6 +2,14 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 1.6.0 - 2023-07-27
+
+### Changelog
+
+- **CHANGED**: Push symlinks config to package instead of patching the application's `config/filesystems.php` file by @tonysm in https://github.com/tonysm/importmap-laravel/pull/29
+
+**Full Changelog**: https://github.com/tonysm/importmap-laravel/compare/1.5.0...1.6.0
+
 ## 1.5.0 - 2023-07-14
 
 ### Changelog
