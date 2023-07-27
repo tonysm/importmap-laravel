@@ -56,23 +56,9 @@ By default the `x-importmap-tags` component assumes your entrypoint module is `a
 <x-importmap-tags entrypoint="admin" />
 ```
 
-We also need to symlink the `resources/js` folder to `public/js` to make our JavaScript files publicly available. It's recommended to do that only for local development. This can be achieved by adding the link rule to your `config/filesystems.php`:
+The package will automatically map the `resources/js` folder to your `public/js` folder using Laravel's symlink feature. All you have to do is run `php artisan storage:link` after installing the package. If you're using Laravel Sail, make sure you prefix that command with `sail` as the symlink needs to be created inside the container.
 
-```php
-<?php
-
-return [
-    // ...
-    'links' => array_filter([
-        public_path('storage') => storage_path('app/public'),
-        public_path('js') => env('APP_ENV') === 'local' ? resource_path('js') : null,
-    ]),
-];
-```
-
-Now, whenever you run `php artisan storage:link` in the `local` env, your `resources/js` folder will be linked to the `public/js` folder, which will make your imports work while you're developing your app.
-
-For production, it's recommended to run the `importmap:optimize` command instead:
+The symlink is only register on local environments. For production, it's recommended to run the `importmap:optimize` command instead:
 
 ```php
 php artisan importmap:optimize
