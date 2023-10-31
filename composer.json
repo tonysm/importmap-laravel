@@ -31,6 +31,9 @@
         "phpstan/phpstan-phpunit": "^1.0",
         "phpunit/phpunit": "^9.5"
     },
+    "bin": [
+        "bin/importmap"
+    ],
     "autoload": {
         "psr-4": {
             "Tonysm\\ImportmapLaravel\\": "src"
