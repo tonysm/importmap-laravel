@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+ARGS=(php artisan)
+
+if [ $# -gt 0 ]; then
+    ARGS+=("importmap:$@")
+else
+    ARGS+=(list importmap)
+fi
+
+"${ARGS[@]}"
