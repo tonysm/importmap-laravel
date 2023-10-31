@@ -8,4 +8,7 @@ else
     ARGS+=(list importmap)
 fi
 
-"${ARGS[@]}"
+OUTPUT=$("${ARGS[@]}")
+MODIFIED_OUTPUT="${OUTPUT//importmap:/importmap }"
+
+echo $MODIFIED_OUTPUT
