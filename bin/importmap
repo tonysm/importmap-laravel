@@ -11,4 +11,4 @@ fi
 OUTPUT=$("${ARGS[@]}")
 MODIFIED_OUTPUT="${OUTPUT//importmap:/importmap }"
 
-echo $MODIFIED_OUTPUT
+echo "${MODIFIED_OUTPUT}"
