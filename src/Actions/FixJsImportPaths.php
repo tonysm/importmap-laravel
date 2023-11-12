@@ -33,7 +33,7 @@ class FixJsImportPaths
 
     private function absoluteOutputPathWithFileFor(SplFileInfo $file)
     {
-        return rtrim($this->absoluteOutputPathFor($file), '/').'/'.$file->getFilename();
+        return rtrim($this->absoluteOutputPathFor($file), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.$file->getFilename();
     }
 
     private function updatedJsImports(SplFileInfo $file)
@@ -51,9 +51,9 @@ class FixJsImportPaths
                     function ($matches) use ($file) {
                         $replaced = $this->replaceDotImports($file, $matches[1], $matches[0]);
 
-                        $relative = trim(str_replace($this->root, '', $replaced), '/');
+                        $relative = trim(str_replace($this->root, '', $replaced), DIRECTORY_SEPARATOR);
 
-                        return str_replace($matches[1], $relative, $matches[0]);
+                        return str_replace(DIRECTORY_SEPARATOR, '/', str_replace($matches[1], $relative, $matches[0]));
                     },
                     $line,
                 );
@@ -69,13 +69,13 @@ class FixJsImportPaths
     {
         $removeExtension = false;
         $removeIndex = false;
-        $path = rtrim($file->getPath(), '/').'/'.$imports;
+        $path = rtrim($file->getPath(), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.str_replace('/', DIRECTORY_SEPARATOR, $imports);
 
         if (is_dir($path)) {
             $removeIndex = true;
-            $path = File::exists(rtrim($path, '/').'/index.mjs')
-                ? rtrim($path, '/').'/index.mjs'
-                : rtrim($path, '/').'/index.js';
+            $path = File::exists(implode(DIRECTORY_SEPARATOR, [rtrim($path, DIRECTORY_SEPARATOR), 'index.mjs']))
+                ? rtrim($path, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.'index.mjs'
+                : rtrim($path, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.'index.js';
         }
 
         if (! str_ends_with($path, '.js') && ! str_ends_with($path, '.mjs')) {
@@ -90,7 +90,7 @@ class FixJsImportPaths
         }
 
         if ($removeIndex) {
-            return Str::beforeLast($fixedPath, '/');
+            return Str::beforeLast($fixedPath, DIRECTORY_SEPARATOR);
         }
 
         if ($removeExtension) {
