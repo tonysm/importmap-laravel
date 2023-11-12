@@ -46,6 +46,4 @@ jobs:
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: Execute tests
-        run: |
-          chmod -R ug+rw tests/tmp
-          vendor/bin/phpunit
+        run: vendor/bin/phpunit
