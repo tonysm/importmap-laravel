@@ -4,9 +4,11 @@ namespace Tonysm\ImportmapLaravel\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Console\Terminal;
 use Tonysm\ImportmapLaravel\Actions\FixJsImportPaths;
+use Tonysm\ImportmapLaravel\Events\FailedToFixImportStatement;
 
 class InstallCommand extends Command
 {
@@ -68,6 +70,14 @@ class InstallCommand extends Command
 
     private function convertLocalImportsFromUsingDots(): void
     {
+        Event::listen(function (FailedToFixImportStatement $event) {
+            $this->afterMessages[] = sprintf(
+                'Failed to fix import statement (%s) in file (%).',
+                $event->importStatement,
+                str_replace(base_path(), '', $event->file->getPath()),
+            );
+        });
+
         $this->displayTask('converting js imports', function () {
             $root = rtrim(resource_path('js'), '/').'/';
 

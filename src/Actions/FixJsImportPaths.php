@@ -5,6 +5,7 @@ namespace Tonysm\ImportmapLaravel\Actions;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use SplFileInfo;
+use Tonysm\ImportmapLaravel\Events\FailedToFixImportStatement;
 use Tonysm\ImportmapLaravel\Exceptions\FailedToFixImportStatementException;
 
 class FixJsImportPaths
@@ -44,31 +45,31 @@ class FixJsImportPaths
                 continue;
             }
 
-            $lines[$index] = preg_replace_callback(
-                '#import (?:.*["\'])(\..*)(?:[\'"];?.*)#',
-                function ($matches) use ($file) {
-                    $replaced = $this->replaceDotImports($file->getPath(), $matches[1]);
+            try {
+                $lines[$index] = preg_replace_callback(
+                    '#import (?:.*["\'])(\..*)(?:[\'"];?.*)#',
+                    function ($matches) use ($file) {
+                        $replaced = $this->replaceDotImports($file, $matches[1], $matches[0]);
 
-                    if (! $replaced) {
-                        throw FailedToFixImportStatementException::couldNotFixImport($matches[0], $file);
-                    }
+                        $relative = trim(str_replace($this->root, '', $replaced), '/');
 
-                    $relative = trim(str_replace($this->root, '', $replaced), '/');
-
-                    return str_replace($matches[1], $relative, $matches[0]);
-                },
-                $line,
-            );
+                        return str_replace($matches[1], $relative, $matches[0]);
+                    },
+                    $line,
+                );
+            } catch (FailedToFixImportStatementException $exception) {
+                event(new FailedToFixImportStatement($exception->file, $exception->importStatement));
+            }
         }
 
         return implode(PHP_EOL, $lines);
     }
 
-    private function replaceDotImports(string $path, string $imports)
+    private function replaceDotImports(SplFileInfo $file, string $imports, string $line)
     {
         $removeExtension = false;
         $removeIndex = false;
-        $path = rtrim($path, '/').'/'.$imports;
+        $path = rtrim($file->getPath(), '/').'/'.$imports;
 
         if (is_dir($path)) {
             $removeIndex = true;
@@ -84,8 +85,8 @@ class FixJsImportPaths
                 : $path.'.js';
         }
 
-        if (! ($fixedPath = realpath($path))) {
-            return false;
+        if (($fixedPath = realpath($path)) === false) {
+            throw FailedToFixImportStatementException::couldNotFixImport($line, $file);
         }
 
         if ($removeIndex) {
