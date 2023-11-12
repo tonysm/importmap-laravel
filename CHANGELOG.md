@@ -2,6 +2,14 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 1.7.0 - 2023-11-12
+
+### What's Changed
+
+- Adds a `bin/importmap` script by @tonysm in https://github.com/tonysm/importmap-laravel/pull/33
+
+**Full Changelog**: https://github.com/tonysm/importmap-laravel/compare/1.6.0...1.7.0
+
 ## 1.6.0 - 2023-07-27
 
 ### Changelog
