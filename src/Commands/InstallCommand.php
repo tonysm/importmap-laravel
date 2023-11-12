@@ -5,8 +5,8 @@ namespace Tonysm\ImportmapLaravel\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
-use SplFileInfo;
 use Symfony\Component\Console\Terminal;
+use Tonysm\ImportmapLaravel\Actions\FixJsImportPaths;
 
 class InstallCommand extends Command
 {
@@ -69,16 +69,9 @@ class InstallCommand extends Command
     private function convertLocalImportsFromUsingDots(): void
     {
         $this->displayTask('converting js imports', function () {
-            collect(File::allFiles(resource_path('js')))
-                ->filter(fn (SplFileInfo $file) => in_array($file->getExtension(), ['js', 'mjs']))
-                ->each(fn (SplFileInfo $file) => File::put(
-                    $file->getRealPath(),
-                    preg_replace(
-                        "/import (.*['\"])\.\/(.*)/",
-                        'import $1$2',
-                        File::get($file->getRealPath()),
-                    ),
-                ));
+            $root = rtrim(resource_path('js'), '/').'/';
+
+            (new FixJsImportPaths($root))();
 
             return self::SUCCESS;
         });
