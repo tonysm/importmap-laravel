@@ -49,3 +49,14 @@ jobs:
         run: |
           chmod -R ug+rw tests/tmp
           vendor/bin/phpunit
+        continue-on-error: true
+
+      - name: Zip Folder
+        run: zip -r tests-tmp.zip tests/tmp
+
+      - name: Upload Artifacts
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: tests-tmp-folder
+          path: tests-tmp.zip
