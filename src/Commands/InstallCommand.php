@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Terminal;
 use Tonysm\ImportmapLaravel\Actions\FixJsImportPaths;
 use Tonysm\ImportmapLaravel\Events\FailedToFixImportStatement;
@@ -62,7 +63,7 @@ class InstallCommand extends Command
     private function publishImportmapFile(): void
     {
         $this->displayTask('publishing the `routes/importmap.php` file', function () {
-            File::copy(__DIR__.'/../../stubs/routes/importmap.php', base_path('routes/importmap.php'));
+            File::copy(dirname(__DIR__, 2).join(DIRECTORY_SEPARATOR, ['', 'stubs', 'routes', 'importmap.php']), base_path(join(DIRECTORY_SEPARATOR, ['routes', 'importmap.php'])));
 
             return self::SUCCESS;
         });
@@ -79,7 +80,7 @@ class InstallCommand extends Command
         });
 
         $this->displayTask('converting js imports', function () {
-            $root = rtrim(resource_path('js'), '/').'/';
+            $root = rtrim(resource_path('js'), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
 
             (new FixJsImportPaths($root))();
 
@@ -224,6 +225,10 @@ class InstallCommand extends Command
 
     private function configureIgnoredFolder()
     {
+        if (Str::contains(File::get(base_path('.gitignore')), 'public/js')) {
+            return;
+        }
+
         $this->displayTask('dumping & ignoring `public/js` folder', function () {
             File::append(
                 base_path('.gitignore'),
