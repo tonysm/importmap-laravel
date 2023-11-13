@@ -4,9 +4,12 @@ namespace Tonysm\ImportmapLaravel\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\File;
-use SplFileInfo;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Terminal;
+use Tonysm\ImportmapLaravel\Actions\FixJsImportPaths;
+use Tonysm\ImportmapLaravel\Events\FailedToFixImportStatement;
 
 class InstallCommand extends Command
 {
@@ -60,7 +63,7 @@ class InstallCommand extends Command
     private function publishImportmapFile(): void
     {
         $this->displayTask('publishing the `routes/importmap.php` file', function () {
-            File::copy(__DIR__.'/../../stubs/routes/importmap.php', base_path('routes/importmap.php'));
+            File::copy(dirname(__DIR__, 2).join(DIRECTORY_SEPARATOR, ['', 'stubs', 'routes', 'importmap.php']), base_path(join(DIRECTORY_SEPARATOR, ['routes', 'importmap.php'])));
 
             return self::SUCCESS;
         });
@@ -68,17 +71,18 @@ class InstallCommand extends Command
 
     private function convertLocalImportsFromUsingDots(): void
     {
+        Event::listen(function (FailedToFixImportStatement $event) {
+            $this->afterMessages[] = sprintf(
+                'Failed to fix import statement (%s) in file (%).',
+                $event->importStatement,
+                str_replace(base_path(), '', $event->file->getPath()),
+            );
+        });
+
         $this->displayTask('converting js imports', function () {
-            collect(File::allFiles(resource_path('js')))
-                ->filter(fn (SplFileInfo $file) => in_array($file->getExtension(), ['js', 'mjs']))
-                ->each(fn (SplFileInfo $file) => File::put(
-                    $file->getRealPath(),
-                    preg_replace(
-                        "/import (.*['\"])\.\/(.*)/",
-                        'import $1$2',
-                        File::get($file->getRealPath()),
-                    ),
-                ));
+            $root = rtrim(resource_path('js'), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
+
+            (new FixJsImportPaths($root))();
 
             return self::SUCCESS;
         });
@@ -221,6 +225,10 @@ class InstallCommand extends Command
 
     private function configureIgnoredFolder()
     {
+        if (Str::contains(File::get(base_path('.gitignore')), 'public/js')) {
+            return;
+        }
+
         $this->displayTask('dumping & ignoring `public/js` folder', function () {
             File::append(
                 base_path('.gitignore'),
