@@ -2,6 +2,15 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 1.8.0 - 2023-11-13
+
+### What's Changed
+
+- Fix installation script not properly fixing paths resolution by @tonysm in https://github.com/tonysm/importmap-laravel/pull/34
+- Bump shims version to 1.8.2 by @tonysm in https://github.com/tonysm/importmap-laravel/pull/35
+
+**Full Changelog**: https://github.com/tonysm/importmap-laravel/compare/1.7.0...1.8.0
+
 ## 1.7.0 - 2023-11-12
 
 ### What's Changed
