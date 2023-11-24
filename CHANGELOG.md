@@ -2,6 +2,12 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 1.8.1 - 2023-11-24
+
+### Changelog
+
+- **FIX**: Fixes the failed to fix import statement event name (https://github.com/tonysm/importmap-laravel/commit/d32c41d3d38ed27767ce8868af0a8861727196ea)
+
 ## 1.8.0 - 2023-11-13
 
 ### What's Changed
