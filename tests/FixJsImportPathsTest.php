@@ -32,7 +32,7 @@ class FixJsImportPathsTest extends TestCase
 
         // Root files...
         $this->assertTrue(File::exists($this->tmpFolder.DIRECTORY_SEPARATOR.'app.js'));
-        $this->assertMatchesRegularExpression('#import ["\']bootstrap["\']#', File::get($this->tmpFolder.DIRECTORY_SEPARATOR.'app.js'));
+        $this->assertMatchesRegularExpression('#import ["\']bootstrap["\']\nimport ["\']libs["\']#', File::get($this->tmpFolder.DIRECTORY_SEPARATOR.'app.js'));
         $this->assertMatchesRegularExpression('#import axios from ["\']axios["\']#', File::get($this->tmpFolder.DIRECTORY_SEPARATOR.'bootstrap.js'));
 
         // Libs folders...

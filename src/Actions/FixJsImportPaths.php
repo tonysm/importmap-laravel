@@ -47,7 +47,7 @@ class FixJsImportPaths
 
             try {
                 $lines[$index] = preg_replace_callback(
-                    '#import (?:.*["\'])(\..*)(?:[\'"];?.*)#',
+                    '#import.+["\']([\.]+.*)["\']#',
                     function ($matches) use ($file) {
                         $replaced = $this->replaceDotImports($file, $matches[1], $matches[0]);
 
