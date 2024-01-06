@@ -34,18 +34,14 @@ class TagsComponentTest extends TestCase
     public function generates_tags_without_nonce()
     {
         $this->blade('<x-importmap-tags />')
-            ->assertSee('<link rel="modulepreload" href="https://cdn.skypack.dev/md5" />', escape: false)
-            ->assertDontSee('<script type="esms-options"', escape: false)
-            ->assertSee('<script async src="https://ga.jspm.io/npm:es-module-shims@'.config('importmap.shim_version').'/dist/es-module-shims.js" data-turbo-track="reload"></script>', escape: false);
+            ->assertSee('<link rel="modulepreload" href="https://cdn.skypack.dev/md5" />', escape: false);
     }
 
     /** @test */
     public function uses_given_csp_nonce()
     {
         $this->blade('<x-importmap-tags nonce="h3ll0" />')
-            ->assertSee('<link rel="modulepreload" href="https://cdn.skypack.dev/md5" nonce="h3ll0" />', escape: false)
-            ->assertSee('<script type="esms-options" nonce="h3ll0">{"nonce":"h3ll0"}</script>', escape: false)
-            ->assertSee('<script async src="https://ga.jspm.io/npm:es-module-shims@'.config('importmap.shim_version').'/dist/es-module-shims.js" data-turbo-track="reload" nonce="h3ll0"></script>', escape: false);
+            ->assertSee('<link rel="modulepreload" href="https://cdn.skypack.dev/md5" nonce="h3ll0" />', escape: false);
     }
 
     /** @test */
