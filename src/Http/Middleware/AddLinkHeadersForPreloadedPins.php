@@ -2,6 +2,7 @@
 
 namespace Tonysm\ImportmapLaravel\Http\Middleware;
 
+use Tonysm\ImportmapLaravel\AssetResolver;
 use Tonysm\ImportmapLaravel\Facades\Importmap;
 
 class AddLinkHeadersForPreloadedPins
@@ -16,7 +17,9 @@ class AddLinkHeadersForPreloadedPins
     public function handle($request, $next)
     {
         return tap($next($request), function ($response) {
-            if ($preloaded = Importmap::preloadedModulePaths(fn ($file) => asset($file))) {
+            $resolver = new AssetResolver();
+
+            if ($preloaded = Importmap::preloadedModulePaths($resolver)) {
                 $response->header('Link', collect($preloaded)
                     ->map(fn ($url) => "<{$url}>; rel=\"modulepreload\"")
                     ->join(', '));
