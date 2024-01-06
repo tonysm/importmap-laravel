@@ -82,7 +82,7 @@ In a nutshell, importmap works by giving the browser a map of where to look for 
 use Tonysm\ImportmapLaravel\Facades\Importmap;
 
 // Other pins...
-Importmap::pin("alpinejs", to: "https://ga.jspm.io/npm:alpinejs@3.8.1/dist/module.esm.js");
+Importmap::pin("alpinejs", to: "/js/vendor/alpinejs.js"); //@3.8.1
 ```
 
 Then, in your JavaScript files you can safely do:
@@ -137,33 +137,21 @@ If you depend on any external library you can use the `importmap:pin` command to
 php artisan importmap:pin alpinejs
 ```
 
-That will add the following line to your `routes/importmap.php` file:
+It will download the `alpinejs` lib, then it will add the following line to your `routes/importmap.php` file:
 
 ```php
-Importmap::pin("alpinejs", to: "https://ga.jspm.io/npm:alpinejs@3.8.1/dist/module.esm.js");
+Importmap::pin("alpinejs", to: "/js/vendor/alpinejs.js"); // @3.8.1
 ```
 
-The `pin` command makes use of the jspm.io API to resolve the dependencies (and the dependencies of our dependencies), looking for ESM modules that we can pin, and resolving it to a CDN URL. We can control the CDN we want to use by specifying the `--from` flag like so:
+The `pin` command makes use of the jspm.io API to resolve the dependencies (and the dependencies of our dependencies), looking for ESM modules that we can pin, and resolving it to a CDN URL and downloading as a dependency. We can control the CDN we want to use by specifying the `--from` flag like so:
 
 ```bash
 php artisan importmap:pin alpinejs --from=unpkg
 ```
 
-Which should generate a pin like so:
+This will download the lib from unpkg instead of the default JSPM CDN.
 
-```php
-Importmap::pin("alpinejs", to: "https://unpkg.com/alpinejs@3.8.1/dist/module.esm.js");
-```
-
-It's preferred that you always pin from the same CDN, because then your browser will reuse the same SSL handshake when downloading the files (which means they will be downloaded faster).
-
-Alternatively to using CDNs, you may prefer to vendor the libraries yourself, which you can do by using the `--download` flag, like so:
-
-```bash
-php artisan importmap:pin alpinejs --download
-```
-
-This will resolve the dependencies (and the dependencies of our dependencies) and download all the files to your `resources/js/vendor` folder, which you should add to your version control and maintain yourself. The pin will look like this:
+It's important to note that the `pin` command will always resolve the dependencies (and the dependencies of our dependencies) and download all the files to your `resources/js/vendor` folder, which you should add to your version control and vendor it yourself. The pin will look like this:
 
 ```php
 Importmap::pin("alpinejs", to: "/js/vendor/alpinejs.js"); // @3.8.1

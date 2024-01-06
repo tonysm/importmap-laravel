@@ -16,7 +16,6 @@ class UnpinCommand extends Command
     protected $signature = '
         importmap:unpin
         {--from-env=production : The CDN environment}
-        {--download : If used, the dependency will be downloaded to be checked in under version control instead of relying on CDNs.}
         {--from=jspm : The CDN.}
         {packages*}
     ';
@@ -38,13 +37,9 @@ class UnpinCommand extends Command
         $packages = Arr::wrap($this->argument('packages'));
 
         if ($imports = $packager->import($packages, $this->option('from-env'), $this->option('from'))) {
-            $imports->each(function (string $url, string $package) use ($packager) {
+            $imports->each(function (string $_url, string $package) use ($packager) {
                 if ($packager->packaged($package)) {
-                    if ($this->option('download')) {
-                        $this->info(sprintf('Unpinning and removing "%s"', $package));
-                    } else {
-                        $this->info(sprintf('Unpinning "%s"', $package));
-                    }
+                    $this->info(sprintf('Unpinning and removing "%s"', $package));
 
                     $packager->remove($package);
                 }
