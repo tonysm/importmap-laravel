@@ -5,7 +5,6 @@ namespace Tonysm\ImportmapLaravel;
 use Illuminate\View\Compilers\BladeCompiler;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Tonysm\ImportmapLaravel\View\Components;
 
 class ImportmapLaravelServiceProvider extends PackageServiceProvider
 {

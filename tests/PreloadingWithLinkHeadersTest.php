@@ -18,7 +18,7 @@ class PreloadingWithLinkHeadersTest extends TestCase
         $map->pin('editor', to: 'js/rich_text.js', preload: false);
         $map->pinAllFrom('resources/js/', under: 'controllers', to: 'js/', preload: false);
 
-        $response = (new AddLinkHeadersForPreloadedPins)->handle(new Request(), function () {
+        $response = (new AddLinkHeadersForPreloadedPins())->handle(new Request(), function () {
             return new Response('Hello World');
         });
 
@@ -34,7 +34,7 @@ class PreloadingWithLinkHeadersTest extends TestCase
         $map->pin('editor', to: 'js/rich_text.js', preload: false);
         $map->pinAllFrom('resources/js/', under: 'controllers', to: 'js/', preload: true);
 
-        $response = (new AddLinkHeadersForPreloadedPins)->handle(new Request(), function () {
+        $response = (new AddLinkHeadersForPreloadedPins())->handle(new Request(), function () {
             return new Response('Hello World');
         });
 
