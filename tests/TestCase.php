@@ -35,6 +35,7 @@ class TestCase extends Orchestra
     public function getEnvironmentSetUp($app)
     {
         config()->set('database.default', 'testing');
+        config()->set('app.url', 'http://localhost');
 
         /*
         $migration = include __DIR__.'/../database/migrations/create_importmap-laravel_table.php.stub';

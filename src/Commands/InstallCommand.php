@@ -63,7 +63,7 @@ class InstallCommand extends Command
     private function publishImportmapFile(): void
     {
         $this->displayTask('publishing the `routes/importmap.php` file', function () {
-            File::copy(dirname(__DIR__, 2).join(DIRECTORY_SEPARATOR, ['', 'stubs', 'routes', 'importmap.php']), base_path(join(DIRECTORY_SEPARATOR, ['routes', 'importmap.php'])));
+            File::copy(dirname(__DIR__, 2).implode(DIRECTORY_SEPARATOR, ['', 'stubs', 'routes', 'importmap.php']), base_path(implode(DIRECTORY_SEPARATOR, ['routes', 'importmap.php'])));
 
             return self::SUCCESS;
         });
@@ -140,7 +140,7 @@ class InstallCommand extends Command
                     $file,
                     str_replace(
                         "<script src=\"{{ mix('js/app.js') }}\" defer></script>",
-                        '<x-importmap-tags />',
+                        '<x-importmap::tags />',
                         File::get($file),
                     ),
                 ));
@@ -157,7 +157,7 @@ class InstallCommand extends Command
                     $file,
                     preg_replace(
                         '/\@vite.*/',
-                        '<x-importmap-tags />',
+                        '<x-importmap::tags />',
                         File::get($file),
                     ),
                 ))
@@ -182,7 +182,7 @@ class InstallCommand extends Command
                     $file,
                     preg_replace(
                         '/(\s*)(<\/head>)/',
-                        "\\1    <x-importmap-tags />\n\\1\\2",
+                        "\\1    <x-importmap::tags />\n\\1\\2",
                         File::get($file),
                     ),
                 ));

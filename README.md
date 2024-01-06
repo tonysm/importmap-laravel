@@ -45,15 +45,15 @@ php artisan importmap:install
 Next, we need to add the following component to our view or layout file:
 
 ```blade
-<x-importmap-tags />
+<x-importmap::tags />
 ```
 
 Add that between your `<head>` tags. The `entrypoint` should be the "main" file, commonly the `resources/js/app.js` file, which will be mapped to the `app` module (use the module name, not the file).
 
-By default the `x-importmap-tags` component assumes your entrypoint module is `app`, which matches the existing `resources/js/app.js` file from Laravel's default scaffolding. You may want to customize the entrypoint, which you can do with the `entrypoint` prop:
+By default the `x-importmap::tags` component assumes your entrypoint module is `app`, which matches the existing `resources/js/app.js` file from Laravel's default scaffolding. You may want to customize the entrypoint, which you can do with the `entrypoint` prop:
 
 ```blade
-<x-importmap-tags entrypoint="admin" />
+<x-importmap::tags entrypoint="admin" />
 ```
 
 The package will automatically map the `resources/js` folder to your `public/js` folder using Laravel's symlink feature. All you have to do after installing the package is run:
@@ -173,7 +173,7 @@ The version is added as a comment to your pin so you know which version was impo
 
 ### Preloading Modules
 
-To avoid the waterfall effect where the browser has to load one file after another before it can get to the deepest nested import, we support [modulepreload links](https://developers.google.com/web/updates/2017/12/modulepreload). Pinned modules can be preloaded by appending `preload: true` to the pin, like so:
+To avoid the waterfall effect where the browser has to load one file after another before it can get to the deepest nested import, we use [modulepreload links](https://developers.google.com/web/updates/2017/12/modulepreload) by default. If you don't want to preload a dependency, because you want to load it on-demand for efficiency, append `preload: false` to the pin.
 
 ```php
 Importmap::pinAllFrom("resources/js/", to: "js/", preload: true);
@@ -185,6 +185,9 @@ Which will add the correct `links` tags to your head tag in the HTML document, l
 ```html
 <link rel="modulepreload" href="https://unpkg.com/alpinejs@3.8.1/dist/module.esm.js">
 ```
+
+You may add the `AddLinkHeadersForPreloadedPins` middleware to the `web` routes group so these preloaded links are sent as a `Link` header.
+Add the `Tonysm\ImportmapLaravel\Http\Middleware\AddLinkHeadersForPreloadedPins` to the `web` route group so the preloaded modules are sent as the Link headers, which are used in [HTTP/2 Server Push](https://datatracker.ietf.org/doc/html/rfc7540#section-8.2) and [Resource Hints](https://html.spec.whatwg.org/#linkTypes) to push resources to the client as early as possible. Some web servers can pick up this `Link` header and convert them to [Early Hints](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/103) responses.
 
 ## Dependency Maintenance Commands
 

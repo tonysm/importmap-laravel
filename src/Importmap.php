@@ -20,12 +20,12 @@ class Importmap
         $this->directories = collect();
     }
 
-    public function pin(string $name, string $to = null, bool $preload = false)
+    public function pin(string $name, ?string $to = null, bool $preload = true)
     {
         $this->packages->add(new MappedFile($name, path: $to ?: "js/{$name}.js", preload: $preload));
     }
 
-    public function pinAllFrom(string $dir, string $under = null, string $to = null, bool $preload = false)
+    public function pinAllFrom(string $dir, ?string $under = null, ?string $to = null, bool $preload = true)
     {
         $this->directories->add(new MappedDirectory($dir, $under, $to, $preload));
     }
