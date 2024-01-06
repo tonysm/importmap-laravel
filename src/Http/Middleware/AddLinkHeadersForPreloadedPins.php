@@ -7,6 +7,10 @@ use Tonysm\ImportmapLaravel\Facades\Importmap;
 
 class AddLinkHeadersForPreloadedPins
 {
+    public function __construct(private ?AssetResolver $assetsResolver = null)
+    {
+    }
+
     /**
      * Sets the Link header for preloaded pins.
      *
@@ -17,7 +21,7 @@ class AddLinkHeadersForPreloadedPins
     public function handle($request, $next)
     {
         return tap($next($request), function ($response) {
-            $resolver = new AssetResolver();
+            $resolver = $this->assetsResolver ?? new AssetResolver();
 
             if ($preloaded = Importmap::preloadedModulePaths($resolver)) {
                 $response->header('Link', collect($preloaded)

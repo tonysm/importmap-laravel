@@ -4,6 +4,7 @@ namespace Tonysm\ImportmapLaravel\Tests;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Tonysm\ImportmapLaravel\AssetResolver;
 use Tonysm\ImportmapLaravel\Http\Middleware\AddLinkHeadersForPreloadedPins;
 use Tonysm\ImportmapLaravel\Importmap;
 
@@ -34,12 +35,20 @@ class PreloadingWithLinkHeadersTest extends TestCase
         $map->pin('editor', to: 'js/rich_text.js', preload: false);
         $map->pinAllFrom('resources/js/', under: 'controllers', to: 'js/', preload: true);
 
-        $response = (new AddLinkHeadersForPreloadedPins())->handle(new Request(), function () {
+        $resolver = new class extends AssetResolver
+        {
+            public function __invoke($module)
+            {
+                return 'http://localhost/'.str_replace(['.js'], ['-123123.js'], $module);
+            }
+        };
+
+        $response = (new AddLinkHeadersForPreloadedPins($resolver))->handle(new Request(), function () {
             return new Response('Hello World');
         });
 
         $this->assertEquals(
-            '<http://localhost/js/app.js?digest=da39a3ee5e6b4b0d3255bfef95601890afd80709>; rel="modulepreload", <http://localhost/js/app.js?digest=da39a3ee5e6b4b0d3255bfef95601890afd80709>; rel="modulepreload", <http://localhost/js/controllers/hello_controller.js?digest=da39a3ee5e6b4b0d3255bfef95601890afd80709>; rel="modulepreload", <http://localhost/js/controllers/index.js?digest=da39a3ee5e6b4b0d3255bfef95601890afd80709>; rel="modulepreload", <http://localhost/js/controllers/utilities/md5_controller.js?digest=da39a3ee5e6b4b0d3255bfef95601890afd80709>; rel="modulepreload", <http://localhost/js/helpers/requests/index.js?digest=da39a3ee5e6b4b0d3255bfef95601890afd80709>; rel="modulepreload", <http://localhost/js/libs/vendor/alpine.js?digest=da39a3ee5e6b4b0d3255bfef95601890afd80709>; rel="modulepreload", <http://localhost/js/spina/controllers/another_controller.js?digest=da39a3ee5e6b4b0d3255bfef95601890afd80709>; rel="modulepreload", <http://localhost/js/spina/controllers/deeper/again_controller.js?digest=da39a3ee5e6b4b0d3255bfef95601890afd80709>; rel="modulepreload"',
+            '<http://localhost/js/app-123123.js>; rel="modulepreload", <http://localhost/js/app-123123.js>; rel="modulepreload", <http://localhost/js/controllers/hello_controller-123123.js>; rel="modulepreload", <http://localhost/js/controllers/index-123123.js>; rel="modulepreload", <http://localhost/js/controllers/utilities/md5_controller-123123.js>; rel="modulepreload", <http://localhost/js/helpers/requests/index-123123.js>; rel="modulepreload", <http://localhost/js/libs/vendor/alpine-123123.js>; rel="modulepreload", <http://localhost/js/spina/controllers/another_controller-123123.js>; rel="modulepreload", <http://localhost/js/spina/controllers/deeper/again_controller-123123.js>; rel="modulepreload"',
             $response->headers->get('Link'),
         );
     }
