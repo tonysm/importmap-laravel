@@ -63,7 +63,7 @@ class InstallCommand extends Command
     private function publishImportmapFile(): void
     {
         $this->displayTask('publishing the `routes/importmap.php` file', function () {
-            File::copy(dirname(__DIR__, 2).join(DIRECTORY_SEPARATOR, ['', 'stubs', 'routes', 'importmap.php']), base_path(join(DIRECTORY_SEPARATOR, ['routes', 'importmap.php'])));
+            File::copy(dirname(__DIR__, 2).implode(DIRECTORY_SEPARATOR, ['', 'stubs', 'routes', 'importmap.php']), base_path(implode(DIRECTORY_SEPARATOR, ['routes', 'importmap.php'])));
 
             return self::SUCCESS;
         });
