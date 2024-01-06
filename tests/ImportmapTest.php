@@ -15,8 +15,9 @@ class ImportmapTest extends TestCase
 
         $this->map = new Importmap(rootPath: __DIR__.DIRECTORY_SEPARATOR.'stubs'.DIRECTORY_SEPARATOR);
 
-        $this->map->pin('app');
-        $this->map->pin('editor', to: 'js/rich_text.js');
+        $this->map->pin('app', preload: false);
+        $this->map->pin('editor', to: 'js/rich_text.js', preload: false);
+        $this->map->pin('not_there', to: 'js/nowhere.js', preload: false);
         $this->map->pin('md5', to: 'https://cdn.skypack.dev/md5', preload: true);
 
         $this->map->pinAllFrom('resources/js/controllers', under: 'controllers', to: 'js/controllers', preload: true);
@@ -90,6 +91,7 @@ class ImportmapTest extends TestCase
 
         $this->assertStringContainsString('md5', $preloadingModulePaths);
         $this->assertStringContainsString('hello_controller', $preloadingModulePaths);
+        $this->assertStringNotContainsString('not_there', $preloadingModulePaths);
         $this->assertStringNotContainsString('app', $preloadingModulePaths);
     }
 }
