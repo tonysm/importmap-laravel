@@ -7,7 +7,7 @@ use Tonysm\ImportmapLaravel\Facades\Importmap;
 
 class AddLinkHeadersForPreloadedPins
 {
-    public function __construct(private ?AssetResolver $assetsResolver = null)
+    public function __construct(private AssetResolver $assetsResolver = new AssetResolver())
     {
     }
 
@@ -21,9 +21,7 @@ class AddLinkHeadersForPreloadedPins
     public function handle($request, $next)
     {
         return tap($next($request), function ($response) {
-            $resolver = $this->assetsResolver ?? new AssetResolver();
-
-            if ($preloaded = Importmap::preloadedModulePaths($resolver)) {
+            if ($preloaded = Importmap::preloadedModulePaths($this->assetsResolver)) {
                 $response->header('Link', collect($preloaded)
                     ->map(fn ($url) => "<{$url}>; rel=\"modulepreload\"")
                     ->join(', '));
