@@ -33,14 +33,14 @@ class TagsComponentTest extends TestCase
     /** @test */
     public function generates_tags_without_nonce()
     {
-        $this->blade('<x-importmap-tags />')
+        $this->blade('<x-importmap::tags />')
             ->assertSee('<link rel="modulepreload" href="https://cdn.skypack.dev/md5" />', escape: false);
     }
 
     /** @test */
     public function uses_given_csp_nonce()
     {
-        $this->blade('<x-importmap-tags nonce="h3ll0" />')
+        $this->blade('<x-importmap::tags nonce="h3ll0" />')
             ->assertSee('<link rel="modulepreload" href="https://cdn.skypack.dev/md5" nonce="h3ll0" />', escape: false);
     }
 
@@ -51,7 +51,7 @@ class TagsComponentTest extends TestCase
         $importmap->pin('foo', preload: true);
         $importmap->pin('bar', preload: true);
 
-        $this->blade('<x-importmap-tags :importmap="$importmap" />', ['importmap' => $importmap])
+        $this->blade('<x-importmap::tags :importmap="$importmap" />', ['importmap' => $importmap])
             ->assertSee('<link rel="modulepreload" href="'.asset('js/foo.js').'" />', escape: false)
             ->assertSee('<link rel="modulepreload" href="'.asset('js/bar.js').'" />', escape: false)
             ->assertDontSee('<link rel="modulepreload" href="https://cdn.skypack.dev/md5" />', escape: false);

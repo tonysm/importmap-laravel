@@ -140,7 +140,7 @@ class InstallCommand extends Command
                     $file,
                     str_replace(
                         "<script src=\"{{ mix('js/app.js') }}\" defer></script>",
-                        '<x-importmap-tags />',
+                        '<x-importmap::tags />',
                         File::get($file),
                     ),
                 ));
@@ -157,7 +157,7 @@ class InstallCommand extends Command
                     $file,
                     preg_replace(
                         '/\@vite.*/',
-                        '<x-importmap-tags />',
+                        '<x-importmap::tags />',
                         File::get($file),
                     ),
                 ))
@@ -182,7 +182,7 @@ class InstallCommand extends Command
                     $file,
                     preg_replace(
                         '/(\s*)(<\/head>)/',
-                        "\\1    <x-importmap-tags />\n\\1\\2",
+                        "\\1    <x-importmap::tags />\n\\1\\2",
                         File::get($file),
                     ),
                 ));

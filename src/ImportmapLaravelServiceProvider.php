@@ -2,6 +2,7 @@
 
 namespace Tonysm\ImportmapLaravel;
 
+use Illuminate\View\Compilers\BladeCompiler;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Tonysm\ImportmapLaravel\View\Components;
@@ -19,7 +20,6 @@ class ImportmapLaravelServiceProvider extends PackageServiceProvider
             ->name('importmap')
             ->hasConfigFile()
             ->hasViews()
-            ->hasViewComponent('importmap', Components\Tags::class)
             ->hasCommand(Commands\InstallCommand::class)
             ->hasCommand(Commands\OptimizeCommand::class)
             ->hasCommand(Commands\ClearCacheCommand::class)
@@ -51,5 +51,14 @@ class ImportmapLaravelServiceProvider extends PackageServiceProvider
                 public_path('js') => resource_path('js'),
             ]);
         }
+
+        $this->configureComponents();
+    }
+
+    private function configureComponents()
+    {
+        $this->callAfterResolving('blade.compiler', function (BladeCompiler $blade) {
+            $blade->anonymousComponentPath(__DIR__.'/../resources/views/components', 'importmap');
+        });
     }
 }
