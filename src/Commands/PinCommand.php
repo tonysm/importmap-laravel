@@ -18,7 +18,6 @@ class PinCommand extends Command
     protected $signature = '
         importmap:pin
             {--from-env=production : The CDN environment}
-            {--download : If used, the dependency will be downloaded to be checked in under version control instead of relying on CDNs.}
             {--from=jspm : The CDN.}
             {packages*}
     ';
@@ -55,27 +54,17 @@ class PinCommand extends Command
     private function importPackages(Packager $packager, Collection $imports): void
     {
         $imports->each(function (string $url, string $package) use ($packager) {
-            if ($this->option('download')) {
-                $this->info(sprintf(
-                    'Pinning "%s" to %s/%s.js via download from %s',
-                    $package,
-                    $packager->vendorPath,
-                    $package,
-                    $url,
-                ));
+            $this->info(sprintf(
+                'Pinning "%s" to %s/%s.js via download from %s',
+                $package,
+                $packager->vendorPath,
+                $package,
+                $url,
+            ));
 
-                $packager->download($package, $url);
+            $packager->download($package, $url);
 
-                $pin = $packager->vendoredPinFor($package, $url);
-            } else {
-                $this->info(sprintf(
-                    'Pinning "%s" to %s',
-                    $package,
-                    $url,
-                ));
-
-                $pin = $packager->pinFor($package, $url);
-            }
+            $pin = $packager->vendoredPinFor($package, $url);
 
             if ($packager->packaged($package)) {
                 // Replace existing pin...
