@@ -173,7 +173,7 @@ The version is added as a comment to your pin so you know which version was impo
 
 ### Preloading Modules
 
-To avoid the waterfall effect where the browser has to load one file after another before it can get to the deepest nested import, we support [modulepreload links](https://developers.google.com/web/updates/2017/12/modulepreload). Pinned modules can be preloaded by appending `preload: true` to the pin, like so:
+To avoid the waterfall effect where the browser has to load one file after another before it can get to the deepest nested import, we use [modulepreload links](https://developers.google.com/web/updates/2017/12/modulepreload) by default. If you don't want to preload a dependency, because you want to load it on demand for efficiency, pinned modules can prevent preloading by appending `preload: false` to the pin:
 
 ```php
 Importmap::pinAllFrom("resources/js/", to: "js/", preload: true);
