@@ -16,7 +16,7 @@ class PackagerSingleQuoteTest extends TestCase
         parent::setUp();
 
         $this->singleQuoteFilePath = sys_get_temp_dir().DIRECTORY_SEPARATOR.'single-quote-importmap-'.Str::random(8).'.php';
-        copy(__DIR__.implode(DIRECTORY_SEPARATOR, ['', 'fixtures', 'npm', 'single-quote-importmap.php']),  $this->singleQuoteFilePath);
+        copy(__DIR__.implode(DIRECTORY_SEPARATOR, ['', 'fixtures', 'npm', 'single-quote-importmap.php']), $this->singleQuoteFilePath);
         $this->packager = new Packager($this->singleQuoteFilePath);
     }
 
