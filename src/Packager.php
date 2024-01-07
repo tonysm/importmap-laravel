@@ -110,7 +110,13 @@ class Packager
 
     private function packageFilename(string $package): string
     {
-        return str_replace('/', '--', $package).'.js';
+        $replacements = [
+            '/' => '--',
+            '#' => '--',
+            '.js' => '',
+        ];
+
+        return str_replace(array_keys($replacements), array_values($replacements), $package).'.js';
     }
 
     private function extractPackageVersionFrom(string $url): string
