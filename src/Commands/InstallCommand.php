@@ -26,7 +26,7 @@ class InstallCommand extends Command
         File::ensureDirectoryExists(resource_path('js'));
 
         $this->convertLocalImportsFromUsingDots();
-        $this->publishImportmapFile();
+        $this->publishImportmapFiles();
         $this->importDependenciesFromNpm();
         $this->updateAppLayouts();
         $this->deleteNpmRelatedFiles();
@@ -60,10 +60,11 @@ class InstallCommand extends Command
         });
     }
 
-    private function publishImportmapFile(): void
+    private function publishImportmapFiles(): void
     {
         $this->displayTask('publishing the `routes/importmap.php` file', function () {
             File::copy(dirname(__DIR__, 2).implode(DIRECTORY_SEPARATOR, ['', 'stubs', 'routes', 'importmap.php']), base_path(implode(DIRECTORY_SEPARATOR, ['routes', 'importmap.php'])));
+            File::copy(dirname(__DIR__, 2).implode(DIRECTORY_SEPARATOR, ['', 'stubs', 'jsconfig.json']), base_path('jsconfig.json'));
 
             return self::SUCCESS;
         });
