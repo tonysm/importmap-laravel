@@ -2,6 +2,33 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 2.0.0 - 2024-01-07
+
+### What's Changed
+
+* Drops the shim by @tonysm in https://github.com/tonysm/importmap-laravel/pull/43
+* Preload default by @tonysm in https://github.com/tonysm/importmap-laravel/pull/44
+* Always download dependencies by @tonysm in https://github.com/tonysm/importmap-laravel/pull/45
+* Dont optimize with URL by @tonysm in https://github.com/tonysm/importmap-laravel/pull/46
+* Install with default jsconfig.json by @tonysm in https://github.com/tonysm/importmap-laravel/pull/47
+
+**Full Changelog**: https://github.com/tonysm/importmap-laravel/compare/1.8.3...2.0.0
+
+
+---
+
+### Upgrade Guide
+
+The pinned imports to CDN URLs will still work, but I recommend you re-pin them now and host them yourself (we're now always downloading vendor libs to `resources/js/vendor/`).
+
+The `<x-importmap-tags />` component has changed to `<x-importmap::tags />` so you can run the following command to replace all occurrences of the previous component name in your layout files:
+
+```bash
+sed -i 's/x-importmap-tags/x-importmap::tags/g' resources/**/*.php
+
+```
+Also, ensure you have `php artisan view:cache` in your deployment script.
+
 ## 1.8.1 - 2023-11-24
 
 ### Changelog
