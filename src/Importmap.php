@@ -33,7 +33,7 @@ class Importmap
     public function preloadedModulePaths(callable $assetResolver): array
     {
         if ($this->hasManifest()) {
-            return $this->resolvePreloadedModulesFromManifest();
+            return $this->resolvePreloadedModulesFromManifest($assetResolver);
         }
 
         return $this->resolveAssetPaths($this->expandPreloadingPackagesAndDirectories(), $assetResolver);
@@ -42,7 +42,7 @@ class Importmap
     public function asArray(callable $assetResolver): array
     {
         if ($this->hasManifest()) {
-            return $this->resolveImportsFromManifest();
+            return $this->resolveImportsFromManifest($assetResolver);
         }
 
         return [
@@ -70,19 +70,19 @@ class Importmap
         return Manifest::path();
     }
 
-    private function resolvePreloadedModulesFromManifest(): array
+    private function resolvePreloadedModulesFromManifest($assetResolver): array
     {
         return collect(json_decode(File::get($this->manifestPath()), true))
             ->filter(fn (array $json) => $json['preload'])
-            ->mapWithKeys(fn (array $json) => [$json['module'] => $json['path']])
+            ->mapWithKeys(fn (array $json) => [$json['module'] => $assetResolver($json['path'])])
             ->all();
     }
 
-    private function resolveImportsFromManifest(): array
+    private function resolveImportsFromManifest($assetResolver): array
     {
         return [
             'imports' => collect(json_decode(File::get($this->manifestPath()), true))
-                ->mapWithKeys(fn (array $json) => [$json['module'] => $json['path']])
+                ->mapWithKeys(fn (array $json) => [$json['module'] => $assetResolver($json['path'])])
                 ->all(),
         ];
     }
