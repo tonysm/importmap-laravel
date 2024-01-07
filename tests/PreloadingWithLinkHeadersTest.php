@@ -35,8 +35,7 @@ class PreloadingWithLinkHeadersTest extends TestCase
         $map->pin('editor', to: 'js/rich_text.js', preload: false);
         $map->pinAllFrom('resources/js/', under: 'controllers', to: 'js/', preload: true);
 
-        $resolver = new class() extends AssetResolver
-        {
+        $resolver = new class () extends AssetResolver {
             public function __invoke($module)
             {
                 return 'http://localhost/'.str_replace(['.js'], ['-123123.js'], $module);
