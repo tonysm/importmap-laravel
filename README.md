@@ -174,9 +174,6 @@ Which will add the correct `links` tags to your head tag in the HTML document, l
 <link rel="modulepreload" href="https://unpkg.com/alpinejs@3.8.1/dist/module.esm.js">
 ```
 
-You may add the `AddLinkHeadersForPreloadedPins` middleware to the `web` routes group so these preloaded links are sent as a `Link` header.
-Add the `Tonysm\ImportmapLaravel\Http\Middleware\AddLinkHeadersForPreloadedPins` to the `web` route group so the preloaded modules are sent as the Link headers, which are used in [HTTP/2 Server Push](https://datatracker.ietf.org/doc/html/rfc7540#section-8.2) and [Resource Hints](https://html.spec.whatwg.org/#linkTypes) to push resources to the client as early as possible. Some web servers can pick up this `Link` header and convert them to [Early Hints](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/103) responses.
-
 ## Dependency Maintenance Commands
 
 Maintaining a healthy dependency list can be tricky. Here are a couple of commands to help you with this task.
