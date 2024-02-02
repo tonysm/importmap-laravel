@@ -46,7 +46,7 @@ class ImportmapLaravelServiceProvider extends PackageServiceProvider
         }
 
         if (app()->environment('local') && app()->runningInConsole()) {
-            config()->set('filesystems.links', config('filesystems.links') + [
+            config()->set('filesystems.links', config('filesystems.links', []) + [
                 public_path('js') => resource_path('js'),
             ]);
         }
