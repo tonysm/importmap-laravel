@@ -2,6 +2,20 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 2.0.1 - 2024-02-02
+
+### What's Changed
+
+* Fix:  Prevent Type Error: Unsupported operand types: null + array by @JunaidQadirB in https://github.com/tonysm/importmap-laravel/pull/48
+* Fix:  Optimize command wasn't working when specifying public vendor lib starting with a forward slash (`/vendor/my-lib.js`, for instance) https://github.com/tonysm/importmap-laravel/commit/4e17a78ba5c0b802e9825806fbafc7086461a670
+* Fix:  Digest wasn't being applied on public vendor libs when starting with a forward slash either https://github.com/tonysm/importmap-laravel/commit/139b788c9837d7313c96e62b8cada68082ea160a
+
+### New Contributors
+
+* @JunaidQadirB made their first contribution in https://github.com/tonysm/importmap-laravel/pull/48
+
+**Full Changelog**: https://github.com/tonysm/importmap-laravel/compare/2.0.0...2.0.1
+
 ## 2.0.0 - 2024-01-07
 
 ### What's Changed
@@ -25,6 +39,7 @@ The `<x-importmap-tags />` component has changed to `<x-importmap::tags />` so y
 
 ```bash
 sed -i 's/x-importmap-tags/x-importmap::tags/g' resources/**/*.php
+
 
 ```
 Also, ensure you have `php artisan view:cache` in your deployment script.
