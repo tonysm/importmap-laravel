@@ -22,6 +22,7 @@ class OptimizeCommandTest extends TestCase
         $this->map->pin('app');
         $this->map->pin('md5', to: 'https://cdn.skypack.dev/md5', preload: true);
         $this->map->pin('my_lib', to: 'vendor/nova/my_lib.js', preload: true);
+        $this->map->pin('my_other_lib', to: '/vendor/nova/my_other_lib.js', preload: true);
 
         if (File::isDirectory($this->distPath = $this->rootPath.'/public/dist/')) {
             File::cleanDirectory($this->distPath);
