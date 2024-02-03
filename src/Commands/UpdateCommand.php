@@ -25,8 +25,12 @@ class UpdateCommand extends Command
 
     public function handle(Npm $npm)
     {
-        $this->call('importmap:pin', [
-            'packages' => $npm->outdatedPackages()->pluck('name')->all(),
-        ]);
+        if (count($outdatedPackages = $npm->outdatedPackages()) > 0) {
+            $this->call('importmap:pin', [
+                'packages' => $outdatedPackages->pluck('name')->all(),
+            ]);
+        } else {
+            $this->components->info('No oudated packages found.');
+        }
     }
 }
