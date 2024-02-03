@@ -4,9 +4,11 @@ namespace Tonysm\ImportmapLaravel\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Tonysm\ImportmapLaravel\Importmap;
 use Tonysm\ImportmapLaravel\Manifest;
 
+#[AsCommand('importmap:clear')]
 class ClearCacheCommand extends Command
 {
     public $signature = 'importmap:clear';

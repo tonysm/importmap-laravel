@@ -3,9 +3,11 @@
 namespace Tonysm\ImportmapLaravel\Commands;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Tonysm\ImportmapLaravel\AssetResolver;
 use Tonysm\ImportmapLaravel\Importmap;
 
+#[AsCommand('importmap:json')]
 class JsonCommand extends Command
 {
     public $signature = 'importmap:json';

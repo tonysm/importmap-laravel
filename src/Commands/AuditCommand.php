@@ -4,9 +4,11 @@ namespace Tonysm\ImportmapLaravel\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Tonysm\ImportmapLaravel\Npm;
 use Tonysm\ImportmapLaravel\VulnerablePackage;
 
+#[AsCommand('importmap:audit')]
 class AuditCommand extends Command
 {
     public $signature = 'importmap:audit';

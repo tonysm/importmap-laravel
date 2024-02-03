@@ -3,9 +3,11 @@
 namespace Tonysm\ImportmapLaravel\Commands;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Tonysm\ImportmapLaravel\Npm;
 use Tonysm\ImportmapLaravel\PackageVersion;
 
+#[AsCommand('importmap:packages')]
 class PackagesCommand extends Command
 {
     public $signature = 'importmap:packages';
