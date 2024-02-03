@@ -6,8 +6,10 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Tonysm\ImportmapLaravel\Packager;
 
+#[AsCommand('importmap:pin')]
 class PinCommand extends Command
 {
     /**
