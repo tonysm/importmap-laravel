@@ -28,7 +28,7 @@ class Packager
             'install' => $packages,
             'flattenScope' => true,
             'env' => ['browser', 'module', $env],
-            'provider' => $from,
+            'provider' => $this->normalizeProvider($from),
         ]);
 
         return match ($response->status()) {
@@ -139,5 +139,13 @@ class Packager
         }
 
         throw Exceptions\ImportmapException::withUnexpectedResponseCode($response->status());
+    }
+
+    private function normalizeProvider(string $provider): string
+    {
+        return match ($provider) {
+            'jspm' => 'jspm.io',
+            default => $provider,
+        };
     }
 }
