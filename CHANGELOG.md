@@ -2,6 +2,14 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 2.1.0 - 2024-02-04
+
+### What's Changed
+
+* New `importmap:update` command and store CDN URL with package name and version in vendor comment by @tonysm in https://github.com/tonysm/importmap-laravel/pull/49
+
+**Full Changelog**: https://github.com/tonysm/importmap-laravel/compare/2.0.1...2.1.0
+
 ## 2.0.1 - 2024-02-02
 
 ### What's Changed
@@ -39,6 +47,7 @@ The `<x-importmap-tags />` component has changed to `<x-importmap::tags />` so y
 
 ```bash
 sed -i 's/x-importmap-tags/x-importmap::tags/g' resources/**/*.php
+
 
 
 ```
