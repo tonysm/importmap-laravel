@@ -84,7 +84,7 @@ class PinCommand extends Command
     private function pattern(string $package): string
     {
         return sprintf(
-            '#Importmap::pin\([\'\"]%s[\'\"].*$#',
+            '#.*pin\([\'\"]%s[\'\"].*#',
             preg_quote($package),
         );
     }
