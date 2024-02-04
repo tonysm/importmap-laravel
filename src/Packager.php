@@ -123,7 +123,7 @@ class Packager
 
     private function extractPackageVersionFrom(string $url): string
     {
-        preg_match('#(@\d+\.\d+\.\d+)/#', $url, $matches);
+        preg_match('#(@\d+\.\d+\.\d+.*?)/#', $url, $matches);
 
         if (! ($matches[1] ?? false)) {
             return 'Unknown Version';
