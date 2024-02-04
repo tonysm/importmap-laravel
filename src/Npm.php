@@ -95,7 +95,7 @@ class Npm
 
     private function findPackagesFromLocalMatches(string $content)
     {
-        preg_match_all('/^Importmap::pin\(.+\)\;\s*\/\/\s*(.+?)@(.+?)\s+.*\r?$/m', $content, $matches);
+        preg_match_all('/^Importmap::pin\([\'\"](.+?)[\'\"].*\)\;\s*\/\/\s*.*@(.+?)\s+.*\r?$/m', $content, $matches);
 
         if (count($matches) !== 3) {
             return collect();
