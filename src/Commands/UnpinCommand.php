@@ -4,8 +4,10 @@ namespace Tonysm\ImportmapLaravel\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Tonysm\ImportmapLaravel\Packager;
 
+#[AsCommand('importmap:unpin')]
 class UnpinCommand extends Command
 {
     /**

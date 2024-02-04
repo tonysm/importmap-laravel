@@ -28,7 +28,7 @@ class Packager
             'install' => $packages,
             'flattenScope' => true,
             'env' => ['browser', 'module', $env],
-            'provider' => $from,
+            'provider' => $this->normalizeProvider($from),
         ]);
 
         return match ($response->status()) {
@@ -55,10 +55,12 @@ class Packager
         $version = $this->extractPackageVersionFrom($url);
 
         return sprintf(
-            'Importmap::pin("%s", to: "%s"); // %s',
+            'Importmap::pin("%s", to: "%s"); // %s%s downloaded from %s',
             $package,
             Str::after($this->vendoredPackageName($package), 'resources'),
+            $package,
             $version,
+            $url,
         );
     }
 
@@ -137,5 +139,13 @@ class Packager
         }
 
         throw Exceptions\ImportmapException::withUnexpectedResponseCode($response->status());
+    }
+
+    private function normalizeProvider(string $provider): string
+    {
+        return match ($provider) {
+            'jspm' => 'jspm.io',
+            default => $provider,
+        };
     }
 }

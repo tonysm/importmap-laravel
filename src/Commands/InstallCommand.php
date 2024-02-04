@@ -7,10 +7,12 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Terminal;
 use Tonysm\ImportmapLaravel\Actions\FixJsImportPaths;
 use Tonysm\ImportmapLaravel\Events\FailedToFixImportStatement;
 
+#[AsCommand('importmap:install')]
 class InstallCommand extends Command
 {
     public $signature = 'importmap:install';
