@@ -2,6 +2,14 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 2.1.1 - 2024-02-05
+
+### What's Changed
+
+* Fix outdated command breaks on previous comment format by @tonysm in https://github.com/tonysm/importmap-laravel/pull/50
+
+**Full Changelog**: https://github.com/tonysm/importmap-laravel/compare/2.1.0...2.1.1
+
 ## 2.1.0 - 2024-02-04
 
 ### What's Changed
@@ -47,6 +55,7 @@ The `<x-importmap-tags />` component has changed to `<x-importmap::tags />` so y
 
 ```bash
 sed -i 's/x-importmap-tags/x-importmap::tags/g' resources/**/*.php
+
 
 
 
