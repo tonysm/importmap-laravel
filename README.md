@@ -186,7 +186,7 @@ To keep your dependencies up-to-date, make sure you run the `importmap:outdated`
 php artisan importmap:outdated
 ```
 
-This command will scan your `config/importmap.php` file, find your current versions, then use the NPM registry API to look for the latest version of the packages you're using. It also handles locally served vendor libs that you added using the `--download` flag from the `importmap:pin` command.
+This command will scan your `routes/importmap.php` file, find your current versions, then use the NPM registry API to look for the latest version of the packages you're using. It also handles locally served vendor libs that you added using the `--download` flag from the `importmap:pin` command.
 
 ### Auditing Dependencies
 
@@ -196,7 +196,7 @@ If you want a security audit on your dependencies to see if you're using a versi
 php artisan importmap:audit
 ```
 
-This will also scan your `config/importmap.php` file, find your current versions, then use the NPM registry API to look for vulnerabilities in your packages. It also handles locally served vendor libs that you added using the `--download` flag from the `importmap:pin` command.
+This will also scan your `routes/importmap.php` file, find your current versions, then use the NPM registry API to look for vulnerabilities in your packages. It also handles locally served vendor libs that you added using the `--download` flag from the `importmap:pin` command.
 
 ## Known Problems
 
