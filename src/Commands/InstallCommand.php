@@ -116,8 +116,8 @@ class InstallCommand extends Command
 
             $dependencies = collect(array_replace($packageJson['dependencies'] ?? [], $packageJson['devDependencies'] ?? []))
                 ->filter(fn ($_version, $package) => ! in_array($package, $filteredOutDependencies))
-                // Axios had an issue with importmaps at the version currently required by Laravel, so we'll try the latest one instead...
-                ->map(fn ($version, $package) => $package === 'axios' ? 'axios' : "\"{$package}@{$version}\"")
+                // Axios has an issue with importmaps, so we'll hardcode the version for now...
+                ->map(fn ($version, $package) => $package === 'axios' ? 'axios@0.27' : "\"{$package}@{$version}\"")
                 ->join(' ');
 
             return Artisan::call("importmap:pin {$dependencies}");
