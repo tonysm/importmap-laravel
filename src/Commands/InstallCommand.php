@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Terminal;
 use Tonysm\ImportmapLaravel\Actions\FixJsImportPaths;
+use Tonysm\ImportmapLaravel\Actions\ReplaceOrAppendTags;
 use Tonysm\ImportmapLaravel\Events\FailedToFixImportStatement;
 
 #[AsCommand('importmap:install')]
@@ -126,68 +127,11 @@ class InstallCommand extends Command
 
     private function updateAppLayouts(): void
     {
-        if (File::exists(base_path('webpack.mix.js'))) {
-            $this->updateAppLayoutsUsingMix();
-        } elseif (File::exists(base_path('vite.config.js'))) {
-            $this->updateAppLayoutsUsingVite();
-        } else {
-            $this->appendImportmapTagsToLayoutsHead();
-        }
-    }
-
-    private function updateAppLayoutsUsingMix()
-    {
-        $this->displayTask('replacing Mix functions in layouts', function () {
+        $this->displayTask('Updating layout files', function () {
             $this->existingLayoutFiles()
                 ->each(fn ($file) => File::put(
                     $file,
-                    str_replace(
-                        "<script src=\"{{ mix('js/app.js') }}\" defer></script>",
-                        '<x-importmap::tags />',
-                        File::get($file),
-                    ),
-                ));
-
-            return self::SUCCESS;
-        });
-    }
-
-    private function updateAppLayoutsUsingVite()
-    {
-        $this->displayTask('replacing Vite functions in layouts', function () {
-            $this->existingLayoutFiles()
-                ->each(fn ($file) => File::put(
-                    $file,
-                    preg_replace(
-                        '/\@vite.*/',
-                        '<x-importmap::tags />',
-                        File::get($file),
-                    ),
-                ))
-                ->each(fn ($file) => File::put(
-                    $file,
-                    preg_replace(
-                        '/.*\@vite\(\[\]\).*\n/',
-                        '',
-                        File::get($file),
-                    ),
-                ));
-
-            return self::SUCCESS;
-        });
-    }
-
-    private function appendImportmapTagsToLayoutsHead(): void
-    {
-        $this->displayTask('adding importmap tags to layouts', function () {
-            $this->existingLayoutFiles()
-                ->each(fn ($file) => File::put(
-                    $file,
-                    preg_replace(
-                        '/(\s*)(<\/head>)/',
-                        "\\1    <x-importmap::tags />\n\\1\\2",
-                        File::get($file),
-                    ),
+                    (new ReplaceOrAppendTags)(File::get($file)),
                 ));
 
             return self::SUCCESS;
