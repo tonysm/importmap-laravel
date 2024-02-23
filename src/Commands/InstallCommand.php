@@ -131,7 +131,7 @@ class InstallCommand extends Command
             $this->existingLayoutFiles()
                 ->each(fn ($file) => File::put(
                     $file,
-                    (new ReplaceOrAppendTags)(File::get($file)),
+                    (new ReplaceOrAppendTags())(File::get($file)),
                 ));
 
             return self::SUCCESS;

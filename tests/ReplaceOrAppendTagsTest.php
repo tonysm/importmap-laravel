@@ -55,7 +55,7 @@ class ReplaceOrAppendTagsTest extends TestCase
         </html>
         BLADE;
 
-        $this->assertEquals($expected, (new ReplaceOrAppendTags)($contents));
+        $this->assertEquals($expected, (new ReplaceOrAppendTags())($contents));
     }
 
     /** @test */
@@ -103,6 +103,6 @@ class ReplaceOrAppendTagsTest extends TestCase
         </html>
         BLADE;
 
-        $this->assertEquals($expected, (new ReplaceOrAppendTags)($contents));
+        $this->assertEquals($expected, (new ReplaceOrAppendTags())($contents));
     }
 }
