@@ -19,7 +19,7 @@ class ReplaceOrAppendTags
 
         return preg_replace(
             static::CLOSING_HEAD_TAG_PATTERN,
-            "\n\\1    <x-importmap::tags />\\1\\2",
+            PHP_EOL."\\1    <x-importmap::tags />\\1\\2",
             $contents,
         );
     }
