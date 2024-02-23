@@ -121,6 +121,10 @@ class InstallCommand extends Command
                 ->map(fn ($version, $package) => $package === 'axios' ? 'axios@0.27' : "\"{$package}@{$version}\"")
                 ->join(' ');
 
+            if (trim($dependencies) === '') {
+                return self::SUCCESS;
+            }
+
             return Artisan::call("importmap:pin {$dependencies}");
         });
     }
