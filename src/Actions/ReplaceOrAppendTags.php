@@ -4,12 +4,12 @@ namespace Tonysm\ImportmapLaravel\Actions;
 
 class ReplaceOrAppendTags
 {
-    public const VITE_DIRECTIVE_PATTERN = '/(\s*)\@vite\(.+\)/';
+    public const VITE_DIRECTIVE_PATTERN = '/(\s*)\@vite\(.*\)/';
     public const CLOSING_HEAD_TAG_PATTERN = '/(\s*)(<\/head>)/';
 
     public function __invoke(string $contents)
     {
-        if (preg_match(self::VITE_DIRECTIVE_PATTERN, $contents)) {
+        if (str_contains($contents, '@vite')) {
             return preg_replace(
                 static::VITE_DIRECTIVE_PATTERN,
                 "\\1<x-importmap::tags />",
