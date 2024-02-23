@@ -2,6 +2,19 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 2.1.2 - 2024-02-23
+
+### What's Changed
+
+* Read typo fixes by @emaia in https://github.com/tonysm/importmap-laravel/pull/52
+* Update the install command to either replace the vite directive or append the importmap tags before the closing head tag by @tonysm in https://github.com/tonysm/importmap-laravel/commit/ce304706a698b35aa46ef3168d6bf2db8ee2a97d
+
+### New Contributors
+
+* @emaia made their first contribution in https://github.com/tonysm/importmap-laravel/pull/52
+
+**Full Changelog**: https://github.com/tonysm/importmap-laravel/compare/2.0.3...2.1.2
+
 ## 2.1.1 - 2024-02-05
 
 ### What's Changed
@@ -55,6 +68,7 @@ The `<x-importmap-tags />` component has changed to `<x-importmap::tags />` so y
 
 ```bash
 sed -i 's/x-importmap-tags/x-importmap::tags/g' resources/**/*.php
+
 
 
 
