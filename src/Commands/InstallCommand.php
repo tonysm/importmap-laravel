@@ -28,6 +28,7 @@ class InstallCommand extends Command
         $this->updateAppLayouts();
         $this->deleteNpmRelatedFiles();
         $this->configureIgnoredFolder();
+        $this->runStorageLinkCommand();
 
         $this->newLine();
         $this->components->info('Importmap Laravel was installed succesfully.');
@@ -120,6 +121,42 @@ class InstallCommand extends Command
         }
 
         File::append(base_path('.gitignore'), "\n/public/js\n");
+    }
+
+    private function runStorageLinkCommand()
+    {
+        if ($this->components->confirm('To be able to serve your assets in development, the resource/js folder will be symlinked to your public/js. Would you like to do that now?', true)) {
+            if ($this->usingSail() && ! env('LARAVEL_SAIL')) {
+                Process::forever()->run([
+                    './vendor/bin/sail',
+                    'up',
+                    '-d',
+                ], function ($_type, $output) {
+                    $this->output->write($output);
+                });
+
+                Process::forever()->run([
+                    './vendor/bin/sail',
+                    'artisan',
+                    'storage:link',
+                ], function ($_type, $output) {
+                    $this->output->write($output);
+                });
+            } else {
+                Process::forever()->run([
+                    $this->phpBinary(),
+                    'artisan',
+                    'storage:link',
+                ], function ($_type, $output) {
+                    $this->output->write($output);
+                });
+            }
+        }
+    }
+
+    private function usingSail(): bool
+    {
+        return file_exists(base_path('docker-compose.yml')) && str_contains(file_get_contents(base_path('composer.json')), 'laravel/sail');
     }
 
     private function phpBinary()
