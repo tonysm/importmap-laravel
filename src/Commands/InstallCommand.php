@@ -3,15 +3,13 @@
 namespace Tonysm\ImportmapLaravel\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Terminal;
+use Symfony\Component\Process\PhpExecutableFinder;
 use Tonysm\ImportmapLaravel\Actions\FixJsImportPaths;
 use Tonysm\ImportmapLaravel\Actions\ReplaceOrAppendTags;
-use Tonysm\ImportmapLaravel\Events\FailedToFixImportStatement;
 
 #[AsCommand('importmap:install')]
 class InstallCommand extends Command
@@ -20,12 +18,8 @@ class InstallCommand extends Command
 
     public $description = 'Installs the package.';
 
-    public $afterMessages = [];
-
     public function handle(): int
     {
-        $this->displayHeader('Installing Importmap Laravel', '<bg=blue;fg=black> INFO </>');
-
         File::ensureDirectoryExists(resource_path('js'));
 
         $this->convertLocalImportsFromUsingDots();
@@ -34,112 +28,83 @@ class InstallCommand extends Command
         $this->updateAppLayouts();
         $this->deleteNpmRelatedFiles();
         $this->configureIgnoredFolder();
-
-        $this->displayAfterNotes();
+        $this->runStorageLinkCommand();
 
         $this->newLine();
-        $this->line(' <fg=white>Done!</>');
+        $this->components->info('Importmap Laravel was installed succesfully.');
 
         return self::SUCCESS;
     }
 
     private function deleteNpmRelatedFiles(): void
     {
-        $this->displayTask('removing NPM related files', function () {
-            $files = [
-                'package.json',
-                'package-lock.json',
-                'webpack.mix.js',
-                'postcss.config.js',
-                'vite.config.js',
-            ];
+        $files = [
+            'package.json',
+            'package-lock.json',
+            'webpack.mix.js',
+            'postcss.config.js',
+            'vite.config.js',
+        ];
 
-            collect($files)
-                ->map(fn ($file) => base_path($file))
-                ->filter(fn ($file) => File::exists($file))
-                ->each(fn ($file) => File::delete($file));
-
-            return self::SUCCESS;
-        });
+        collect($files)
+            ->map(fn ($file) => base_path($file))
+            ->filter(fn ($file) => File::exists($file))
+            ->each(fn ($file) => File::delete($file));
     }
 
     private function publishImportmapFiles(): void
     {
-        $this->displayTask('publishing the `routes/importmap.php` file', function () {
-            File::copy(dirname(__DIR__, 2).implode(DIRECTORY_SEPARATOR, ['', 'stubs', 'routes', 'importmap.php']), base_path(implode(DIRECTORY_SEPARATOR, ['routes', 'importmap.php'])));
-            File::copy(dirname(__DIR__, 2).implode(DIRECTORY_SEPARATOR, ['', 'stubs', 'jsconfig.json']), base_path('jsconfig.json'));
-
-            return self::SUCCESS;
-        });
+        File::copy(dirname(__DIR__, 2).implode(DIRECTORY_SEPARATOR, ['', 'stubs', 'routes', 'importmap.php']), base_path(implode(DIRECTORY_SEPARATOR, ['routes', 'importmap.php'])));
+        File::copy(dirname(__DIR__, 2).implode(DIRECTORY_SEPARATOR, ['', 'stubs', 'jsconfig.json']), base_path('jsconfig.json'));
     }
 
     private function convertLocalImportsFromUsingDots(): void
     {
-        Event::listen(function (FailedToFixImportStatement $event) {
-            $this->afterMessages[] = sprintf(
-                'Failed to fix import statement (%s) in file (%).',
-                $event->importStatement,
-                str_replace(base_path(), '', $event->file->getPath()),
-            );
-        });
-
-        $this->displayTask('converting js imports', function () {
-            $root = rtrim(resource_path('js'), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
-
-            (new FixJsImportPaths($root))();
-
-            return self::SUCCESS;
-        });
+        (new FixJsImportPaths(rtrim(resource_path('js'), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR))();
     }
 
     private function importDependenciesFromNpm(): void
     {
-        $this->displayTask('pinning dependencies from NPM', function () {
-            if (! File::exists($packageJsonFile = base_path('package.json'))) {
-                $this->afterMessages[] = '<fg=white>* Pinning was skipped because of missing package.json</>';
+        if (! File::exists($packageJsonFile = base_path('package.json'))) {
+            return;
+        }
 
-                return self::INVALID;
-            }
+        $filteredOutDependencies = [
+            '@tailwindcss/forms',
+            '@tailwindcss/typography',
+            'autoprefixer',
+            'laravel-vite-plugin',
+            'postcss',
+            'tailwindcss',
+            'vite',
+        ];
 
-            $this->afterMessages[] = '<fg=white>* Some dev dependencies could\'ve been skipped...</>';
+        $packageJson = json_decode(File::get($packageJsonFile), true);
 
-            $filteredOutDependencies = [
-                '@tailwindcss/forms',
-                '@tailwindcss/typography',
-                'autoprefixer',
-                'laravel-vite-plugin',
-                'postcss',
-                'tailwindcss',
-                'vite',
-            ];
+        $dependencies = collect(array_replace($packageJson['dependencies'] ?? [], $packageJson['devDependencies'] ?? []))
+            ->filter(fn ($_version, $package) => ! in_array($package, $filteredOutDependencies))
+            // Axios has an issue with importmaps, so we'll hardcode the version for now...
+            ->map(fn ($version, $package) => $package === 'axios' ? 'axios@0.27' : "\"{$package}@{$version}\"");
 
-            $packageJson = json_decode(File::get($packageJsonFile), true);
+        if (trim($dependencies->join('')) === '') {
+            return;
+        }
 
-            $dependencies = collect(array_replace($packageJson['dependencies'] ?? [], $packageJson['devDependencies'] ?? []))
-                ->filter(fn ($_version, $package) => ! in_array($package, $filteredOutDependencies))
-                // Axios has an issue with importmaps, so we'll hardcode the version for now...
-                ->map(fn ($version, $package) => $package === 'axios' ? 'axios@0.27' : "\"{$package}@{$version}\"")
-                ->join(' ');
-
-            if (trim($dependencies) === '') {
-                return self::SUCCESS;
-            }
-
-            return Artisan::call("importmap:pin {$dependencies}");
+        Process::forever()->run(array_merge([
+            $this->phpBinary(),
+            'artisan',
+            'importmap:pin',
+        ], $dependencies->all()), function ($_type, $output) {
+            $this->output->write($output);
         });
     }
 
     private function updateAppLayouts(): void
     {
-        $this->displayTask('Updating layout files', function () {
-            $this->existingLayoutFiles()
-                ->each(fn ($file) => File::put(
-                    $file,
-                    (new ReplaceOrAppendTags())(File::get($file)),
-                ));
-
-            return self::SUCCESS;
-        });
+        $this->existingLayoutFiles()->each(fn ($file) => File::put(
+            $file,
+            (new ReplaceOrAppendTags())(File::get($file)),
+        ));
     }
 
     private function existingLayoutFiles()
@@ -149,55 +114,53 @@ class InstallCommand extends Command
             ->filter(fn ($file) => File::exists($file));
     }
 
-    private function displayHeader($text, $prefix)
-    {
-        $this->newLine();
-        $this->line(sprintf(' %s <fg=white>%s</>  ', $prefix, $text));
-        $this->newLine();
-    }
-
-    private function displayTask($description, $task)
-    {
-        $width = (new Terminal())->getWidth();
-        $dots = max(str_repeat('<fg=gray>.</>', $width - strlen($description) - 13), 0);
-        $this->output->write(sprintf('    <fg=white>%s</> %s ', $description, $dots));
-        $output = $task();
-
-        if ($output === self::SUCCESS) {
-            $this->output->write('<info>DONE</info>');
-        } elseif ($output === self::FAILURE) {
-            $this->output->write('<error>FAIL</error>');
-        } elseif ($output === self::INVALID) {
-            $this->output->write('<fg=yellow>WARN</>');
-        }
-
-        $this->newLine();
-    }
-
     private function configureIgnoredFolder()
     {
         if (Str::contains(File::get(base_path('.gitignore')), 'public/js')) {
             return;
         }
 
-        $this->displayTask('dumping & ignoring `public/js` folder', function () {
-            File::append(
-                base_path('.gitignore'),
-                "\n/public/js\n"
-            );
-
-            return self::SUCCESS;
-        });
+        File::append(base_path('.gitignore'), "\n/public/js\n");
     }
 
-    private function displayAfterNotes()
+    private function runStorageLinkCommand()
     {
-        if (count($this->afterMessages) > 0) {
-            $this->displayHeader('After Notes & Next Steps', '<bg=yellow;fg=black> NOTES </>');
+        if ($this->components->confirm('To be able to serve your assets in development, the resource/js folder will be symlinked to your public/js. Would you like to do that now?', true)) {
+            if ($this->usingSail() && ! env('LARAVEL_SAIL')) {
+                Process::forever()->run([
+                    './vendor/bin/sail',
+                    'up',
+                    '-d',
+                ], function ($_type, $output) {
+                    $this->output->write($output);
+                });
 
-            foreach ($this->afterMessages as $message) {
-                $this->line('    '.$message);
+                Process::forever()->run([
+                    './vendor/bin/sail',
+                    'artisan',
+                    'storage:link',
+                ], function ($_type, $output) {
+                    $this->output->write($output);
+                });
+            } else {
+                Process::forever()->run([
+                    $this->phpBinary(),
+                    'artisan',
+                    'storage:link',
+                ], function ($_type, $output) {
+                    $this->output->write($output);
+                });
             }
         }
+    }
+
+    private function usingSail(): bool
+    {
+        return file_exists(base_path('docker-compose.yml')) && str_contains(file_get_contents(base_path('composer.json')), 'laravel/sail');
+    }
+
+    private function phpBinary()
+    {
+        return (new PhpExecutableFinder())->find(false) ?: 'php';
     }
 }
