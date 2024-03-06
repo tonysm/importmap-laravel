@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Process\PhpExecutableFinder;
 use Tonysm\ImportmapLaravel\Actions\FixJsImportPaths;
 use Tonysm\ImportmapLaravel\Actions\ReplaceOrAppendTags;
 
@@ -120,5 +121,10 @@ class InstallCommand extends Command
         }
 
         File::append(base_path('.gitignore'), "\n/public/js\n");
+    }
+
+    private function phpBinary()
+    {
+        return (new PhpExecutableFinder())->find(false) ?: 'php';
     }
 }
