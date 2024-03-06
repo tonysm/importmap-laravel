@@ -83,10 +83,9 @@ class InstallCommand extends Command
         $dependencies = collect(array_replace($packageJson['dependencies'] ?? [], $packageJson['devDependencies'] ?? []))
             ->filter(fn ($_version, $package) => ! in_array($package, $filteredOutDependencies))
             // Axios has an issue with importmaps, so we'll hardcode the version for now...
-            ->map(fn ($version, $package) => $package === 'axios' ? 'axios@0.27' : "\"{$package}@{$version}\"")
-            ->join(' ');
+            ->map(fn ($version, $package) => $package === 'axios' ? 'axios@0.27' : "\"{$package}@{$version}\"");
 
-        if (trim($dependencies) === '') {
+        if (trim($dependencies->join('')) === '') {
             return;
         }
 
@@ -94,7 +93,7 @@ class InstallCommand extends Command
             $this->phpBinary(),
             'artisan',
             'importmap:pin',
-        ], $dependencies), function ($_type, $output) {
+        ], $dependencies->all()), function ($_type, $output) {
             $this->output->write($output);
         });
     }
