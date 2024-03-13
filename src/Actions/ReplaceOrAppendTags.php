@@ -9,7 +9,7 @@ class ReplaceOrAppendTags
 
     public function __invoke(string $contents)
     {
-        if (str_contains($contents, '<x-importmap::tasg />')) {
+        if (str_contains($contents, '<x-importmap::tags />')) {
             return $contents;
         }
 
