@@ -9,6 +9,10 @@ class ReplaceOrAppendTags
 
     public function __invoke(string $contents)
     {
+        if (str_contains($contents, '<x-importmap::tasg />')) {
+            return $contents;
+        }
+
         if (str_contains($contents, '@vite')) {
             return preg_replace(
                 static::VITE_DIRECTIVE_PATTERN,
