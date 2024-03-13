@@ -83,6 +83,15 @@ class InstallCommand extends Command
 
         $dependencies = collect(array_replace($packageJson['dependencies'] ?? [], $packageJson['devDependencies'] ?? []))
             ->filter(fn ($_version, $package) => ! in_array($package, $filteredOutDependencies))
+            ->filter(function ($_version, $package) {
+                if ($package !== 'axios') {
+                    return true;
+                }
+
+                $this->output->warning('It seems you are using axios. Axios is not compatible with importmaps, so we are skipping its installation.');
+
+                return false;
+            })
             // Axios has an issue with importmaps, so we'll hardcode the version for now...
             ->map(fn ($version, $package) => $package === 'axios' ? 'axios@0.27' : "\"{$package}@{$version}\"");
 
