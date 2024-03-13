@@ -2,6 +2,14 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 2.3.0 - 2024-03-13
+
+### What's Changed
+
+- Skip axios installation with a warning by @tonysm in https://github.com/tonysm/importmap-laravel/commit/c77bb163d9a4b2f81d0d399b7c03323e9562b91a
+
+**Full Changelog**: https://github.com/tonysm/importmap-laravel/compare/2.2.0...2.3.0
+
 ## 2.2.0 - 2024-03-06
 
 ### What's Changed
@@ -76,6 +84,7 @@ The `<x-importmap-tags />` component has changed to `<x-importmap::tags />` so y
 
 ```bash
 sed -i 's/x-importmap-tags/x-importmap::tags/g' resources/**/*.php
+
 
 
 
