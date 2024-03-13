@@ -2,6 +2,14 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 2.3.1 - 2024-03-13
+
+### What's Changed
+
+- Skip adding the `<x-importmap::tags />` component to layouts if they already exist in https://github.com/tonysm/importmap-laravel/commit/ff2019eb14b48223c985e6cdee0601455bc41d88
+
+**Full Changelog**: https://github.com/tonysm/importmap-laravel/compare/2.3.0...2.3.1
+
 ## 2.3.0 - 2024-03-13
 
 ### What's Changed
@@ -84,6 +92,7 @@ The `<x-importmap-tags />` component has changed to `<x-importmap::tags />` so y
 
 ```bash
 sed -i 's/x-importmap-tags/x-importmap::tags/g' resources/**/*.php
+
 
 
 
