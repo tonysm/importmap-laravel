@@ -2,6 +2,14 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 2.4.0 - 2025-03-02
+
+### What's Changed
+
+* Laravel 12.x Compatibility by @laravel-shift in https://github.com/tonysm/importmap-laravel/pull/59
+
+**Full Changelog**: https://github.com/tonysm/importmap-laravel/compare/2.3.2...2.4.0
+
 ## 2.3.1 - 2024-03-13
 
 ### What's Changed
@@ -92,6 +100,7 @@ The `<x-importmap-tags />` component has changed to `<x-importmap::tags />` so y
 
 ```bash
 sed -i 's/x-importmap-tags/x-importmap::tags/g' resources/**/*.php
+
 
 
 
