@@ -165,6 +165,6 @@ class Importmap
 
     private function resolveAssetPaths(Collection $paths, callable $assetResolver): array
     {
-        return $paths->mapWithKeys(fn(MappedFile $mapping) => [$mapping->name => $assetResolver($mapping->path)])->all();
+        return $paths->mapWithKeys(fn (MappedFile $mapping) => [$mapping->name => $assetResolver($mapping->path)])->all();
     }
 }

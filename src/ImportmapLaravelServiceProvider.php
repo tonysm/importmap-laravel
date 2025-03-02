@@ -33,7 +33,7 @@ class ImportmapLaravelServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
-        $this->app->scoped(Importmap::class, fn(): \Tonysm\ImportmapLaravel\Importmap => new Importmap());
+        $this->app->scoped(Importmap::class, fn (): \Tonysm\ImportmapLaravel\Importmap => new Importmap);
 
         $this->app->bind('importmap-laravel', Importmap::class);
     }

@@ -47,7 +47,7 @@ class TagsComponentTest extends TestCase
     #[\PHPUnit\Framework\Attributes\Test]
     public function uses_custom_map(): void
     {
-        $importmap = new Importmap();
+        $importmap = new Importmap;
         $importmap->pin('foo', preload: true);
         $importmap->pin('bar', preload: true);
 

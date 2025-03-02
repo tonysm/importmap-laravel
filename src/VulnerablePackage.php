@@ -9,6 +9,5 @@ class VulnerablePackage
         public string $severity,
         public string $vulnerableVersions,
         public string $vulnerability,
-    ) {
-    }
+    ) {}
 }

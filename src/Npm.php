@@ -53,7 +53,7 @@ class Npm
 
         return $this->getAudit($data)
             ->collect()
-            ->flatMap(fn(array $vulnerabilities, string $package) => collect($vulnerabilities)
+            ->flatMap(fn (array $vulnerabilities, string $package) => collect($vulnerabilities)
                 ->map(fn (array $vulnerability): \Tonysm\ImportmapLaravel\VulnerablePackage => new VulnerablePackage(
                     name: $package,
                     severity: $vulnerability['severity'],

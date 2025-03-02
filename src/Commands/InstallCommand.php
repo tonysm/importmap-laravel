@@ -112,7 +112,7 @@ class InstallCommand extends Command
     {
         $this->existingLayoutFiles()->each(fn ($file) => File::put(
             $file,
-            (new ReplaceOrAppendTags())(File::get($file)),
+            (new ReplaceOrAppendTags)(File::get($file)),
         ));
     }
 
@@ -170,6 +170,6 @@ class InstallCommand extends Command
 
     private function phpBinary(): string
     {
-        return (new PhpExecutableFinder())->find(false) ?: 'php';
+        return (new PhpExecutableFinder)->find(false) ?: 'php';
     }
 }
