@@ -31,15 +31,13 @@ class UnpinCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle(Packager $packager)
+    public function handle(Packager $packager): int
     {
         $packages = Arr::wrap($this->argument('packages'));
 
         if ($imports = $packager->import($packages, $this->option('from-env'), $this->option('from'))) {
-            $imports->each(function (string $_url, string $package) use ($packager) {
+            $imports->each(function (string $_url, string $package) use ($packager): void {
                 if ($packager->packaged($package)) {
                     $this->info(sprintf('Unpinning and removing "%s"', $package));
 

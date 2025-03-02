@@ -6,12 +6,12 @@ use Exception;
 
 class ImportmapException extends Exception
 {
-    public static function withResponseError(string $error)
+    public static function withResponseError(string $error): self
     {
         return new self($error);
     }
 
-    public static function withUnexpectedResponseCode($code)
+    public static function withUnexpectedResponseCode($code): self
     {
         return new self(sprintf('Unexpected response code (%s)', $code));
     }

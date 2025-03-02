@@ -10,7 +10,7 @@ class FailedToFixImportStatementException extends ImportmapException
 
     public SplFileInfo $file;
 
-    public static function couldNotFixImport(string $importStatement, SplFileInfo $file)
+    public static function couldNotFixImport(string $importStatement, SplFileInfo $file): static
     {
         $exception = new static(sprintf(
             'Failed to fix import statement (%s) in file (%s)',

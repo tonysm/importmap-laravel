@@ -82,8 +82,8 @@ class InstallCommand extends Command
         $packageJson = json_decode(File::get($packageJsonFile), true);
 
         $dependencies = collect(array_replace($packageJson['dependencies'] ?? [], $packageJson['devDependencies'] ?? []))
-            ->filter(fn ($_version, $package) => ! in_array($package, $filteredOutDependencies))
-            ->filter(function ($_version, $package) {
+            ->filter(fn ($_version, $package): bool => ! in_array($package, $filteredOutDependencies))
+            ->filter(function ($_version, $package): bool {
                 if ($package !== 'axios') {
                     return true;
                 }
@@ -93,7 +93,7 @@ class InstallCommand extends Command
                 return false;
             })
             // Axios has an issue with importmaps, so we'll hardcode the version for now...
-            ->map(fn ($version, $package) => $package === 'axios' ? 'axios@0.27' : "\"{$package}@{$version}\"");
+            ->map(fn ($version, $package): string => $package === 'axios' ? 'axios@0.27' : "\"{$package}@{$version}\"");
 
         if (trim($dependencies->join('')) === '') {
             return;
@@ -103,7 +103,7 @@ class InstallCommand extends Command
             $this->phpBinary(),
             'artisan',
             'importmap:pin',
-        ], $dependencies->all()), function ($_type, $output) {
+        ], $dependencies->all()), function ($_type, $output): void {
             $this->output->write($output);
         });
     }
@@ -112,7 +112,7 @@ class InstallCommand extends Command
     {
         $this->existingLayoutFiles()->each(fn ($file) => File::put(
             $file,
-            (new ReplaceOrAppendTags())(File::get($file)),
+            (new ReplaceOrAppendTags)(File::get($file)),
         ));
     }
 
@@ -123,7 +123,7 @@ class InstallCommand extends Command
             ->filter(fn ($file) => File::exists($file));
     }
 
-    private function configureIgnoredFolder()
+    private function configureIgnoredFolder(): void
     {
         if (Str::contains(File::get(base_path('.gitignore')), 'public/js')) {
             return;
@@ -132,7 +132,7 @@ class InstallCommand extends Command
         File::append(base_path('.gitignore'), "\n/public/js\n");
     }
 
-    private function runStorageLinkCommand()
+    private function runStorageLinkCommand(): void
     {
         if ($this->components->confirm('To be able to serve your assets in development, the resource/js folder will be symlinked to your public/js. Would you like to do that now?', true)) {
             if ($this->usingSail() && ! env('LARAVEL_SAIL')) {
@@ -140,7 +140,7 @@ class InstallCommand extends Command
                     './vendor/bin/sail',
                     'up',
                     '-d',
-                ], function ($_type, $output) {
+                ], function ($_type, $output): void {
                     $this->output->write($output);
                 });
 
@@ -148,7 +148,7 @@ class InstallCommand extends Command
                     './vendor/bin/sail',
                     'artisan',
                     'storage:link',
-                ], function ($_type, $output) {
+                ], function ($_type, $output): void {
                     $this->output->write($output);
                 });
             } else {
@@ -156,7 +156,7 @@ class InstallCommand extends Command
                     $this->phpBinary(),
                     'artisan',
                     'storage:link',
-                ], function ($_type, $output) {
+                ], function ($_type, $output): void {
                     $this->output->write($output);
                 });
             }
@@ -168,8 +168,8 @@ class InstallCommand extends Command
         return file_exists(base_path('docker-compose.yml')) && str_contains(file_get_contents(base_path('composer.json')), 'laravel/sail');
     }
 
-    private function phpBinary()
+    private function phpBinary(): string
     {
-        return (new PhpExecutableFinder())->find(false) ?: 'php';
+        return (new PhpExecutableFinder)->find(false) ?: 'php';
     }
 }

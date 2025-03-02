@@ -28,7 +28,7 @@ class AuditCommand extends Command
         $this->table(
             ['Package', 'Severity', 'Vulnerable Versions', 'Vulnerability'],
             $vulnerablePackages
-                ->map(fn (VulnerablePackage $package) => [$package->name, $package->severity, $package->vulnerableVersions, $package->vulnerability])
+                ->map(fn (VulnerablePackage $package): array => [$package->name, $package->severity, $package->vulnerableVersions, $package->vulnerability])
                 ->all()
         );
 
@@ -36,9 +36,9 @@ class AuditCommand extends Command
 
         $summary = $vulnerablePackages
             ->groupBy('severity')
-            ->map(fn ($vulns) => $vulns->count())
+            ->map(fn ($vulns): int => $vulns->count())
             ->sortDesc()
-            ->map(fn ($count, $severity) => "$count {$severity}")
+            ->map(fn ($count, $severity): string => "$count {$severity}")
             ->join(', ');
 
         $this->error(sprintf(

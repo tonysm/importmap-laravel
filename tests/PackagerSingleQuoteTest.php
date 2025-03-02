@@ -29,23 +29,23 @@ class PackagerSingleQuoteTest extends TestCase
         parent::tearDown();
     }
 
-    /** @test */
-    public function packaged_with_single_quotes()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function packaged_with_single_quotes(): void
     {
         $this->assertTrue($this->packager->packaged('md5'));
         $this->assertFalse($this->packager->packaged('md5-extension'));
     }
 
-    /** @test */
-    public function remove_package_with_single_quote()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function remove_package_with_single_quote(): void
     {
         $this->packager->remove('md5');
 
         $this->assertFalse($this->packager->packaged('md5'));
     }
 
-    /** @test */
-    public function removes_url_unsafe_elements()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function removes_url_unsafe_elements(): void
     {
         $this->assertStringContainsString(
             '#lorem/buffer.js',

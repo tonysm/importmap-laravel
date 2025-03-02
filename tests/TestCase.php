@@ -17,7 +17,7 @@ class TestCase extends Orchestra
         config()->set('importmap.manifest_location_path', __DIR__.'/stubs/public/.importmap-manifest.json');
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Tonysm\\ImportmapLaravel\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName): string => 'Tonysm\\ImportmapLaravel\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
 
         if (File::exists($stubManifest = Manifest::path())) {
@@ -32,7 +32,7 @@ class TestCase extends Orchestra
         ];
     }
 
-    public function getEnvironmentSetUp($app)
+    public function getEnvironmentSetUp($app): void
     {
         config()->set('database.default', 'testing');
         config()->set('app.url', 'http://localhost');

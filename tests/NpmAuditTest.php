@@ -19,14 +19,14 @@ class NpmAuditTest extends TestCase
         Http::preventStrayRequests();
     }
 
-    /** @test */
-    public function finds_no_audit_vulnerabilities()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function finds_no_audit_vulnerabilities(): void
     {
         Http::fake(fn () => Http::response([]));
 
         $this->assertCount(0, $this->npm->vulnerablePackages());
 
-        Http::assertSent(fn (Request $request) => (
+        Http::assertSent(fn (Request $request): bool => (
             $request->data() == [
                 'is-svg' => ['3.0.0'],
                 'lodash' => ['4.17.12'],
@@ -34,8 +34,8 @@ class NpmAuditTest extends TestCase
         ));
     }
 
-    /** @test */
-    public function finds_audit_vulnerabilities()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function finds_audit_vulnerabilities(): void
     {
         Http::fake(fn () => Http::response([
             'is-svg' => [
@@ -64,7 +64,7 @@ class NpmAuditTest extends TestCase
         $this->assertEquals('high', $vulnerabilities->last()->severity);
         $this->assertEquals('>=2.1.0 <4.3.0', $vulnerabilities->last()->vulnerableVersions);
 
-        Http::assertSent(fn (Request $request) => (
+        Http::assertSent(fn (Request $request): bool => (
             $request->data() == [
                 'is-svg' => ['3.0.0'],
                 'lodash' => ['4.17.12'],

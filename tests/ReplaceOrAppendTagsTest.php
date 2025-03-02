@@ -6,8 +6,8 @@ use Tonysm\ImportmapLaravel\Actions\ReplaceOrAppendTags;
 
 class ReplaceOrAppendTagsTest extends TestCase
 {
-    /** @test */
-    public function replace_vite_tags()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function replace_vite_tags(): void
     {
         $contents = <<<'BLADE'
         <!DOCTYPE html>
@@ -55,11 +55,11 @@ class ReplaceOrAppendTagsTest extends TestCase
         </html>
         BLADE;
 
-        $this->assertEquals($expected, (new ReplaceOrAppendTags())($contents));
+        $this->assertEquals($expected, (new ReplaceOrAppendTags)($contents));
     }
 
-    /** @test */
-    public function appends_to_before_closing_head_tag_when_vite_directive_is_missing()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function appends_to_before_closing_head_tag_when_vite_directive_is_missing(): void
     {
         $contents = <<<'BLADE'
         <!DOCTYPE html>
@@ -103,6 +103,6 @@ class ReplaceOrAppendTagsTest extends TestCase
         </html>
         BLADE;
 
-        $this->assertEquals($expected, (new ReplaceOrAppendTags())($contents));
+        $this->assertEquals($expected, (new ReplaceOrAppendTags)($contents));
     }
 }

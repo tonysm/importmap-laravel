@@ -48,13 +48,11 @@ class OptimizeCommand extends Command
             $preloadModulePaths = $importmap->preloadedModulePaths(fn ($file) => $file);
 
             $optmizedJson = collect($imports['imports'])
-                ->map(function (string $oldFilename, string $module) use ($preloadModulePaths, $optimizedImports) {
-                    return [
-                        'module' => $module,
-                        'path' => $optimizedImports[$module] ?? $oldFilename,
-                        'preload' => in_array($oldFilename, $preloadModulePaths),
-                    ];
-                })
+                ->map(fn (string $oldFilename, string $module): array => [
+                    'module' => $module,
+                    'path' => $optimizedImports[$module] ?? $oldFilename,
+                    'preload' => in_array($oldFilename, $preloadModulePaths),
+                ])
                 ->values()
                 ->all();
 
@@ -70,7 +68,7 @@ class OptimizeCommand extends Command
     {
         return preg_replace(
             '#(\.jsm?)$#',
-            sprintf('-%s$1', (new FileDigest())($fileSource)),
+            sprintf('-%s$1', (new FileDigest)($fileSource)),
             $filename
         );
     }

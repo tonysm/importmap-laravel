@@ -89,10 +89,10 @@ class Packager
         }
     }
 
-    private function removePackageFromImportmap(string $package)
+    private function removePackageFromImportmap(string $package): void
     {
         $contents = collect(File::lines($this->importmapPath))
-            ->reject(fn (string $line) => (
+            ->reject(fn (string $line): int|false => (
                 preg_match(sprintf('#Importmap::pin\(["\']%s["\']#', preg_quote($package)), $line)
             ))
             ->join(PHP_EOL);
@@ -132,7 +132,7 @@ class Packager
         return $matches[1];
     }
 
-    private function handleFailureResponse(Response $response)
+    private function handleFailureResponse(Response $response): void
     {
         if ($errorMessage = $response->json('error', null)) {
             throw Exceptions\ImportmapException::withResponseError($errorMessage);

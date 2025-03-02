@@ -29,8 +29,8 @@ class OptimizeCommandTest extends TestCase
         }
     }
 
-    /** @test */
-    public function optimize_command_generates_copies_files_to_public_dist_folder()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function optimize_command_generates_copies_files_to_public_dist_folder(): void
     {
         $this->artisan('importmap:optimize')
             ->expectsOutput('    copied js/app.js to dist/js/app-da39a3ee5e6b4b0d3255bfef95601890afd80709.js');
@@ -38,8 +38,8 @@ class OptimizeCommandTest extends TestCase
         $this->assertTrue(File::exists($this->rootPath.'/public/.importmap-manifest.json'));
     }
 
-    /** @test */
-    public function uses_the_generated_importmap_manifest_json_when_that_is_available()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function uses_the_generated_importmap_manifest_json_when_that_is_available(): void
     {
         File::put($this->map->rootPath.'/public/.importmap-manifest.json', json_encode($imports = [
             ['module' => 'app', 'path' => 'http://example.com/app.js', 'preload' => false],

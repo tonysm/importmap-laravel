@@ -23,7 +23,7 @@ class UpdateCommand extends Command
      */
     protected $description = 'Update outdated pinned packages.';
 
-    public function handle(Npm $npm)
+    public function handle(Npm $npm): void
     {
         if (count($outdatedPackages = $npm->outdatedPackages()) > 0) {
             $this->call('importmap:pin', [

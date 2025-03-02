@@ -33,10 +33,8 @@ class PinCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle(Packager $packager)
+    public function handle(Packager $packager): int
     {
         $this->call('importmap:clear');
 
@@ -55,7 +53,7 @@ class PinCommand extends Command
 
     private function importPackages(Packager $packager, Collection $imports): void
     {
-        $imports->each(function (string $url, string $package) use ($packager) {
+        $imports->each(function (string $url, string $package) use ($packager): void {
             $this->info(sprintf(
                 'Pinning "%s" to %s/%s.js via download from %s',
                 $package,

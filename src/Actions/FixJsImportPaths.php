@@ -15,10 +15,10 @@ class FixJsImportPaths
         $this->output ??= $root;
     }
 
-    public function __invoke()
+    public function __invoke(): void
     {
         collect(File::allFiles($this->root))
-            ->filter(fn (SplFileInfo $file) => in_array($file->getExtension(), ['js', 'mjs']))
+            ->filter(fn (SplFileInfo $file): bool => in_array($file->getExtension(), ['js', 'mjs']))
             ->each(fn (SplFileInfo $file) => File::ensureDirectoryExists($this->absoluteOutputPathFor($file)))
             ->each(fn (SplFileInfo $file) => File::put(
                 $this->absoluteOutputPathWithFileFor($file),
@@ -26,36 +26,36 @@ class FixJsImportPaths
             ));
     }
 
-    private function absoluteOutputPathFor(SplFileInfo $file)
+    private function absoluteOutputPathFor(SplFileInfo $file): string
     {
         return str_replace($this->root, $this->output, dirname($file->getRealPath()));
     }
 
-    private function absoluteOutputPathWithFileFor(SplFileInfo $file)
+    private function absoluteOutputPathWithFileFor(SplFileInfo $file): string
     {
-        return rtrim($this->absoluteOutputPathFor($file), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.$file->getFilename();
+        return rtrim((string) $this->absoluteOutputPathFor($file), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.$file->getFilename();
     }
 
-    private function updatedJsImports(SplFileInfo $file)
+    private function updatedJsImports(SplFileInfo $file): string
     {
         $lines = File::lines($file->getRealPath())->all();
 
         foreach ($lines as $index => $line) {
-            if (! str_starts_with($line, 'import ')) {
+            if (! str_starts_with((string) $line, 'import ')) {
                 continue;
             }
 
             try {
                 $lines[$index] = preg_replace_callback(
                     '#import.+["\']([\.]+.*)["\']#',
-                    function ($matches) use ($file) {
+                    function ($matches) use ($file): string {
                         $replaced = $this->replaceDotImports($file, $matches[1], $matches[0]);
 
                         $relative = trim(str_replace($this->root, '', $replaced), DIRECTORY_SEPARATOR);
 
                         return str_replace(DIRECTORY_SEPARATOR, '/', str_replace($matches[1], $relative, $matches[0]));
                     },
-                    $line,
+                    (string) $line,
                 );
             } catch (FailedToFixImportStatementException $exception) {
                 event(new FailedToFixImportStatement($exception->file, $exception->importStatement));

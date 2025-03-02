@@ -18,8 +18,8 @@ class NpmOutdatedTest extends TestCase
         Http::preventStrayRequests();
     }
 
-    /** @test */
-    public function finds_no_outdated_packages()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function finds_no_outdated_packages(): void
     {
         Http::fakeSequence()
             ->push(['dist-tags' => ['latest' => '3.0.0']])
@@ -28,8 +28,8 @@ class NpmOutdatedTest extends TestCase
         $this->assertCount(0, $this->npm->outdatedPackages());
     }
 
-    /** @test */
-    public function handles_error_when_fails_to_fetch_latest_version_of_package()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handles_error_when_fails_to_fetch_latest_version_of_package(): void
     {
         Http::fake([
             'https://registry.npmjs.org/is-svg' => Http::response([], 404),
@@ -44,8 +44,8 @@ class NpmOutdatedTest extends TestCase
         $this->assertEquals('Response error', $packages->first()->error);
     }
 
-    /** @test */
-    public function handles_error_when_returns_ok_but_response_json_contains_error()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handles_error_when_returns_ok_but_response_json_contains_error(): void
     {
         Http::fake([
             'https://registry.npmjs.org/is-svg' => Http::response(['error' => 'Something went wrong']),
@@ -60,8 +60,8 @@ class NpmOutdatedTest extends TestCase
         $this->assertEquals('Something went wrong', $packages->first()->error);
     }
 
-    /** @test */
-    public function finds_outdated_packages()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function finds_outdated_packages(): void
     {
         Http::fake([
             'https://registry.npmjs.org/is-svg' => Http::response(['dist-tags' => ['latest' => '4.0.0']]),
