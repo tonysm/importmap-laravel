@@ -31,16 +31,14 @@ class ImportmapLaravelServiceProvider extends PackageServiceProvider
             ->hasCommand(Commands\UpdateCommand::class);
     }
 
-    public function packageRegistered()
+    public function packageRegistered(): void
     {
-        $this->app->scoped(Importmap::class, function () {
-            return new Importmap();
-        });
+        $this->app->scoped(Importmap::class, fn(): \Tonysm\ImportmapLaravel\Importmap => new Importmap());
 
         $this->app->bind('importmap-laravel', Importmap::class);
     }
 
-    public function packageBooted()
+    public function packageBooted(): void
     {
         if (file_exists(base_path('routes/importmap.php'))) {
             require base_path('routes/importmap.php');
@@ -55,9 +53,9 @@ class ImportmapLaravelServiceProvider extends PackageServiceProvider
         $this->configureComponents();
     }
 
-    private function configureComponents()
+    private function configureComponents(): void
     {
-        $this->callAfterResolving('blade.compiler', function (BladeCompiler $blade) {
+        $this->callAfterResolving('blade.compiler', function (BladeCompiler $blade): void {
             $blade->anonymousComponentPath(__DIR__.'/../resources/views/components', 'importmap');
         });
     }

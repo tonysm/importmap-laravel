@@ -30,22 +30,22 @@ class TagsComponentTest extends TestCase
         }
     }
 
-    /** @test */
-    public function generates_tags_without_nonce()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function generates_tags_without_nonce(): void
     {
         $this->blade('<x-importmap::tags />')
             ->assertSee('<link rel="modulepreload" href="https://cdn.skypack.dev/md5" />', escape: false);
     }
 
-    /** @test */
-    public function uses_given_csp_nonce()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function uses_given_csp_nonce(): void
     {
         $this->blade('<x-importmap::tags nonce="h3ll0" />')
             ->assertSee('<link rel="modulepreload" href="https://cdn.skypack.dev/md5" nonce="h3ll0" />', escape: false);
     }
 
-    /** @test */
-    public function uses_custom_map()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function uses_custom_map(): void
     {
         $importmap = new Importmap();
         $importmap->pin('foo', preload: true);

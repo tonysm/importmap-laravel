@@ -25,8 +25,8 @@ class FixJsImportPathsTest extends TestCase
         $this->action = new FixJsImportPaths(root: $this->rootFolder = __DIR__.implode(DIRECTORY_SEPARATOR, ['', 'stubs', 'fixing-paths']), output: $this->tmpFolder);
     }
 
-    /** @test */
-    public function fixes_imports()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function fixes_imports(): void
     {
         $this->action->__invoke();
 

@@ -53,15 +53,13 @@ class Npm
 
         return $this->getAudit($data)
             ->collect()
-            ->flatMap(function (array $vulnerabilities, string $package) {
-                return collect($vulnerabilities)
-                    ->map(fn (array $vulnerability) => new VulnerablePackage(
-                        name: $package,
-                        severity: $vulnerability['severity'],
-                        vulnerableVersions: $vulnerability['vulnerable_versions'],
-                        vulnerability: $vulnerability['title'],
-                    ));
-            })
+            ->flatMap(fn(array $vulnerabilities, string $package) => collect($vulnerabilities)
+                ->map(fn (array $vulnerability): \Tonysm\ImportmapLaravel\VulnerablePackage => new VulnerablePackage(
+                    name: $package,
+                    severity: $vulnerability['severity'],
+                    vulnerableVersions: $vulnerability['vulnerable_versions'],
+                    vulnerability: $vulnerability['title'],
+                )))
             ->sortBy([
                 ['name', 'asc'],
                 ['severity', 'asc'],
@@ -89,7 +87,7 @@ class Npm
 
         return collect($matches[1])
             ->zip($matches[2])
-            ->map(fn ($items) => new PackageVersion(name: $items[0], version: $items[1]))
+            ->map(fn ($items): \Tonysm\ImportmapLaravel\PackageVersion => new PackageVersion(name: $items[0], version: $items[1]))
             ->values();
     }
 
@@ -103,7 +101,7 @@ class Npm
 
         return collect($matches[1])
             ->zip($matches[2])
-            ->map(fn ($items) => new PackageVersion(name: $items[0], version: $items[1]))
+            ->map(fn ($items): \Tonysm\ImportmapLaravel\PackageVersion => new PackageVersion(name: $items[0], version: $items[1]))
             ->values();
     }
 
@@ -127,17 +125,17 @@ class Npm
         }
 
         if (! isset($json['versions'])) {
-            return;
+            return null;
         }
 
         return collect($json['versions'])
             ->keys()
-            ->sort(fn ($versionA, $versionB) => version_compare($versionB, $versionA))
+            ->sort(fn ($versionA, $versionB): int => version_compare($versionB, $versionA))
             ->values()
             ->first();
     }
 
-    private function outdated(string $currentVersion, string $latestVersion)
+    private function outdated(string $currentVersion, string $latestVersion): bool
     {
         return version_compare($currentVersion, $latestVersion) === -1;
     }

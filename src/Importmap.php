@@ -9,9 +9,9 @@ use SplFileInfo;
 
 class Importmap
 {
-    private Collection $packages;
+    private readonly Collection $packages;
 
-    private Collection $directories;
+    private readonly Collection $directories;
 
     public function __construct(public ?string $rootPath = null)
     {
@@ -20,12 +20,12 @@ class Importmap
         $this->directories = collect();
     }
 
-    public function pin(string $name, ?string $to = null, bool $preload = true)
+    public function pin(string $name, ?string $to = null, bool $preload = true): void
     {
         $this->packages->add(new MappedFile($name, path: $to ?: "js/{$name}.js", preload: $preload));
     }
 
-    public function pinAllFrom(string $dir, ?string $under = null, ?string $to = null, bool $preload = true)
+    public function pinAllFrom(string $dir, ?string $under = null, ?string $to = null, bool $preload = true): void
     {
         $this->directories->add(new MappedDirectory($dir, $under, $to, $preload));
     }
@@ -70,7 +70,7 @@ class Importmap
         return Manifest::path();
     }
 
-    private function resolvePreloadedModulesFromManifest($assetResolver): array
+    private function resolvePreloadedModulesFromManifest(callable $assetResolver): array
     {
         return collect(json_decode(File::get($this->manifestPath()), true))
             ->filter(fn (array $json) => $json['preload'])
@@ -78,7 +78,7 @@ class Importmap
             ->all();
     }
 
-    private function resolveImportsFromManifest($assetResolver): array
+    private function resolveImportsFromManifest(callable $assetResolver): array
     {
         return [
             'imports' => collect(json_decode(File::get($this->manifestPath()), true))
@@ -90,7 +90,7 @@ class Importmap
     private function expandPreloadingPackagesAndDirectories(): Collection
     {
         return $this->expandPackagesAndDirectories()
-            ->filter(fn (MappedFile $mapping) => $mapping->preload)
+            ->filter(fn (MappedFile $mapping): bool => $mapping->preload)
             ->values();
     }
 
@@ -107,7 +107,7 @@ class Importmap
             }
 
             return $this->findJavascriptFilesInTree($absolutePath)
-                ->map(function (SplFileInfo $file) use ($mapping, $absolutePath) {
+                ->map(function (SplFileInfo $file) use ($mapping, $absolutePath): ?\Tonysm\ImportmapLaravel\MappedFile {
                     $moduleFilename = $this->relativePathFrom($file->getRealPath(), $absolutePath);
                     $moduleName = $this->moduleNameFrom($moduleFilename, $mapping);
                     $modulePath = $this->modulePathFrom($moduleFilename, $mapping);
@@ -138,11 +138,11 @@ class Importmap
         $allFiles = File::allFiles($absolutePath);
 
         return collect($allFiles)
-            ->filter(fn (SplFileInfo $file) => in_array($file->getExtension(), ['js', 'jsm']))
+            ->filter(fn (SplFileInfo $file): bool => in_array($file->getExtension(), ['js', 'jsm']))
             ->values();
     }
 
-    private function relativePathFrom(string $fileAbsolutePath, string $folderAbsolutePath)
+    private function relativePathFrom(string $fileAbsolutePath, string $folderAbsolutePath): string
     {
         return trim(Str::after($fileAbsolutePath, $folderAbsolutePath), DIRECTORY_SEPARATOR);
     }
@@ -158,15 +158,13 @@ class Importmap
     private function modulePathFrom(string $moduleFilename, MappedDirectory $mapping): string
     {
         return str_replace(DIRECTORY_SEPARATOR, '/', implode('/', array_filter([
-            rtrim($mapping->path ?: $mapping->under, DIRECTORY_SEPARATOR.'/'),
+            rtrim((string) $mapping->path ?: $mapping->under, DIRECTORY_SEPARATOR.'/'),
             $moduleFilename,
         ])));
     }
 
     private function resolveAssetPaths(Collection $paths, callable $assetResolver): array
     {
-        return $paths->mapWithKeys(function (MappedFile $mapping) use ($assetResolver) {
-            return [$mapping->name => $assetResolver($mapping->path)];
-        })->all();
+        return $paths->mapWithKeys(fn(MappedFile $mapping) => [$mapping->name => $assetResolver($mapping->path)])->all();
     }
 }

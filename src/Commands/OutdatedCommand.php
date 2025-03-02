@@ -28,7 +28,7 @@ class OutdatedCommand extends Command
         $this->table(
             ['Package', 'Current', 'Latest'],
             $outdatedPackages
-                ->map(fn (OutdatedPackage $package) => [$package->name, $package->currentVersion, $package->latestVersion ?: $package->error])
+                ->map(fn (OutdatedPackage $package): array => [$package->name, $package->currentVersion, $package->latestVersion ?: $package->error])
                 ->all(),
         );
 
