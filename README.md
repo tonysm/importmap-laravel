@@ -22,7 +22,7 @@ This package was inspired by the [Importmap Rails](https://github.com/rails/impo
 
 ### How does it work?
 
-[Import maps](https://github.com/WICG/import-maps) let you import JavaScript modules using logical names that map to versioned/digested files – directly from the browser. So you can [build modern JavaScript applications using JavaScript libraries made for ES modules (ESM) without the need for transpiling or bundling](https://world.hey.com/dhh/modern-web-apps-without-javascript-bundling-or-transpiling-a20f2755). This frees you from needing Webpack, Yarn, npm, or any other part of the JavaScript toolchain.
+[Import maps](https://github.com/WICG/import-maps) lets you import JavaScript modules directly from the browser using logical names that map to versioned/digested files. So you can [build modern JavaScript applications using JavaScript libraries made for ES modules (ESM) without the need for transpiling or bundling](https://world.hey.com/dhh/modern-web-apps-without-javascript-bundling-or-transpiling-a20f2755). This frees you from needing Webpack, Yarn, npm, or any other part of the JavaScript toolchain.
 
 With this approach, you'll ship many small JavaScript files instead of one big JavaScript file. Thanks to HTTP/2 that no longer carries a material performance penalty during the initial transport, and offers substantial benefits over the long run due to better caching dynamics. Whereas before any change to any JavaScript file included in your big bundle would invalidate the cache for the whole bundle, now only the cache for that single file is invalidated.
 
@@ -50,7 +50,7 @@ Next, we need to add the following component to our view or layout file:
 
 Add that between your `<head>` tags. The `entrypoint` should be the "main" file, commonly the `resources/js/app.js` file, which will be mapped to the `app` module (use the module name, not the file).
 
-By default the `x-importmap::tags` component assumes your entrypoint module is `app`, which matches the existing `resources/js/app.js` file from Laravel's default scaffolding. You may want to customize the entrypoint, which you can do with the `entrypoint` prop:
+By default, the `x-importmap::tags` component assumes your entrypoint module is `app`, which matches the existing `resources/js/app.js` file from Laravel's default scaffolding. You may want to customize the entrypoint, which you can do with the `entrypoint` prop:
 
 ```blade
 <x-importmap::tags entrypoint="admin" />
@@ -64,13 +64,13 @@ php artisan storage:link
 
 If you're using Laravel Sail, make sure you prefix that command with `sail` as the symlink needs to be created inside the container.
 
-The symlink is only registered on local environments. For production, it's recommended to run the `importmap:optimize` command instead:
+The symlink is only registered in local environments. For production, it's recommended to run the `importmap:optimize` command instead:
 
 ```php
 php artisan importmap:optimize
 ```
 
-This should scan all your pinned files/folders (no URLs) and publish them to `public/dist/js`, adding a digest based on the file's content to the file name - so something like `public/dist/js/app-123123.js`, and then generate a `.importmap-manifest.json` file in the `public/` folder. This file will get presence over your pins. If you run that by accident in development, make sure you delete that file or simply run `php artisan importmap:clear`, which should get rid of it. You may also want to add `/public/dist` to your `.gitignore` file, as well as `*importmap-manifest.json`.
+This should scan all your pinned files/folders (no URLs) and publish them to `public/dist/js`, adding a digest based on the file's content to the file name - so something like `public/dist/js/app-123123.js`, and then generate a `.importmap-manifest.json` file in the `public/` folder. This file will get precedence over your pins. If you run that by accident in development, manually delete that file or run `php artisan importmap:clear`, which should delete it for you. You may also want to add the `/public/dist` path and the `*importmap-manifest.json` file to your `.gitignore` file.
 
 ## Usage
 
@@ -85,7 +85,7 @@ use Tonysm\ImportmapLaravel\Facades\Importmap;
 Importmap::pin("alpinejs", to: "/js/vendor/alpinejs.js"); //@3.8.1
 ```
 
-Then, in your JavaScript files you can safely do:
+Then, in your JavaScript files, you can safely do:
 
 ```js
 import Alpine from 'alpinejs';
@@ -109,7 +109,7 @@ Declaring all your local files can be tedious, so you may want to map an entire 
 Importmap::pinAllFrom("resources/js/", to: "js/");
 ```
 
-When we're generating the importmap JSON, we'll scan that directory looking for any `.js` or `.jsm` files inside of it and generating the correct importmap for them based on their relative location. There are a couple of interesting rules, though, something like:
+When we're generating the importmap JSON, we'll scan that directory looking for any `.js` or `.jsm` files inside of it and generate the correct importmap for them based on their relative location. There are a couple of interesting rules, though, something like:
 
 | Path | Module | URI |
 |---|---|---|
@@ -186,7 +186,7 @@ To keep your dependencies up-to-date, make sure you run the `importmap:outdated`
 php artisan importmap:outdated
 ```
 
-This command will scan your `routes/importmap.php` file, find your current versions, then use the NPM registry API to look for the latest version of the packages you're using. It also handles locally served vendor libs that you added using the `--download` flag from the `importmap:pin` command.
+This command will scan your `routes/importmap.php` file, find your current versions, and then use the NPM registry API to look for the latest version of the packages you're using. It also handles locally served vendor libs that you added using the `--download` flag from the `importmap:pin` command.
 
 ### Auditing Dependencies
 
@@ -196,7 +196,7 @@ If you want a security audit on your dependencies to see if you're using a versi
 php artisan importmap:audit
 ```
 
-This will also scan your `routes/importmap.php` file, find your current versions, then use the NPM registry API to look for vulnerabilities in your packages. It also handles locally served vendor libs that you added using the `--download` flag from the `importmap:pin` command.
+This will also scan your `routes/importmap.php` file, find your current versions, and then use the NPM registry API to look for vulnerabilities in your packages. It also handles locally served vendor libs that you added using the `--download` flag from the `importmap:pin` command.
 
 ## Known Problems
 
@@ -206,7 +206,7 @@ It's possible to use both React and Vue with importmaps but, unfortunately, you 
 
 ### Process ENV Configs
 
-You may be used to having a couple `process.env.MIX_*` lines in your JS files here and there. The way this works is Webpack would replace at build time your calls to `process.env` with the values it had during the build. Since we don't have a "build time" anymore, this won't work. Instead, you should add `<meta>` tags to your layout file with anything that you want to make available to your JavaScript files and use `document.head.querySelector('meta[name=my-config]').content` instead of relying on the `process.env`.
+You may be used to having a couple `process.env.MIX_*` lines in your JS files here and there. The way this works is Webpack would replace at build time of your calls to `process.env` with the values it had during the build. Since we don't have a "build time" anymore, this won't work. Instead, you should add `<meta>` tags to your layout file with anything that you want to make available to your JavaScript files and use `document.head.querySelector('meta[name=my-config]').content` instead of relying on the `process.env`.
 
 Consider using something like [`current.js`](https://www.npmjs.com/package/current.js) to easily consume your `<meta>` configs using a globally available `Current` object.
 
