@@ -1,15 +1,9 @@
 <p align="center" style="margin-top: 2rem; margin-bottom: 2rem;"><img src="/art/importmap-laravel-logo.svg" alt="Logo Importmap Laravel" /></p>
 
 <p align="center">
-    <a href="https://packagist.org/packages/tonysm/importmap-laravel">
-        <img src="https://img.shields.io/packagist/dt/tonysm/importmap-laravel.svg?style=flat-square" alt="Total Downloads">
-    </a>
-    <a href="https://packagist.org/packages/tonysm/importmap-laravel">
-        <img src="https://img.shields.io/packagist/v/tonysm/importmap-laravel" alt="Latest Stable Version">
-    </a>
-    <a href="https://packagist.org/packages/tonysm/importmap-laravel">
-        <img src="https://img.shields.io/packagist/l/tonysm/importmap-laravel" alt="License">
-    </a>
+    <a href="https://packagist.org/packages/tonysm/importmap-laravel"><img src="https://img.shields.io/packagist/dt/tonysm/importmap-laravel.svg?style=flat-square" alt="Total Downloads"></a>
+    <a href="https://packagist.org/packages/tonysm/importmap-laravel"><img src="https://img.shields.io/packagist/v/tonysm/importmap-laravel" alt="Latest Stable Version"></a>
+    <a href="https://packagist.org/packages/tonysm/importmap-laravel"><img src="https://img.shields.io/packagist/l/tonysm/importmap-laravel" alt="License"></a>
 </p>
 
 ## Introduction
