@@ -4,6 +4,7 @@ namespace Tonysm\ImportmapLaravel\Tests;
 
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
+use PHPUnit\Framework\Attributes\Test;
 use Tonysm\ImportmapLaravel\Npm;
 
 class NpmAuditTest extends TestCase
@@ -19,7 +20,7 @@ class NpmAuditTest extends TestCase
         Http::preventStrayRequests();
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function finds_no_audit_vulnerabilities(): void
     {
         Http::fake(fn () => Http::response([]));
@@ -34,7 +35,7 @@ class NpmAuditTest extends TestCase
         ));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function finds_audit_vulnerabilities(): void
     {
         Http::fake(fn () => Http::response([

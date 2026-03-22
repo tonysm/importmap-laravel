@@ -3,6 +3,7 @@
 namespace Tonysm\ImportmapLaravel\Tests;
 
 use Illuminate\Support\Facades\File;
+use PHPUnit\Framework\Attributes\Test;
 use Tonysm\ImportmapLaravel\Importmap;
 
 class OptimizeCommandTest extends TestCase
@@ -29,7 +30,7 @@ class OptimizeCommandTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function optimize_command_generates_copies_files_to_public_dist_folder(): void
     {
         $this->artisan('importmap:optimize')
@@ -38,7 +39,7 @@ class OptimizeCommandTest extends TestCase
         $this->assertTrue(File::exists($this->rootPath.'/public/.importmap-manifest.json'));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function uses_the_generated_importmap_manifest_json_when_that_is_available(): void
     {
         File::put($this->map->rootPath.'/public/.importmap-manifest.json', json_encode($imports = [

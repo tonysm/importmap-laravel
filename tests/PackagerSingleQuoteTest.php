@@ -3,6 +3,7 @@
 namespace Tonysm\ImportmapLaravel\Tests;
 
 use Illuminate\Support\Str;
+use PHPUnit\Framework\Attributes\Test;
 use Tonysm\ImportmapLaravel\Packager;
 
 class PackagerSingleQuoteTest extends TestCase
@@ -29,14 +30,14 @@ class PackagerSingleQuoteTest extends TestCase
         parent::tearDown();
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function packaged_with_single_quotes(): void
     {
         $this->assertTrue($this->packager->packaged('md5'));
         $this->assertFalse($this->packager->packaged('md5-extension'));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function remove_package_with_single_quote(): void
     {
         $this->packager->remove('md5');
@@ -44,7 +45,7 @@ class PackagerSingleQuoteTest extends TestCase
         $this->assertFalse($this->packager->packaged('md5'));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function removes_url_unsafe_elements(): void
     {
         $this->assertStringContainsString(

@@ -4,6 +4,7 @@ namespace Tonysm\ImportmapLaravel\Tests;
 
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 use Illuminate\Support\Facades\File;
+use PHPUnit\Framework\Attributes\Test;
 use Tonysm\ImportmapLaravel\Importmap;
 
 class TagsComponentTest extends TestCase
@@ -30,21 +31,21 @@ class TagsComponentTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function generates_tags_without_nonce(): void
     {
         $this->blade('<x-importmap::tags />')
             ->assertSee('<link rel="modulepreload" href="https://cdn.skypack.dev/md5" />', escape: false);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function uses_given_csp_nonce(): void
     {
         $this->blade('<x-importmap::tags nonce="h3ll0" />')
             ->assertSee('<link rel="modulepreload" href="https://cdn.skypack.dev/md5" nonce="h3ll0" />', escape: false);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function uses_custom_map(): void
     {
         $importmap = new Importmap;

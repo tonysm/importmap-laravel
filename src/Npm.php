@@ -54,7 +54,7 @@ class Npm
         return $this->getAudit($data)
             ->collect()
             ->flatMap(fn (array $vulnerabilities, string $package) => collect($vulnerabilities)
-                ->map(fn (array $vulnerability): \Tonysm\ImportmapLaravel\VulnerablePackage => new VulnerablePackage(
+                ->map(fn (array $vulnerability): VulnerablePackage => new VulnerablePackage(
                     name: $package,
                     severity: $vulnerability['severity'],
                     vulnerableVersions: $vulnerability['vulnerable_versions'],
@@ -87,7 +87,7 @@ class Npm
 
         return collect($matches[1])
             ->zip($matches[2])
-            ->map(fn ($items): \Tonysm\ImportmapLaravel\PackageVersion => new PackageVersion(name: $items[0], version: $items[1]))
+            ->map(fn ($items): PackageVersion => new PackageVersion(name: $items[0], version: $items[1]))
             ->values();
     }
 
@@ -101,7 +101,7 @@ class Npm
 
         return collect($matches[1])
             ->zip($matches[2])
-            ->map(fn ($items): \Tonysm\ImportmapLaravel\PackageVersion => new PackageVersion(name: $items[0], version: $items[1]))
+            ->map(fn ($items): PackageVersion => new PackageVersion(name: $items[0], version: $items[1]))
             ->values();
     }
 

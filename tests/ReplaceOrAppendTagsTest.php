@@ -2,11 +2,12 @@
 
 namespace Tonysm\ImportmapLaravel\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tonysm\ImportmapLaravel\Actions\ReplaceOrAppendTags;
 
 class ReplaceOrAppendTagsTest extends TestCase
 {
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function replace_vite_tags(): void
     {
         $contents = <<<'BLADE'
@@ -58,7 +59,7 @@ class ReplaceOrAppendTagsTest extends TestCase
         $this->assertEquals($expected, (new ReplaceOrAppendTags)($contents));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function appends_to_before_closing_head_tag_when_vite_directive_is_missing(): void
     {
         $contents = <<<'BLADE'

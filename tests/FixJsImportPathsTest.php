@@ -4,6 +4,7 @@ namespace Tonysm\ImportmapLaravel\Tests;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use PHPUnit\Framework\Attributes\Test;
 use Tonysm\ImportmapLaravel\Actions\FixJsImportPaths;
 
 class FixJsImportPathsTest extends TestCase
@@ -25,7 +26,7 @@ class FixJsImportPathsTest extends TestCase
         $this->action = new FixJsImportPaths(root: $this->rootFolder = __DIR__.implode(DIRECTORY_SEPARATOR, ['', 'stubs', 'fixing-paths']), output: $this->tmpFolder);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function fixes_imports(): void
     {
         $this->action->__invoke();

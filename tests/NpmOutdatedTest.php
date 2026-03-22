@@ -3,6 +3,7 @@
 namespace Tonysm\ImportmapLaravel\Tests;
 
 use Illuminate\Support\Facades\Http;
+use PHPUnit\Framework\Attributes\Test;
 use Tonysm\ImportmapLaravel\Npm;
 
 class NpmOutdatedTest extends TestCase
@@ -18,7 +19,7 @@ class NpmOutdatedTest extends TestCase
         Http::preventStrayRequests();
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function finds_no_outdated_packages(): void
     {
         Http::fakeSequence()
@@ -28,7 +29,7 @@ class NpmOutdatedTest extends TestCase
         $this->assertCount(0, $this->npm->outdatedPackages());
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function handles_error_when_fails_to_fetch_latest_version_of_package(): void
     {
         Http::fake([
@@ -44,7 +45,7 @@ class NpmOutdatedTest extends TestCase
         $this->assertEquals('Response error', $packages->first()->error);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function handles_error_when_returns_ok_but_response_json_contains_error(): void
     {
         Http::fake([
@@ -60,7 +61,7 @@ class NpmOutdatedTest extends TestCase
         $this->assertEquals('Something went wrong', $packages->first()->error);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function finds_outdated_packages(): void
     {
         Http::fake([
