@@ -2,6 +2,14 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 2.6.0 - 2026-03-22
+
+### What's Changed
+
+- Adds Laravel Boost guideline and skill
+
+**Full Changelog**: https://github.com/tonysm/importmap-laravel/compare/2.5.0...2.6.0
+
 ## 2.5.0 - 2026-02-28
 
 ### What's Changed
@@ -108,6 +116,7 @@ The `<x-importmap-tags />` component has changed to `<x-importmap::tags />` so y
 
 ```bash
 sed -i 's/x-importmap-tags/x-importmap::tags/g' resources/**/*.php
+
 
 
 
