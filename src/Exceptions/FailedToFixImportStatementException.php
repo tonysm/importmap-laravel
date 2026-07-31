@@ -8,7 +8,7 @@ class FailedToFixImportStatementException extends ImportmapException
 {
     public string $importStatement;
 
-    public SplFileInfo $file;
+    public SplFileInfo $sourceFile;
 
     public static function couldNotFixImport(string $importStatement, SplFileInfo $file): static
     {
@@ -19,7 +19,7 @@ class FailedToFixImportStatementException extends ImportmapException
         ));
 
         $exception->importStatement = $importStatement;
-        $exception->file = $file;
+        $exception->sourceFile = $file;
 
         return $exception;
     }
