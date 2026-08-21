@@ -2,10 +2,13 @@
 
 namespace Tonysm\ImportmapLaravel\Tests;
 
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\Test;
+use SplFileInfo;
 use Tonysm\ImportmapLaravel\Actions\FixJsImportPaths;
+use Tonysm\ImportmapLaravel\Events\FailedToFixImportStatement;
 
 class FixJsImportPathsTest extends TestCase
 {
@@ -46,5 +49,18 @@ class FixJsImportPathsTest extends TestCase
         $this->assertMatchesRegularExpression('#import { application } from ["\']libs/stimulus["\']#', File::get($this->tmpFolder.implode(DIRECTORY_SEPARATOR, ['', 'controllers', 'index.js'])));
         $this->assertMatchesRegularExpression('#import hello from ["\']controllers/hello_controller["\']#', File::get($this->tmpFolder.implode(DIRECTORY_SEPARATOR, ['', 'controllers', 'index.js'])));
         $this->assertMatchesRegularExpression('#import { Controller } from ["\']@hotwired/stimulus["\']#', File::get($this->tmpFolder.implode(DIRECTORY_SEPARATOR, ['', 'controllers', 'hello_controller.js'])));
+    }
+
+    #[Test]
+    public function dispatches_an_event_when_an_import_cannot_be_fixed(): void
+    {
+        Event::fake();
+
+        $action = new FixJsImportPaths(root: __DIR__.implode(DIRECTORY_SEPARATOR, ['', 'stubs', 'failing-import']), output: $this->tmpFolder);
+        $action->__invoke();
+
+        Event::assertDispatched(FailedToFixImportStatement::class, function (FailedToFixImportStatement $event): bool {
+            return $event->file instanceof SplFileInfo && Str::contains($event->importStatement, 'missing-file');
+        });
     }
 }

@@ -58,7 +58,7 @@ class FixJsImportPaths
                     (string) $line,
                 );
             } catch (FailedToFixImportStatementException $exception) {
-                event(new FailedToFixImportStatement($exception->file, $exception->importStatement));
+                event(new FailedToFixImportStatement($exception->sourceFile, $exception->importStatement));
             }
         }
 
