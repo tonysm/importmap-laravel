@@ -2,6 +2,18 @@
 
 All notable changes to `importmap-laravel` will be documented in this file.
 
+## 2.6.1 - 2026-08-21
+
+### What's Changed
+
+* Fix `FailedToFixImportStatementException` redeclaring `$file` as a different type by @ziadoz in https://github.com/tonysm/importmap-laravel/pull/79
+
+### New Contributors
+
+* @ziadoz made their first contribution in https://github.com/tonysm/importmap-laravel/pull/79
+
+**Full Changelog**: https://github.com/tonysm/importmap-laravel/compare/2.6.0...2.6.1
+
 ## 2.6.0 - 2026-03-22
 
 ### What's Changed
@@ -116,6 +128,7 @@ The `<x-importmap-tags />` component has changed to `<x-importmap::tags />` so y
 
 ```bash
 sed -i 's/x-importmap-tags/x-importmap::tags/g' resources/**/*.php
+
 
 
 
